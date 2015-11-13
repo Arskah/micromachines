@@ -15,7 +15,7 @@ and calls the Engine. This class also initiates the game.
 class Game
 {
 public:
-	/* 
+	/*
 	The constructor for the Game.
 	Paremeters:
 	- window: a pointer to the application window
