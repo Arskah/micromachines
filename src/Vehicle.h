@@ -4,6 +4,7 @@
 
 class Vehicle : public Object
 {
+<<<<<<< HEAD
 public:
 	//Default constructor
 	Vehicle(sf::Texture * const texture, const sf::Vector2u location, const float speed, const int type,
@@ -24,4 +25,7 @@ private:
 	float turnrate;
 	float weapontimer;
 	//Projectile weapon
+=======
+
+>>>>>>> 907e73a61a51f63dc57ced1954648f7f709b21f3
 };

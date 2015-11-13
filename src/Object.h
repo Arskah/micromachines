@@ -1,5 +1,6 @@
 #pragma once
 
+<<<<<<< HEAD
 #include "SFML\Graphics.hpp"
 
 class Object : public sf::Drawable, public sf::Transformable
@@ -32,4 +33,9 @@ protected:
 
 	//Set new speed for the Object. Inherited by Vehicle and Projectile. Meant for Vehicle to be able to accelerate.
 	void setSpeed(const float speed);
+=======
+class Object
+{
+
+>>>>>>> 907e73a61a51f63dc57ced1954648f7f709b21f3
 };
