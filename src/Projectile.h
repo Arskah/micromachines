@@ -6,7 +6,7 @@ class Projectile : public Object
 {
 public:
 	//Default constructor.
-	Projectile(sf::Texture * const texture, const sf::Vector2u location, const float speed, const int type, const float cooldown);
+	Projectile(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type, const float cooldown);
 
 	//Returns cooldown from Projectile.
 	float getCooldown() const;
