@@ -7,7 +7,7 @@ class Vehicle : public Object
 <<<<<<< HEAD
 public:
 	//Default constructor
-	Vehicle(sf::Texture * const texture, const sf::Vector2u location, const float speed, const int type,
+	Vehicle(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type,
 		const float acceleration, const float maxspeed, const float turnrate, const float weapontimer); //Projectile * weapon);
 
 	//Increases speed of the Vehicle by a function of member variable acceleration.

@@ -1,7 +1,7 @@
 #pragma once
 
-<<<<<<< HEAD
-#include "SFML\Graphics.hpp"
+#include "SFML/Graphics.hpp"
+#include "Config.h"
 
 class Object : public sf::Drawable, public sf::Transformable
 {
@@ -11,12 +11,12 @@ public:
 	//Returns speed from Object.
 	float getSpeed() const;
 	//Returns type from Object.
-	int getType() const;
+	Config::ObjectType getType() const;
 
 private:
 	sf::Vector2u location;
 	float speed;
-	int type;
+	Config::ObjectType type;
 
 	//Loads texture to Object.
 	void loadTexture(sf::Texture * const texture);
@@ -29,7 +29,7 @@ private:
 
 protected:
 	//Default constructor.
-	Object(sf::Texture * const texture, const sf::Vector2u location, const float speed, const int type);
+	Object(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type);
 
 	//Set new speed for the Object. Inherited by Vehicle and Projectile. Meant for Vehicle to be able to accelerate.
 	void setSpeed(const float speed);
@@ -37,5 +37,4 @@ protected:
 class Object
 {
 
->>>>>>> 907e73a61a51f63dc57ced1954648f7f709b21f3
 };

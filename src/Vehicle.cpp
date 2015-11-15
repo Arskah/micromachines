@@ -1,7 +1,7 @@
 #include "Vehicle.h"
 
 
-Vehicle::Vehicle(sf::Texture * const texture, const sf::Vector2u location, const float speed, const int type,
+Vehicle::Vehicle(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type,
 	const float acceleration, const float maxspeed, const float turnrate, const float weapontimer) : Object(texture, location, speed, type)
 {
 	this->acceleration = acceleration;
