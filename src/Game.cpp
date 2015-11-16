@@ -16,25 +16,27 @@ void Game::initTextures()
 Vehicle * Game::initVehicle(Config::ObjectType type)
 {
 	std::string line;
-	std::ifstream objectfile("resources/objects.txt");
+	std::ifstream objectfile;
+	objectfile.open("src/resources/objects.txt", std::ifstream::in);
 	if (objectfile.is_open())
 	{
 		while (std::getline(objectfile, line))
 		{
-			if (line[0] == '#')
-				continue;
-			if (static_cast<int>(type) == int(line[0])-48)
+			if (line[0] != '#')
 			{
-				std::stringstream stream(line);
-				std::string token;
-				std::vector<float> parameters;
-				while (std::getline(stream, token, ' '))
+				if (static_cast<int>(type) == int(line[0]) - 48)
 				{
-					parameters.push_back(std::stof(token));
+					std::stringstream stream(line);
+					std::string token;
+					std::vector<float> parameters;
+					while (std::getline(stream, token, ' '))
+					{
+						parameters.push_back(std::stof(token));
+					}
+					// The loaded vehicle is added to the vehicles -vector here
+					vehicles.emplace_back(&textures.find(type)->second, type, parameters[1], parameters[2], parameters[3], parameters[4]);
+					return &vehicles.back();
 				}
-				// The loaded vehicle is added to the vehicles -vector here
-				vehicles.emplace_back(&textures.find(type)->second, type, parameters[1], parameters[2], parameters[3], parameters[4]);
-				return &vehicles.back();
 			}
 		}
 	}

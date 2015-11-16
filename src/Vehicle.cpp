@@ -1,8 +1,11 @@
 #include "Vehicle.h"
 
-
-Vehicle::Vehicle(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type,
-	const float acceleration, const float maxspeed, const float turnrate, const float weapontimer) : Object(texture, location, speed, type)
+/*
+Vehicle default constructor.
+NOTE: Location and speed are set to (0,0) and 0 by default.
+*/
+Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, const float acceleration, 
+				const float maxspeed, const float turnrate, const float weapontimer) : Object(texture, sf::Vector2f(0.f, 0.f), 0.f, type)
 {
 	this->acceleration = acceleration;
 	this->maxspeed = maxspeed;

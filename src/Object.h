@@ -7,14 +7,14 @@ class Object : public sf::Drawable, public sf::Transformable
 {
 public:
 	//Returns location from Object.
-	sf::Vector2u getLocation() const;
+	sf::Vector2f getLocation() const;
 	//Returns speed from Object.
 	float getSpeed() const;
 	//Returns type from Object.
 	Config::ObjectType getType() const;
 
 private:
-	sf::Vector2u location;
+	sf::Vector2f location;
 	float speed;
 	Config::ObjectType type;
 
@@ -29,7 +29,7 @@ private:
 
 protected:
 	//Default constructor.
-	Object(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type);
+	Object(sf::Texture * const texture, const sf::Vector2f location, const float speed, const Config::ObjectType type);
 
 	//Set new speed for the Object. Inherited by Vehicle and Projectile. Meant for Vehicle to be able to accelerate.
 	void setSpeed(const float speed);
