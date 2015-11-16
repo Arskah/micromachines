@@ -1,60 +1,68 @@
-#include "engine.hpp"
+#pragma once
 #include "Engine.h"
 
-#define COOLDOWN 1
-
-/* Main function in the Engine namespace. Calls all functions handling position calculation and handles drawing new frame
-Parameters:
-- window: The window game is drawn on
-- players: vector consisting of every player and AI 
-- objects: vector of all objects on map
-- map: Game map
-- userinput: pair consisting of userinput given by player (2nd true if input given)
-*/
-
-void Engine::update(sf::renderWindow* window, std::vector<Player> players, std::vector<Object> objects, Map map, std::pair<inputtype, bool> userinput)
+void Engine::update(sf::renderWindow* window, std::vector<Player> players, std::vector<Object> vehicles, std::vector<Projectile> projectiles, Map map, std::vector<std::pair<std::string, int>> userinput)
 {
-	for (auto it = player.begin(); it != player.end(); it++)
+	/* AI and player movement handling */
+	Engine::playerInput(players, userinput);
+
+	/* Move objects. Players and AI move depends on input handling */
+	for (auto it = vehicles.begin(); it != vehicles.end(); it++)
 	{
-		playerInput(it, userinput);
+		Engine::moveVehicle(it);
 	}
-	for (auto it = objects.begin(); it != objects.end(); it++)
+	//TODO: projectiles
+	/*
+	for (auto it = projectiles.begin(); it != projectiles.end(); it++)
 	{
-		calculatePosObject(it);
+		Engine::calculatePosProjectile(it);
 	}
-	draw(window, objects, map);
+	*/
+	/* Call function to handle all drawing */
+	Engine::draw(window, vehicles, projectiles, map);
 }
 
 /* Handles userinput before moving the object*/
-void Engine::playerInput(Player player, std::pair<inputtype, bool> userinput))
+void Engine::playerInput(std::vector<Player> players, std::vector<std::pair<std::string, int>> userinput)
 {
-	if (userinput.second())
+	for (auto it = players.begin(); it != players.end(); it++)
 	{
-		switch (userinput.first())
+		if ()
 		{
-		case left:
-			player.getVehicle().turn(true);
-		case right:
-			player.getVehicle().turn(false);
-		case accelerate:
-			player.getVehicle().accelerate();
-		case brake:
-			player.getVehicle().brake();
-		case default:
-			// Open menu? What other inputs we have?
+			switch (input_it.second())
+			{
+			case left:
+				player.getVehicle()->turn(true);
+			case right:
+				player.getVehicle()->turn(false);
+			case accelerate:
+				player.getVehicle()->accelerate();
+			case brake:
+				player.getVehicle()->brake();
+			case default:
+				// Open menu? What other inputs we have?
+			}
 		}
 	}
-	//calculatePosObject(player);		// If player vehicles are in objects, own calcualtion is not needed
 }
 
-void Engine::calculatePosObject(Object object)
+void Engine::moveVehicle(Object vehicle)
 {
-	float speed = object.getSpeed();
-	if (speed > 0)
+	float speed = vehicle.getSpeed();
+	float rotation = 0;
+	if (speed != 0)
 	{
-		sf::vector2f velocity_vector(speed, direction);
-		object.move(velocity_vector);
+		sf::Vector2f movementVec; //normal vector based on current direction
+		const sf::Vector2f forwardVec(0.f, 1.f); //normal vec pointing forward
+
+		sf::Transform t;		// create 
+		t.rotate(vehicle.getRotation);
+		movementVec = t.transformPoint(forwardVec);
+
+		float speed_multiplier = speed;		//TODO friction etc.
+		vehicle.move(speed_multiplier * movementVec);
 	}
+	
 }
 /*
 void Engine::calculatePosProjectile(Object projectile)
@@ -62,24 +70,32 @@ void Engine::calculatePosProjectile(Object projectile)
 	while (projectile.getLocation())
 }
 */
-void Engine::draw_map(sf::renderWindow* window, Map map)
-{
-	for (unsigned int x = 0; x < map.size().first(); x++)
-		for (unsigned int y = 0; y < map.size().second(); y++)
-		{
 
-		}
+void Engine::draw_vehicles(sf::renderWindow* window, std::vector<Object> vehicles)
+{
+	for (auto it = objects.begin(); it != objects.end(); it++)
+	{
+		window.draw(it);
+	}
 }
 
-void Engine::draw_objects(sf::renderWindow* window)
+/*
+void Engine::draw_projectiles(sf::renderWindow* window, std::vector<Projectile> projectiles)
 {
-
+	for (auto it = projectiles.begin(); it != projectiles.end(); it++)
+	{
+		window.draw(it);
+	}
 }
-
-void Engine::draw(sf::renderWindow* window, std::vector<Object> objects, Map map)
+*/
+/* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
+TODO: view individual for players and moving view: not all should be drawn on every frame
+*/
+void Engine::draw(sf::renderWindow* window, std::vector<Object> vehicles, std::vector<Projectile> projectiles, Map map)
 {
-	window.clear(sf::Color::Black);			// Clear previous frame
-	draw_map(window, map);
-	draw_objects(window, objects);
-	window.display();						// Update drawings
+	window.clear(sf::Color::Black);				// Clear previous frame
+	//window.draw(map);							//TODO: Map			'BOTTOM' drawing
+	//Engine::draw_projectiless(projectiles);		// Projectiles don't overwrite on vehicles
+	Engine::draw_vehicles(vehicles);			// On top of everything
+	window.display();							// Update drawings
 }

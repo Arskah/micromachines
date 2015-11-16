@@ -95,11 +95,13 @@ private:
 	std::vector<Projectile> projectiles;
 	Map map;
 	sf::RenderWindow* window;
+
 	std::vector<std::pair<std::string, int>> userinput; //TODO: replace int with proper inputType
 
 	// inputlist here
 	// Also possibly load and store all textures here?
 	sf::RenderWindow * window;
-	std::vector<std::pair<std::string, Config::ObjectType>> userinput;
+	/* OLD DEFINITION? Object type? */
+	//std::vector<std::pair<std::string, Config::ObjectType>> userinput;
 	std::map<Config::ObjectType, sf::Texture> textures;
 };

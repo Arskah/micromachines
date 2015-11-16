@@ -33,7 +33,7 @@ protected:
 
 	//Set new speed for the Object. Inherited by Vehicle and Projectile. Meant for Vehicle to be able to accelerate.
 	void setSpeed(const float speed);
-=======
+
 class Object
 {
 
