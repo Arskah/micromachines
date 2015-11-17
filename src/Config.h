@@ -16,5 +16,15 @@ namespace Config
 		Boat
 	};
 
+	enum class BlockType
+	{
+		None,
+		Ground,
+		Grass,
+		Sand,
+		Water,
+		Barrier
+	};
+
 	extern const float FrameCap;
 }

@@ -1,0 +1,32 @@
+# Map file
+#
+# First sizes are declared as "X Y", Size needs to have '!' in front
+# Then all block types and frictions as pairs "Type Pair"
+# Blocks declared on seperate lines and the reader needs to take care of the positioning.
+# Blocks declared in X_1 Y_1, X_1 Y_2, X_1 Y_3.... X_n Y_m
+! 5 5
+1 1.0
+1 1.0
+1 1.0
+1 1.0
+1 1.0
+2 2.0
+2 2.0
+2 2.0
+2 2.0
+2 2.0
+1 1.0
+1 1.0
+1 1.0
+1 1.0
+1 1.0
+2 2.0
+2 2.0
+2 2.0
+2 2.0
+2 2.0
+3 3.0
+3 3.0
+3 3.0
+3 3.0
+3 3.0
