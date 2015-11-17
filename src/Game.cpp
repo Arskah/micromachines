@@ -3,38 +3,108 @@
 Game::Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata)
 {
 	this->window = window;
+	initObjectTextures();
+	initBlockTextures();
 	initPlayers(playerdata);
 	initMap(mapdata);
 	initProjectiles();
 }
 
-void Game::initTextures()
+/*
+Loading all the object textures from a file into a map.
+The textures are paired with the type of the object.
+*/
+void Game::initObjectTextures()
 {
-	return;
+	std::string line;
+	std::ifstream texturefile;
+	texturefile.open("src/resources/objecttextures.txt", std::ifstream::in);
+	if (texturefile.is_open())
+	{
+		while (std::getline(texturefile, line))
+		{
+			if (line[0] != '#' && line[0] != '\n')
+			{
+				std::stringstream stream(line);
+				std::string token;
+				std::vector<std::string> tokens;
+				while (std::getline(stream, token, ' '))
+				{
+					tokens.push_back(token);
+				}
+				std::pair<Config::ObjectType, sf::Texture> texturepair;
+				texturepair.first = static_cast<Config::ObjectType>(std::stoi(tokens[0]));
+				sf::Texture texture;
+				texture.loadFromFile(tokens[1]);
+				texturepair.second = texture;
+				objecttextures.insert(texturepair);
+			}
+		}
+	}
 }
 
+/*
+Loading all the block textures from a file into a map.
+The textures are paired with the type of the block.
+*/
+void Game::initBlockTextures()
+{
+	std::string line;
+	std::ifstream texturefile;
+	texturefile.open("src/resources/blocktextures.txt", std::ifstream::in);
+	if (texturefile.is_open())
+	{
+		while (std::getline(texturefile, line))
+		{
+			if (line[0] != '#' && line[0] != '\n')
+			{
+				std::stringstream stream(line);
+				std::string token;
+				std::vector<std::string> tokens;
+				while (std::getline(stream, token, ' '))
+				{
+					tokens.push_back(token);
+				}
+				std::pair<Config::BlockType, sf::Texture> texturepair;
+				texturepair.first = static_cast<Config::BlockType>(std::stoi(tokens[0]));
+				sf::Texture texture;
+				texture.loadFromFile(tokens[1]);
+				texturepair.second = texture;
+				blocktextures.insert(texturepair);
+			}
+		}
+	}
+}
+
+/*
+Creating a Vehicle object based on the given object type.
+The object parameters are read from a file.
+The constructed vehicle is pushed to the vehicles vector.
+*/
 Vehicle * Game::initVehicle(Config::ObjectType type)
 {
 	std::string line;
-	std::ifstream objectfile("resources/objects.txt");
+	std::ifstream objectfile;
+	objectfile.open("src/resources/objects.txt", std::ifstream::in);
 	if (objectfile.is_open())
 	{
 		while (std::getline(objectfile, line))
 		{
-			if (line[0] == '#')
-				continue;
-			if (static_cast<int>(type) == int(line[0])-48)
+			if (line[0] != '#')
 			{
-				std::stringstream stream(line);
-				std::string token;
-				std::vector<float> parameters;
-				while (std::getline(stream, token, ' '))
+				if (static_cast<int>(type) == int(line[0]) - 48)
 				{
-					parameters.push_back(std::stof(token));
+					std::stringstream stream(line);
+					std::string token;
+					std::vector<float> parameters;
+					while (std::getline(stream, token, ' '))
+					{
+						parameters.push_back(std::stof(token));
+					}
+					// The loaded vehicle is added to the vehicles -vector here
+					vehicles.emplace_back(&objecttextures.find(type)->second, type, parameters[1], parameters[2], parameters[3], parameters[4]);
+					return &vehicles.back();
 				}
-				// The loaded vehicle is added to the vehicles -vector here
-				vehicles.emplace_back(&textures.find(type)->second, type, parameters[1], parameters[2], parameters[3], parameters[4]);
-				return &vehicles.back();
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 #include "Object.h"
 
-Object::Object(sf::Texture * const texture, const sf::Vector2u location, const float speed, const Config::ObjectType type)
+Object::Object(sf::Texture * const texture, const sf::Vector2f location, const float speed, const Config::ObjectType type)
 {
 	if (texture)
 		loadTexture(texture);
@@ -10,7 +10,7 @@ Object::Object(sf::Texture * const texture, const sf::Vector2u location, const f
 	this->type = type;
 }
 
-sf::Vector2u Object::getLocation() const
+sf::Vector2f Object::getLocation() const
 {
 	return location;
 }

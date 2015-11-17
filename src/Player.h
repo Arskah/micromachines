@@ -1,6 +1,5 @@
 #pragma once
 
-<<<<<<< HEAD
 #include <string>
 
 class Vehicle;
@@ -19,9 +18,4 @@ public:
 private:
 	std::string name;
 	Vehicle * vehicle;
-=======
-class Player
-{
-
->>>>>>> 907e73a61a51f63dc57ced1954648f7f709b21f3
 };

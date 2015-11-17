@@ -21,25 +21,25 @@ namespace Engine
 	- userinput: this structure maps the player (by name) to the input the player gave
 	this list is passed to the engine with every cycle of the loop
 	*/
-	void update(sf::renderWindow*, std::vector<Player>, std::vector<Object>, std::vector<Projectile>, Map, std::vector<std::pair<std::string, int>>);
+	void update(sf::renderWindow*, std::vector<Object>, std::vector<Projectile>, Map, std::vector<std::pair<Player*, Config::InputType>>);
 
-
-
-	/* Input handling and AI calling
+	/* Input handling
 	Parameters:
-	- player: player and AI
-	- userinput: this structure maps the player (by name) to the input the player gave
-	this list is passed to the engine with every cycle of the loop
+	- userinput: this structure maps the player to the input the player gave.
+	This vector structure is passed to the engine with every cycle of the loop
 	*/
-	void playerInput(std::vector<Player> players, std::vector<std::pair<std::string, int>>);
+	void handleInput(std::vector<std::pair<Player*, Config::InputType>>);
 
-	/* Function that calculates new postitions for every moving object every frame.
+	/* Function that handles moving of objects each frame. Executed after input handling
 	Parameters:
-	- object:
+	- vehicle: reference to a vehicle object being moved on loop
 	*/
-	void moveVehicle(Object);
+	void moveVehicle(Object&);
 
-	//void calculatePosProjectile();
+	/*
+	void moveProjectile(Projectile);
+	*/
+
 
 	/* Function draws all vehicles
 	Parameters:

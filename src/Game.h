@@ -13,11 +13,11 @@
 #include "Vehicle.h"
 #include "Config.h"
 
+
 /*
 This class keeps track of the map, players and objects, runs the event loop
 and calls the Engine. This class also initiates the game.
 */
-
 class Game
 {
 public:
@@ -37,11 +37,17 @@ public:
 
 
 private:
-	/* initTextures()
+	/* initObjectTextures()
 	Loads all the textures to a map containing object types and texture files.
 	This is ran only by the constructor.
 	*/
-	void initTextures();
+	void initObjectTextures();
+
+	/* initMapTextures()
+	Loads all the textures to a map containing object types and texture files.
+	This is ran only by the constructor.
+	*/
+	void initBlockTextures();
 
 	/* initVehicle()
 	Creates a Vehicle from a file.
@@ -80,28 +86,16 @@ private:
 	window: the application window
 	userinput: this structure maps the player (by name) to the input the player gave
 			   this list is passed to the engine with every cycle of the loop
-	textures: map containing ObjectTypes and textures.
+	objecttextures: map containing ObjectTypes and textures
+	blocktextures: map containing BlockTypes and textures
 	*/
-	/*
-	- w: a pointer to the application window
-	- p: list of player names and their vehicle choices (vehicle type)
-	- m: data of the map for initializing the map????
-	*/
-	Game(sf::RenderWindow *w, std::map<std::string, int> p);
-
-private:
 	std::vector<Player> players;
 	std::vector<Vehicle> vehicles;
 	std::vector<Projectile> projectiles;
 	Map map;
-	sf::RenderWindow* window;
-
-	std::vector<std::pair<std::string, int>> userinput; //TODO: replace int with proper inputType
-
-	// inputlist here
-	// Also possibly load and store all textures here?
 	sf::RenderWindow * window;
-	/* OLD DEFINITION? Object type? */
-	//std::vector<std::pair<std::string, Config::ObjectType>> userinput;
-	std::map<Config::ObjectType, sf::Texture> textures;
+
+	std::vector<std::pair<Player *, Config::InputType>> userinput;
+	std::map<Config::ObjectType, sf::Texture> objecttextures;
+	std::map<Config::BlockType, sf::Texture> blocktextures;
 };
