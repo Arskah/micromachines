@@ -152,5 +152,42 @@ void Game::run()
 				break;
 			}
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			std::pair<Player *, Config::InputType> pair;
+			pair.first = &players.front();
+			pair.second = Config::InputType::Accelerate;
+			userinput.push_back(pair);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			std::pair<Player *, Config::InputType> pair;
+			pair.first = &players.front();
+			pair.second = Config::InputType::TurnLeft;
+			userinput.push_back(pair);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			std::pair<Player *, Config::InputType> pair;
+			pair.first = &players.front();
+			pair.second = Config::InputType::TurnRight;
+			userinput.push_back(pair);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			std::pair<Player *, Config::InputType> pair;
+			pair.first = &players.front();
+			pair.second = Config::InputType::Brake;
+			userinput.push_back(pair);
+		}
+
+		// The engine draws the game state here
+		Engine::update(window, vehicles, projectiles, map, userinput);
+
+		// Clearing the user input of this particular loop cycle
+		for (auto i = 0; i < userinput.size(); i++)
+		{
+			userinput.pop_back();
+		}
 	}
 }

@@ -12,7 +12,7 @@
 #include "Projectile.h"
 #include "Vehicle.h"
 #include "Config.h"
-
+#include "Engine.h"
 
 /*
 This class keeps track of the map, players and objects, runs the event loop
