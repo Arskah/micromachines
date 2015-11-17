@@ -3,6 +3,7 @@
 Game::Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata)
 {
 	this->window = window;
+	initTextures();
 	initPlayers(playerdata);
 	initMap(mapdata);
 	initProjectiles();
@@ -10,7 +11,31 @@ Game::Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, C
 
 void Game::initTextures()
 {
-	return;
+	std::string line;
+	std::ifstream texturefile;
+	texturefile.open("src/resources/textures.txt", std::ifstream::in);
+	if (texturefile.is_open())
+	{
+		while (std::getline(texturefile, line))
+		{
+			if (line[0] != '#' && line[0] != '\n')
+			{
+				std::stringstream stream(line);
+				std::string token;
+				std::vector<std::string> tokens;
+				while (std::getline(stream, token, ' '))
+				{
+					tokens.push_back(token);
+				}
+				std::pair<Config::ObjectType, sf::Texture> texturepair;
+				texturepair.first = static_cast<Config::ObjectType>(std::stoi(tokens[0]));
+				sf::Texture texture;
+				texture.loadFromFile(tokens[1]);
+				texturepair.second = texture;
+				textures.insert(texturepair);
+			}
+		}
+	}
 }
 
 Vehicle * Game::initVehicle(Config::ObjectType type)
