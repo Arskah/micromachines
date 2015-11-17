@@ -37,11 +37,17 @@ public:
 
 
 private:
-	/* initTextures()
+	/* initObjectTextures()
 	Loads all the textures to a map containing object types and texture files.
 	This is ran only by the constructor.
 	*/
-	void initTextures();
+	void initObjectTextures();
+
+	/* initMapTextures()
+	Loads all the textures to a map containing object types and texture files.
+	This is ran only by the constructor.
+	*/
+	void initBlockTextures();
 
 	/* initVehicle()
 	Creates a Vehicle from a file.
@@ -80,13 +86,16 @@ private:
 	window: the application window
 	userinput: this structure maps the player (by name) to the input the player gave
 			   this list is passed to the engine with every cycle of the loop
-	textures: map containing ObjectTypes and textures.
+	objecttextures: map containing ObjectTypes and textures
+	blocktextures: map containing BlockTypes and textures
 	*/
 	std::vector<Player> players;
 	std::vector<Vehicle> vehicles;
 	std::vector<Projectile> projectiles;
 	Map map;
 	sf::RenderWindow * window;
+
 	std::vector<std::pair<std::string, Config::ObjectType>> userinput;
-	std::map<Config::ObjectType, sf::Texture> textures;
+	std::map<Config::ObjectType, sf::Texture> objecttextures;
+	std::map<Config::BlockType, sf::Texture> blocktextures;
 };

@@ -3,17 +3,18 @@
 Game::Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata)
 {
 	this->window = window;
-	initTextures();
+	initObjectTextures();
+	initBlockTextures();
 	initPlayers(playerdata);
 	initMap(mapdata);
 	initProjectiles();
 }
 
-void Game::initTextures()
+void Game::initObjectTextures()
 {
 	std::string line;
 	std::ifstream texturefile;
-	texturefile.open("src/resources/textures.txt", std::ifstream::in);
+	texturefile.open("src/resources/objecttextures.txt", std::ifstream::in);
 	if (texturefile.is_open())
 	{
 		while (std::getline(texturefile, line))
@@ -32,7 +33,36 @@ void Game::initTextures()
 				sf::Texture texture;
 				texture.loadFromFile(tokens[1]);
 				texturepair.second = texture;
-				textures.insert(texturepair);
+				objecttextures.insert(texturepair);
+			}
+		}
+	}
+}
+
+void Game::initBlockTextures()
+{
+	std::string line;
+	std::ifstream texturefile;
+	texturefile.open("src/resources/blocktextures.txt", std::ifstream::in);
+	if (texturefile.is_open())
+	{
+		while (std::getline(texturefile, line))
+		{
+			if (line[0] != '#' && line[0] != '\n')
+			{
+				std::stringstream stream(line);
+				std::string token;
+				std::vector<std::string> tokens;
+				while (std::getline(stream, token, ' '))
+				{
+					tokens.push_back(token);
+				}
+				std::pair<Config::BlockType, sf::Texture> texturepair;
+				texturepair.first = static_cast<Config::BlockType>(std::stoi(tokens[0]));
+				sf::Texture texture;
+				texture.loadFromFile(tokens[1]);
+				texturepair.second = texture;
+				blocktextures.insert(texturepair);
 			}
 		}
 	}
@@ -59,7 +89,7 @@ Vehicle * Game::initVehicle(Config::ObjectType type)
 						parameters.push_back(std::stof(token));
 					}
 					// The loaded vehicle is added to the vehicles -vector here
-					vehicles.emplace_back(&textures.find(type)->second, type, parameters[1], parameters[2], parameters[3], parameters[4]);
+					vehicles.emplace_back(&objecttextures.find(type)->second, type, parameters[1], parameters[2], parameters[3], parameters[4]);
 					return &vehicles.back();
 				}
 			}
