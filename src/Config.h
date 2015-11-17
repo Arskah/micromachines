@@ -26,5 +26,15 @@ namespace Config
 		Barrier
 	};
 
+	enum class InputType
+	{
+		None,
+		Accelerate,
+		TurnLeft,
+		TurnRight,
+		Brake,
+		Shoot
+	};
+
 	extern const float FrameCap;
 }

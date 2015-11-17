@@ -10,6 +10,10 @@ Game::Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, C
 	initProjectiles();
 }
 
+/*
+Loading all the object textures from a file into a map.
+The textures are paired with the type of the object.
+*/
 void Game::initObjectTextures()
 {
 	std::string line;
@@ -39,6 +43,10 @@ void Game::initObjectTextures()
 	}
 }
 
+/*
+Loading all the block textures from a file into a map.
+The textures are paired with the type of the block.
+*/
 void Game::initBlockTextures()
 {
 	std::string line;
@@ -68,6 +76,11 @@ void Game::initBlockTextures()
 	}
 }
 
+/*
+Creating a Vehicle object based on the given object type.
+The object parameters are read from a file.
+The constructed vehicle is pushed to the vehicles vector.
+*/
 Vehicle * Game::initVehicle(Config::ObjectType type)
 {
 	std::string line;

@@ -95,7 +95,7 @@ private:
 	Map map;
 	sf::RenderWindow * window;
 
-	std::vector<std::pair<std::string, Config::ObjectType>> userinput;
+	std::vector<std::pair<Player *, Config::InputType>> userinput;
 	std::map<Config::ObjectType, sf::Texture> objecttextures;
 	std::map<Config::BlockType, sf::Texture> blocktextures;
 };
