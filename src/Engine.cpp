@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine.h"
 
-void Engine::update(sf::RenderWindow* window, std::vector<Object> vehicles, std::vector<Projectile> projectiles, Map map, std::vector<std::pair<Player*, Config::InputType>> userinput)
+void Engine::update(sf::RenderWindow* window, std::vector<Vehicle> vehicles, std::vector<Projectile> projectiles, Map map, std::vector<std::pair<Player*, Config::InputType>> userinput)
 {
 	/* AI and player movement handling */
 	Engine::handleInput(userinput);
@@ -25,42 +25,44 @@ void Engine::update(sf::RenderWindow* window, std::vector<Object> vehicles, std:
 	Engine::draw(window, vehicles, projectiles, map);
 }
 
-/* Handles userinput before moving the object*/
+/* Handles userinput before moving the vehicle*/
 void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput)
 {
 	for (auto it : userinput)
 	{
-		Player* player = it.first();
-		Config::InputType input = it.second();
+		Player* player = it.first;
+		Config::InputType input = it.second;
 		switch (input)
 		{
-		case TurnLeft:
+		case Config::InputType::TurnLeft:
 			player->getVehicle()->turn(true);
 			break;
-		case TurnRight:
+		case Config::InputType::TurnRight:
 			player->getVehicle()->turn(false);
 			break;
-		case Accelerate:
+		case Config::InputType::Accelerate:
 			player->getVehicle()->accelerate();
 			break;
-		case Brake:
+		case Config::InputType::Brake:
 			player->getVehicle()->brake();
 			break;
-		case Shoot:
+		case Config::InputType::Shoot:
 			player->getVehicle()->shoot();
+			break;
+		default:
 			break;
 		}
 	}
 }
 //TODO
 /* Finds the block a vehicle is currently on and gets the block's friction multiplier
-float Engine::getFriction(Object vehicle)
+float Engine::getFriction(Vehicle vehicle)
 {
 	vehicle.getLocation();
 }
 */
 
-void Engine::moveVehicle(Object& vehicle)
+void Engine::moveVehicle(Vehicle& vehicle)
 {
 	float speed = vehicle.getSpeed();
 	if (speed != 0)
@@ -77,13 +79,13 @@ void Engine::moveVehicle(Object& vehicle)
 	}
 }
 /*
-void Engine::moveProjectile(Object& projectile)
+void Engine::moveProjectile(Vehicle& projectile)
 {
 	
 }
 */
 
-void Engine::draw_vehicles(sf::RenderWindow* window, std::vector<Object> vehicles)
+void Engine::draw_vehicles(sf::RenderWindow* window, std::vector<Vehicle> vehicles)
 {
 	for (auto it : vehicles)
 	{
@@ -103,7 +105,7 @@ void Engine::draw_projectiles(sf::renderWindow* window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow* window, std::vector<Object> vehicles, std::vector<Projectile> projectiles, Map map)
+void Engine::draw(sf::RenderWindow* window, std::vector<Vehicle> vehicles, std::vector<Projectile> projectiles, Map map)
 {
 	(void) projectiles;
 	window->clear(sf::Color::Black);				// Clear previous frame
