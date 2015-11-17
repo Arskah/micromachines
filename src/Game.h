@@ -97,5 +97,5 @@ private:
 
 	std::vector<std::pair<Player *, Config::InputType>> userinput;
 	std::map<Config::ObjectType, sf::Texture> objecttextures;
-	std::map<Config::BlockType, sf::Texture> blocktextures;
+	std::map<Config::BlockType, sf::Image> blocktextures;
 };

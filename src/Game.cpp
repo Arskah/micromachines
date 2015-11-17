@@ -65,9 +65,9 @@ void Game::initBlockTextures()
 				{
 					tokens.push_back(token);
 				}
-				std::pair<Config::BlockType, sf::Texture> texturepair;
+				std::pair<Config::BlockType, sf::Image> texturepair;
 				texturepair.first = static_cast<Config::BlockType>(std::stoi(tokens[0]));
-				sf::Texture texture;
+				sf::Image texture;
 				texture.loadFromFile(tokens[1]);
 				texturepair.second = texture;
 				blocktextures.insert(texturepair);
