@@ -13,7 +13,7 @@ int main()
 	playerdata.push_back(pair);
 	std::string mapdata = "lol";
 
-	Game game(&window, playerdata, mapdata);
+	Game game(window, playerdata, mapdata);
 	game.run();
 
 	/*

@@ -1,8 +1,7 @@
 #include "Game.h"
 
-Game::Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata)
+Game::Game(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata) : window(window)
 {
-	this->window = window;
 	initObjectTextures();
 	initBlockTextures();
 	initPlayers(playerdata);
@@ -140,15 +139,15 @@ THE GAME RUNS HERE
 */
 void Game::run()
 {
-	while (window->isOpen())
+	while (window.isOpen())
 	{
 		sf::Event event;
-		while (window->pollEvent(event))
+		while (window.pollEvent(event))
 		{
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window->close();
+				window.close();
 				break;
 			}
 		}

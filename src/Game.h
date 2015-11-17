@@ -28,7 +28,7 @@ public:
 	- playerdata: list of player names and their vehicle choices (vehicle type)
 	- mapdata: filepath to the map data
 	*/
-	Game(sf::RenderWindow * window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata);
+	Game(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata);
 
 	/* run()
 	The game loop. Runs the event loop, gathers user input and passes it to the Engine.
@@ -93,7 +93,7 @@ private:
 	std::vector<Vehicle> vehicles;
 	std::vector<Projectile> projectiles;
 	Map map;
-	sf::RenderWindow * window;
+	sf::RenderWindow& window;
 
 	std::vector<std::pair<Player *, Config::InputType>> userinput;
 	std::map<Config::ObjectType, sf::Texture> objecttextures;
