@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine.h"
 
-void Engine::update(sf::RenderWindow* window, std::vector<Vehicle> vehicles, std::vector<Projectile> projectiles, Map map, std::vector<std::pair<Player*, Config::InputType>> userinput)
+void Engine::update(sf::RenderWindow& window, std::vector<Vehicle>& vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput)
 {
 	/* AI and player movement handling */
 	Engine::handleInput(userinput);
@@ -65,7 +65,7 @@ float Engine::getFriction(Vehicle vehicle)
 void Engine::moveVehicle(Vehicle& vehicle)
 {
 	float speed = vehicle.getSpeed();
-	if (speed != 0)
+	if (speed != 0.0f)
 	{
 		float rotation = vehicle.getRotation();
 		sf::Vector2f movementVec; //normal vector based on current direction
@@ -75,7 +75,7 @@ void Engine::moveVehicle(Vehicle& vehicle)
 		t.rotate(rotation);
 		movementVec = t.transformPoint(forwardVec);
 		//TODO friction etc.
-		vehicle.move(speed * movementVec);
+		vehicle.move(movementVec * speed);
 	}
 }
 /*
@@ -85,11 +85,11 @@ void Engine::moveProjectile(Vehicle& projectile)
 }
 */
 
-void Engine::draw_vehicles(sf::RenderWindow* window, std::vector<Vehicle> vehicles)
+void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle>& vehicles)
 {
 	for (auto it : vehicles)
 	{
-		window->draw(it);
+		window.draw(it);
 	}
 }
 
@@ -105,12 +105,12 @@ void Engine::draw_projectiles(sf::renderWindow* window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow* window, std::vector<Vehicle> vehicles, std::vector<Projectile> projectiles, Map map)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle>& vehicles, std::vector<Projectile>& projectiles, Map& map)
 {
 	(void) projectiles;
-	window->clear(sf::Color::Black);				// Clear previous frame
+	window.clear(sf::Color::Black);				// Clear previous frame
 	//window->draw(map.getDrawable());							//TODO: Map			'BOTTOM' drawing
 	//Engine::draw_projectiless(projectiles);		// Projectiles don't overwrite on vehicles
 	Engine::draw_vehicles(window, vehicles);			// On top of everything
-	window->display();							// Update drawings
+	window.display();							// Update drawings
 }
