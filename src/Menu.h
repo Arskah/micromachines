@@ -19,6 +19,8 @@ protected:
 	sf::Text getSelected() const;
 
 	int selectedItem = 0;
+
+	sf::RenderWindow window;
 	int width;
 	int height;
 private:
@@ -29,7 +31,10 @@ private:
 
 class MainMenu : public Menu
 {
-	MainMenu(sf::RenderWindow& window);
+	MainMenu(sf::RenderWindow& window) : Menu(window)
+	{
+
+	}
 protected:
 	virtual void select();
 private:
@@ -40,7 +45,10 @@ private:
 
 class SettingsMenu : public Menu
 {
-	SettingsMenu(sf::RenderWindow& window);
+	SettingsMenu(sf::RenderWindow& window) : Menu(window)
+	{
+
+	}
 protected:
 	virtual void select();
 private:
@@ -51,7 +59,10 @@ private:
 
 class SinglePlayerMenu : public Menu
 {
-	SinglePlayerMenu(sf::RenderWindow& window);
+	SinglePlayerMenu(sf::RenderWindow& window) : Menu(window)
+	{
+
+	}
 protected:
 	virtual void select();
 private:
@@ -62,7 +73,10 @@ private:
 
 class MultiPlayerMenu : public Menu
 {
-	MultiPlayerMenu(sf::RenderWindow& window);
+	MultiPlayerMenu(sf::RenderWindow& window) : Menu(window)
+	{
+
+	}
 protected:
 	virtual void select();
 private:
@@ -73,7 +87,10 @@ private:
 
 class PauseMenu : public Menu
 {
-	PauseMenu(sf::RenderWindow& window);
+	PauseMenu(sf::RenderWindow& window) : Menu(window)
+	{
+
+	}
 protected:
 	virtual void select();
 private:

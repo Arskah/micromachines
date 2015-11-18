@@ -1,6 +1,6 @@
 #include "Menu.h"
 /* BASE CLASS FOR ALL MENUS*/
-Menu::Menu(sf::RenderWindow& window)
+Menu::Menu(sf::RenderWindow& window) : window(window)
 {
 	if (!font.loadFromFile("arial.ttf"))
 	{
@@ -89,26 +89,26 @@ sf::Text Menu::getSelected() const
 /* END OF BASE CLASS*/
 
 /* MAIN MENU*/
-MainMenu::MainMenu(sf::RenderWindow& window) : Menu()
-{
-	// TODO: background and vector with possible selections. Read from file??
-}
-
 void MainMenu::select()
 {
 	switch (selectedItem)		// TODO: from up to down, these will call functions that do things in menus. Like if MainMenu top selection is 'Single Player', case 0 will call Single Player Menu. Enum good here??
 	{
-	case 0:
+	case 0:		// Want to play Single player
+		SinglePlayerMenu::SinglePlayerMenu(this->window);
+		break;
+	case 1:		// Want to play multiplayer
+		MultiplayerMenu::MultiPlayerMenu(this->window);
+		break;
+	case 2:		// Open settings
+		SettingsMenu::SettingsMenu(this->window);
+		break;
+	case 3:		//EXIT GAME
+		window.close();
 		break;
 	}
 }
 
 /* SETTINGS MENU*/
-SettingsMenu::SettingsMenu(sf::RenderWindow& window)
-{
-
-}
-
 void SettingsMenu::select()
 {
 	switch (selectedItem)
@@ -119,46 +119,31 @@ void SettingsMenu::select()
 }
 
 /* SINGLEPLAYER MENU*/
-SinglePlayerMenu::SinglePlayerMenu(sf::RenderWindow& window)
-{
-
-}
-
 void SinglePlayerMenu::select()
 {
 	switch (selectedItem)
 	{
-	case 0:
-		break;
+	case 0:		// Start game
+		break;	// TODO: car changing; # of AI etc. settings. Maybe need to tweak base class items to take other objects than text as well
 	}
 }
 
 /* MULTIPLAYER MENU*/
-MultiPlayerMenu::MultiPlayerMenu(sf::RenderWindow& window)
-{
-
-}
-
 void MultiPlayerMenu::select()
 {
 	switch (selectedItem)
 	{
-	case 0:
+	case 0:		// Start game
 		break;
 	}
 }
 
 /* PAUSE MENU*/
-PauseMenu::PauseMenu(sf::RenderWindow& window)
-{
-
-}
-
 void PauseMenu::select()
 {
 	switch (selectedItem)
 	{
-	case 0:
+	case 0:		// Continue
 		break;
 	}
 }

@@ -184,7 +184,7 @@ void Game::run()
 		Engine::update(window, vehicles, projectiles, map, userinput);
 
 		// Clearing the user input of this particular loop cycle
-		for (auto i = 0; i < userinput.size(); i++)
+		for (unsigned int i = 0; i < userinput.size(); i++)
 		{
 			userinput.pop_back();
 		}

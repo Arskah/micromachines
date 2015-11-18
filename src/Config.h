@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 /*
 Declare global default values here and declare them in the .cpp to avoid linker errors
