@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "Config.h"
+#include "ResourceManager.h"
 
 int main()
 {
@@ -13,7 +14,8 @@ int main()
 	playerdata.push_back(pair);
 	std::string mapdata = "lol";
 
-	Game game(window, playerdata, mapdata);
+	ResourceManager resourcemanager;
+	Game game(window, &resourcemanager, playerdata, mapdata);
 	game.run();
 
 	/*

@@ -1,5 +1,5 @@
 # type acceleration maxspeed turnrate weapontimer
 0 0.0 0.0 0.0 0.0
 1 0.0 0.0 0.0 10.0
-2 10.0 40.0 30.0 30.0
+2 10.0 40.0 0.1 30.0
 3 3.0 20.0 5.0 30.0
