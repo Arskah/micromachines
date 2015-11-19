@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
@@ -68,6 +69,8 @@ THE GAME RUNS HERE
 void Game::run()
 {
 	sf::Clock clock;
+	float tickrate = 1.f / 60;
+	float dt = 0.f;
 
 	while (window.isOpen())
 	{
@@ -81,42 +84,46 @@ void Game::run()
 				break;
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		{
-			std::pair<Player *, Config::InputType> pair;
-			pair.first = &players.front();
-			pair.second = Config::InputType::Accelerate;
-			userinput.push_back(pair);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			std::pair<Player *, Config::InputType> pair;
-			pair.first = &players.front();
-			pair.second = Config::InputType::TurnLeft;
-			userinput.push_back(pair);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			std::pair<Player *, Config::InputType> pair;
-			pair.first = &players.front();
-			pair.second = Config::InputType::TurnRight;
-			userinput.push_back(pair);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			std::pair<Player *, Config::InputType> pair;
-			pair.first = &players.front();
-			pair.second = Config::InputType::Brake;
-			userinput.push_back(pair);
-		}
 
-		// The engine draws the game state here
-		Engine::update(window, &vehicles, projectiles, map, userinput);
+		dt = clock.getElapsedTime().asSeconds();
+		//clock.restart();
 
-		// Clearing the user input of this particular loop cycle
-		for (size_t i = 0; i < userinput.size(); i++)
+		if (dt >= tickrate)
 		{
-			userinput.pop_back();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			{
+				std::pair<Player *, Config::InputType> pair;
+				pair.first = &players.front();
+				pair.second = Config::InputType::Accelerate;
+				userinput.push_back(pair);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				std::pair<Player *, Config::InputType> pair;
+				pair.first = &players.front();
+				pair.second = Config::InputType::TurnLeft;
+				userinput.push_back(pair);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				std::pair<Player *, Config::InputType> pair;
+				pair.first = &players.front();
+				pair.second = Config::InputType::TurnRight;
+				userinput.push_back(pair);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			{
+				std::pair<Player *, Config::InputType> pair;
+				pair.first = &players.front();
+				pair.second = Config::InputType::Brake;
+				userinput.push_back(pair);
+			}
+			
+			// The engine draws the game state here
+			Engine::update(window, &vehicles, projectiles, map, userinput, dt);
+			clock.restart();
 		}
+		//std::cout << "FPS: " << 1.f / clock.getElapsedTime().asSeconds() << std::endl;
+		userinput.clear();
 	}
 }

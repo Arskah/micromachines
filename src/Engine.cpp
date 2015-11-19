@@ -1,10 +1,10 @@
 #pragma once
 #include "Engine.h"
 
-void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput)
+void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
 {
 	/* AI and player movement handling */
-	Engine::handleInput(userinput);
+	Engine::handleInput(userinput, dt);
 
 	/* Move vehicles. Players and AI move depends on input handling */
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
@@ -26,7 +26,7 @@ void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, s
 }
 
 /* Handles userinput before moving the vehicle*/
-void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput)
+void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
 {
 	for (auto it : userinput)
 	{
@@ -35,16 +35,16 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 		switch (input)
 		{
 		case Config::InputType::TurnLeft:
-			player->getVehicle()->turn(true);
+			player->getVehicle()->turn(true, dt);
 			break;
 		case Config::InputType::TurnRight:
-			player->getVehicle()->turn(false);
+			player->getVehicle()->turn(false, dt);
 			break;
 		case Config::InputType::Accelerate:
-			player->getVehicle()->accelerate();
+			player->getVehicle()->accelerate(dt);
 			break;
 		case Config::InputType::Brake:
-			player->getVehicle()->brake();
+			player->getVehicle()->brake(dt);
 			break;
 		case Config::InputType::Shoot:
 			player->getVehicle()->shoot();

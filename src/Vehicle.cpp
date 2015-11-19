@@ -18,9 +18,13 @@ Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, con
  *
  * Exponential function of increasing speed to be added later.
  */
-void Vehicle::accelerate()
+void Vehicle::accelerate(float dt)
 {
-	this->setSpeed(this->getSpeed() + acceleration);
+	if (this->getSpeed() < maxspeed)
+	{
+		this->setSpeed(this->getSpeed() + acceleration * dt);
+	}
+
 }
 
 /**
@@ -28,17 +32,20 @@ void Vehicle::accelerate()
 *
 * Exponential function of decreasing speed to be added later.
 */
-void Vehicle::brake()
+void Vehicle::brake(float dt)
 {
-	this->setSpeed(this->getSpeed() - acceleration);
+	if (this->getSpeed() > 0)
+		this->setSpeed(this->getSpeed() - 1.5 * acceleration * dt);
+	else
+		this->setSpeed(this->getSpeed() + 1.5 * acceleration * dt);
 }
 
-void Vehicle::turn(bool left)
+void Vehicle::turn(bool left, float dt)
 {
 	if (left)
-		this->setRotation(this->getRotation() - turnrate);
+		this->setRotation(this->getRotation() - turnrate * dt);
 	else
-		this->setRotation(this->getRotation() + turnrate);
+		this->setRotation(this->getRotation() + turnrate * dt);
 }
 
 /**

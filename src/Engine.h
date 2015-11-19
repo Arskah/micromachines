@@ -21,14 +21,14 @@ namespace Engine
 	- userinput: this structure maps the player (by name) to the input the player gave
 	this list is passed to the engine with every cycle of the loop
 	*/
-	void update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput);
+	void update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt);
 
 	/* Input handling
 	Parameters:
 	- userinput: this structure maps the player to the input the player gave.
 	This vector structure is passed to the engine with every cycle of the loop
 	*/
-	void handleInput(std::vector<std::pair<Player*, Config::InputType>>);
+	void handleInput(std::vector<std::pair<Player*, Config::InputType>>, float dt);
 
 	/* Function that handles moving of objects each frame. Executed after input handling
 	Parameters:
