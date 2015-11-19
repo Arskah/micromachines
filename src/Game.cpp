@@ -67,6 +67,8 @@ THE GAME RUNS HERE
 */
 void Game::run()
 {
+	sf::Clock clock;
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -109,7 +111,7 @@ void Game::run()
 		}
 
 		// The engine draws the game state here
-		Engine::update(window, vehicles, projectiles, map, userinput);
+		Engine::update(window, &vehicles, projectiles, map, userinput);
 
 		// Clearing the user input of this particular loop cycle
 		for (size_t i = 0; i < userinput.size(); i++)
