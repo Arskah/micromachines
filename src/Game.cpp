@@ -86,8 +86,8 @@ void Game::run()
 		}
 
 		dt = clock.getElapsedTime().asSeconds();
-		//clock.restart();
 
+		// Once enough time (always the same) has passed, process the events of the 'tick'
 		if (dt >= tickrate)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -121,9 +121,8 @@ void Game::run()
 			
 			// The engine draws the game state here
 			Engine::update(window, &vehicles, projectiles, map, userinput, dt);
+			userinput.clear();
 			clock.restart();
 		}
-		//std::cout << "FPS: " << 1.f / clock.getElapsedTime().asSeconds() << std::endl;
-		userinput.clear();
 	}
 }

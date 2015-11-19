@@ -6,7 +6,7 @@
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
-	window.setFramerateLimit(0);
+	window.setFramerateLimit(60);
 	std::string name = "Okko";
 	Config::ObjectType type = Config::ObjectType::Car;
 	std::pair<const std::string, Config::ObjectType> pair(name, type);

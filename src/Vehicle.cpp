@@ -24,6 +24,10 @@ void Vehicle::accelerate(float dt)
 	{
 		this->setSpeed(this->getSpeed() + acceleration * dt);
 	}
+	else
+	{
+		this->setSpeed(maxspeed);
+	}
 
 }
 
@@ -35,9 +39,18 @@ void Vehicle::accelerate(float dt)
 void Vehicle::brake(float dt)
 {
 	if (this->getSpeed() > 0)
+	{
 		this->setSpeed(this->getSpeed() - 1.5 * acceleration * dt);
+		if (this->getSpeed() < 0)
+			this->setSpeed(0.f);
+	}
 	else
+	{
 		this->setSpeed(this->getSpeed() + 1.5 * acceleration * dt);
+		if (this->getSpeed() > 0)
+			this->setSpeed(0.f);
+	}
+
 }
 
 void Vehicle::turn(bool left, float dt)
