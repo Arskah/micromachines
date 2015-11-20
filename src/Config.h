@@ -23,7 +23,7 @@ namespace Config
 		Grass,
 		Sand,
 		Water,
-		Barrier
+		RockWall
 	};
 
 	enum class InputType
@@ -35,6 +35,9 @@ namespace Config
 		Brake,
 		Shoot
 	};
+
+	extern const std::map<std::string, Config::BlockType> StringToBlockTypeMap;
+	extern const std::map<BlockType, float> BlockToFrictionMap;
 
 	extern const float FrameCap;
 }

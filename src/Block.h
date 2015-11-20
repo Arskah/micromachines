@@ -5,6 +5,9 @@
 class Block
 {
 public:
+	//Give map access to be able to update blocks while under editing
+	friend class Map;
+
 	//Default Constructor
 	Block(const Config::BlockType type, const float friction);
 
