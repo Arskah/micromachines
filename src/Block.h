@@ -9,6 +9,7 @@ public:
 	friend class Map;
 
 	//Default Constructor
+	Block();
 	Block(const Config::BlockType type, const float friction);
 
 	//Returns type from Block.

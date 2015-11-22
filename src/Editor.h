@@ -32,45 +32,6 @@ private:
 	sf::VertexArray createSelected(std::vector<const sf::Image *> * block_images, const sf::Sprite * blocks_ui, const int num);
 	
 	sf::RenderWindow & window;
-	sf::Vector2u size;
 	Map map;
 	const std::map<Config::BlockType, sf::Image> * blocktextures;
 };
-
-/*
-#include <SFML/Graphics.hpp>
-#include "Editor.h"
-
-int main()
-{
-sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
-
-std::map<Config::BlockType, sf::Image> blocktextures;
-Editor editor(&window, &blocktextures);
-editor.runEditor();
-
-while(window.isOpen())
-{
-sf::Event event;
-while (window.pollEvent(event))
-{
-switch (event.type)
-{
-case sf::Event::Closed:
-window.close();
-break;
-case sf::Event::KeyPressed:
-if (event.key.code == sf::Keyboard::Escape)
-window.close();
-break;
-}
-}
-
-window.clear();
-window.display();
-}
-
-return 0;
-}
-
-*/
