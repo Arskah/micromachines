@@ -10,6 +10,7 @@ void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, s
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
 	{
 		it->slow(Engine::getFriction(&(*it), map), dt);
+		//std::cout << Engine::getFriction(&(*it), map) << std::endl;
 		Engine::moveVehicle(&(*it));
 	}
 
@@ -115,6 +116,14 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 	window.clear(sf::Color::Black);				// Clear previous frame
 	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
 	//Engine::draw_projectiless(projectiles);		// Projectiles don't overwrite on vehicles
-	Engine::draw_vehicles(window, vehicles);			// On top of everything
+	Engine::draw_vehicles(window, vehicles);   // On top of everything
+	
+	// This is a ghetto version of the centered view.
+	sf::View view;
+	view.setCenter(sf::Vector2f(vehicles->back().getPosition().x, vehicles->back().getPosition().y));
+	view.setSize(1280.f, 720.f);
+	view.setRotation(vehicles->back().getRotation() - 180.f);
+
+	window.setView(view);
 	window.display();							// Update drawings
 }

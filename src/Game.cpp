@@ -76,6 +76,7 @@ void Game::run()
 	if (music.openFromFile("src/resources/sounds/themesong.wav"))
 		music.play();
 
+
 	while (window.isOpen())
 	{
 		sf::Event event;

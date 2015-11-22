@@ -11,7 +11,7 @@ Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, con
 	this->maxspeed = maxspeed;
 	this->turnrate = turnrate;
 	this->weapontimer = weapontimer;
-	this->setScale(sf::Vector2f(0.5, 0.5));
+	//this->setScale(sf::Vector2f(0.5, 0.5));
 }
 
 /**
