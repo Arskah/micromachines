@@ -9,6 +9,7 @@ void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, s
 	/* Move vehicles. Players and AI move depends on input handling */
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
 	{
+		it->slow(Engine::getFriction(&(*it), map), dt);
 		Engine::moveVehicle(&(*it));
 	}
 
@@ -56,16 +57,18 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 }
 //TODO
 /* Finds the block a vehicle is currently on and gets the block's friction multiplier
-float Engine::getFriction(Vehicle vehicle)
-{
-	vehicle.getLocation();
-}
 */
+float Engine::getFriction(Vehicle * vehicle, Map& map)
+{
+	sf::Vector2f location = vehicle->getLocation();
+	return map.getBlock(location.x, location.y).getFriction();
+}
+
 
 void Engine::moveVehicle(Vehicle * vehicle)
 {
 	float speed = vehicle->getSpeed();
-	if (speed != 0.0f)
+	if (speed > 0.0f)
 	{
 		float rotation = vehicle->getRotation();
 		sf::Vector2f movementVec; //normal vector based on current direction

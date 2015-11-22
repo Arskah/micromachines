@@ -18,8 +18,10 @@ public:
 	void brake(float dt);
 	//Increases rotation angle of the Vehicle by a function of member variable turnrate.
 	void turn(bool left, float dt);
-	//Launches a Projectile from the Vehicle
+	//Launches a Projectile from the Vehicle.
 	void shoot();
+	//Decreases the speed based on the friction of the underlying block.
+	void slow(float friction, float dt);
 
 private:
 	float acceleration;

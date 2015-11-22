@@ -11,6 +11,7 @@ Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, con
 	this->maxspeed = maxspeed;
 	this->turnrate = turnrate;
 	this->weapontimer = weapontimer;
+	this->setScale(sf::Vector2f(0.5, 0.5));
 }
 
 /**
@@ -59,6 +60,14 @@ void Vehicle::turn(bool left, float dt)
 		this->setRotation(this->getRotation() - turnrate * dt);
 	else
 		this->setRotation(this->getRotation() + turnrate * dt);
+}
+
+void Vehicle::slow(float friction, float dt)
+{
+	if (this->getSpeed() > 0)
+	{
+		this->setSpeed(this->getSpeed() - friction * dt);
+	}
 }
 
 /**

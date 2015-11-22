@@ -36,6 +36,7 @@ namespace Engine
 	*/
 	void moveVehicle(Vehicle *);
 
+	float getFriction(Vehicle *, Map& map);
 	/*
 	void moveProjectile(Projectile);
 	*/
