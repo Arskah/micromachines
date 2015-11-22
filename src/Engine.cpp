@@ -60,7 +60,8 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 */
 float Engine::getFriction(Vehicle * vehicle, Map& map)
 {
-	sf::Vector2f location = vehicle->getLocation();
+	// change the getPosition() to getLocation() once it's properly implemented.
+	sf::Vector2f location = vehicle->getPosition();
 	return map.getBlock(location.x, location.y).getFriction();
 }
 

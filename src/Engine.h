@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 #include "AI.h"
 #include "Block.h"
 #include "Map.h"
