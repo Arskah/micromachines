@@ -2,14 +2,41 @@
 
 Editor::Editor(sf::RenderWindow & window, const std::map<Config::BlockType, sf::Image> * blocktextures) : window(window), map(*blocktextures)
 {
-	//this->window = window;
 	this->blocktextures = blocktextures;
 }
 
 void Editor::runEditor()
 {
-	//DEBUG
-	initMap();
+	//Ask what to do on init
+	{
+		std::string input = openTextbox("Create new or load? Type 'new' or 'load'", Editor::BoxTypes::Text);
+		std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+		//Load file
+		if (input == "load")
+		{
+			std::string filename = openTextbox("Enter filename to load from");
+			if (filename.size() != 0)
+			{
+				filename.insert(0, "src/resources/");
+				filename.append(".png");
+				//Check if load successfull
+				if (!map.loadFromImage(filename, *blocktextures))
+				{
+					openTextbox(" Load failed. Creating new map, press ESC to continue");
+					initMap();
+				}
+			}
+			else
+			{
+				openTextbox("False filename, creating new...");
+				initMap();
+			}
+		}
+		//Create new
+		else
+			initMap();
+	}
 
 	//Variables
 	bool exit = false;
@@ -35,10 +62,10 @@ void Editor::runEditor()
 	blocks_ui_tex.loadFromImage(blocks_ui_image);
 	sf::Sprite blocks_ui;
 	blocks_ui.setTexture(blocks_ui_tex);
-	//blocks_ui.setPosition(float(5), float(map.blocks[0].size() - blocks_ui.getTexture()->getSize().y - 5));
 
 	//Map update functions
-	void (Map::*updateImageFunc)(const std::map<Config::BlockType, sf::Image>&, const sf::Vector2u, const Config::BlockType, const int) = &Map::updateImageCircle;
+	//void (Map::*updateImageFunc)(const std::map<Config::BlockType, sf::Image>&, const sf::Vector2u, const Config::BlockType, const int) = &Map::updateImageCircle;
+	void (Map::*updateImageFunc)(const sf::Vector2i, const Config::BlockType, const int) = &Map::updateImageCircle;
 	Config::BlockType block_to_draw = Config::BlockType::Ground;
 
 	//Catch wanted draw points to these
@@ -63,8 +90,7 @@ void Editor::runEditor()
 			//Temp variables
 			std::string filename;
 
-			sf::Clock timer;
-			sf::Time time;
+			bool test = false;
 
 			switch (event.type)
 			{
@@ -89,9 +115,10 @@ void Editor::runEditor()
 					filename = openTextbox("Enter filename to save to");
 					if (filename.size() != 0)
 					{
+						filename.insert(0, "src/resources/");
 						filename.append(".png");
 						//Check if save successfull
-						map.saveToImage(filename);
+						test = map.saveToImage(filename);
 					}
 					break;
 					//Load file
@@ -99,12 +126,11 @@ void Editor::runEditor()
 					filename = openTextbox("Enter filename to load from");
 					if (filename.size() != 0)
 					{
+						filename.insert(0, "src/resources/");
 						filename.append(".png");
 						//Check if load successfull
-						timer.restart();
 						map.loadFromImage(filename, *blocktextures);
 					}
-					time = timer.getElapsedTime();
 					break;
 					//From 'Numpad +' or 'E' increase brush size
 				case sf::Keyboard::Add:
@@ -187,12 +213,6 @@ void Editor::runEditor()
 			}
 		}
 
-		//Test if function fast enough to be able to draw directly and without the loop below -- IS NOT
-		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-		{
-			map.updateImageCircle2(sf::Vector2i(window.mapPixelToCoords(sf::Mouse::getPosition(window), default_view)), block_to_draw, brush_size);
-		}*/
-
 		//Faster here than in event loop
 		//Capture clicked position
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
@@ -267,18 +287,14 @@ void Editor::runEditor()
 		//If only one point clicked, then do only that
 		if (pixels_to_draw_on.size() == 1)
 		{
-			map.updateImageCircle2(pixels_to_draw_on.front(), block_to_draw, brush_size);
+			(map.*updateImageFunc)(sf::Vector2i(pixels_to_draw_on.front()), block_to_draw, brush_size);
 		}
 		//Otherwise do the whole lines until empty
 		else
 		{
 			while (pixels_to_draw_on.size() > 1)
 			{
-				sf::Clock timer;
-				sf::Time time;
-				//(map.*updateImageFunc)((*blocktextures), sf::Vector2u(pixels_to_draw_on.front()), block_to_draw, brush_size);
-				map.updateImageCircle2(pixels_to_draw_on.front(), block_to_draw, brush_size);
-				time = timer.getElapsedTime();
+				(map.*updateImageFunc)(sf::Vector2i(pixels_to_draw_on.front()), block_to_draw, brush_size);
 				pixels_to_draw_on.pop_front();
 			}
 		}
@@ -291,16 +307,24 @@ void Editor::runEditor()
 
 		//Clear window
 		window.clear();
+
 		//Draw Map
 		window.draw((*map.getDrawable()));
+
 		//Draw interfaces
 		blocks_ui.setPosition(5.f + window.getView().getCenter().x - (window.getSize().x / 2),
 			window.getView().getCenter().y + (window.getSize().y / 2) - blocks_ui.getTexture()->getSize().y - 5.f);
 		window.draw(blocks_ui);
-		window.draw(createSelected(&block_images, &blocks_ui, static_cast<int>(block_to_draw)));
+
+		//Selection box for blocks_ui
+		//Slightly broken if using other than 1280x720 maps.
+		//Will be fixed
+		//window.draw(createSelected(&block_images, &blocks_ui, static_cast<int>(block_to_draw)));
+
 		//Minimap
 		window.setView(minimap_view);
 		window.draw((*map.getDrawable()));
+
 		//Display
 		window.display();
 
@@ -316,15 +340,22 @@ void Editor::runEditor()
 void Editor::initMap()
 {
 	sf::Vector2u size;
-	size.x = std::stoi(openTextbox("Please enter map size X", BoxTypes::Number));
-	size.y = std::stoi(openTextbox("Please enter map size Y", BoxTypes::Number));
+
+	std::string size_x = "", size_y = "";
+	while (size_x == "")
+		size_x = openTextbox("Please enter map size X", BoxTypes::Number);
+	while (size_y == "")
+		size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
+
+	size.x = std::stoi(size_x);
+	size.y = std::stoi(size_y);
 	//size.x = 30;
 	//size.y = 30;
 
-	//std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
+	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
 
 	//DEBUG BASE
-	std::string base = "sand";
+	//std::string base = "sand";
 
 	//Change inputted string to lowercase
 	std::transform(base.begin(), base.end(), base.begin(), ::tolower);
@@ -339,14 +370,7 @@ void Editor::initMap()
 	}
 
 	//Create an image of the map
-	sf::Time time;
-	sf::Clock timer;
-	timer.restart();
-
-	map.createNewImage((*blocktextures), size, base_block_type);
-
-	time = timer.getElapsedTime();
-	time = timer.getElapsedTime();
+	map.createImageFromBase((*blocktextures), size, base_block_type);
 }
 
 std::string Editor::openTextbox(const std::string &box_name, const BoxTypes box_type)

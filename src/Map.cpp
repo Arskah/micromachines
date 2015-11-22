@@ -28,7 +28,6 @@ Map::Map(const std::map<Config::BlockType, sf::Image>& block_resources)
 		sf::Image circle_mask;
 
 		circle_mask.create(50, 50, sf::Color::Black);
-		//circle_mask.create(50, 50, sf::Color(253, 253, 253, 253));
 
 		for (int x = 0; x < i; x++)
 		{
@@ -37,85 +36,14 @@ Map::Map(const std::map<Config::BlockType, sf::Image>& block_resources)
 				if (std::sqrt(std::pow((i - 1) / 2 - x, 2) + std::pow((i - 1) / 2 - y, 2)) > ((i - 1) / 2))
 				{
 					circle_mask.setPixel(x, y, sf::Color::Red);
-					//circle_mask.setPixel(x, y, sf::Color(254, 254, 254, 254));
 				}
 			}
 		}
 
 		circle_mask.createMaskFromColor(sf::Color::Black);
-		//circle_mask.createMaskFromColor(sf::Color(253, 253, 253, 253));
 
 		circle_brush_masks.push_back(circle_mask);
 	}
-}
-
-
-void Map::loadFromFile(const std::string &filename, const std::map<Config::BlockType, sf::Image> &blocktextures)
-{
-	int size_x = 0;
-	int size_y = 0;
-	int current_x = 0;
-	int current_y = 0;
-
-	std::vector<Block> row;
-
-	std::string line;
-	std::ifstream objectfile;
-	objectfile.open(filename, std::ifstream::in);
-	if (objectfile.is_open())
-	{
-		while (std::getline(objectfile, line))
-		{
-			if (line[0] == '!')
-			{
-				std::stringstream stream(line);
-				std::string token;
-				std::vector<int> parameters;
-
-				//Discard '!'
-				std::getline(stream, token, ' ');
-				while (std::getline(stream, token, ' '))
-				{
-					parameters.push_back(std::stoi(token));
-				}
-
-				size_x = parameters[0];
-				size_y = parameters[1];
-			}
-			else if (line[0] != '#')
-			{
-				std::stringstream stream(line);
-				std::string token;
-				std::vector<float> parameters;
-				while (std::getline(stream, token, ' '))
-				{
-					parameters.push_back(std::stof(token));
-				}
-				
-				//Push current block to row
-				if (current_y < size_y)
-				{
-					row.push_back(Block(static_cast<Config::BlockType>(int(parameters[0])), parameters[1]));
-					//Move to next
-					++current_y;
-				}
-				//If row full, empty it
-				if (current_x < size_x && current_y == size_y)
-				{
-					//Add column
-					blocks.push_back(row);
-
-					//Move to next
-					row.clear();
-					current_y = 0;
-					++current_x;
-				}
-			}
-		}
-	}
-
-	//Create image
-	createImage(blocktextures);
 }
 
 bool Map::saveToImage(const std::string & filename)
@@ -139,21 +67,23 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	//Fill with empty ones first
 	blocks.assign(block_image.getSize().x, std::vector<Block>(block_image.getSize().y, Block(Config::BlockType::None, Config::BlockToFrictionMap.find(Config::BlockType::None)->second)));
 	
-	/*
 	//Raw pointer to block types, will need a conversion
 	const sf::Uint8 * block_info = block_image.getPixelsPtr();
 	//Right starting position to start reading from (pixel is 4x sf::Uint8)
 	block_info += 2;
 
+	//THROWS A NOTE FOR WRONG ELEMENT & ITERATOR, IS NOT A BUG, IS INTENTIONAL HAXXX (need to check on how to iterate with steps of 4 inside vector ctor)
 	//Pointer to block type information
 	sf::Uint32 * ptr_u = (sf::Uint32 *)block_info;
 	//Get type values from pixels
 	std::vector<sf::Uint8> type_values(ptr_u, (ptr_u + block_image.getSize().x * block_image.getSize().y));
-	*/
+	
 
+	/* TRIED TO FIX ABOVE HERE, NOT WORKING YET
 	sf::Uint8 * block_info = (sf::Uint8 *)block_image.getPixelsPtr();
 	block_info += 2;
 	std::vector<sf::Uint8> type_values(block_info, (block_info + block_image.getSize().x * block_image.getSize().y));
+	*/
 
 	//Count how many of certain blocks in a row
 	std::vector<std::pair<Config::BlockType, int>> block_counts;
@@ -184,23 +114,6 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 		sf::Vector2u size = block_image.getSize();
 		blocks[i].assign(blockrow.begin() + block_image.getSize().y * i, blockrow.begin() + block_image.getSize().y * (i + 1));
 	}
-	
-	/*
-	//Set blocks from image -- VERSION 1 -- DEPRECATED
-	for (std::size_t x = 0; x < block_image.getSize().x; x++)
-	{
-		for (std::size_t y = 0; y < block_image.getSize().y; y++)
-		{
-			//blocks[x][y].type = static_cast<Config::BlockType>(*block_info);
-			//blocks[x][y].friction = Config::BlockToFrictionMap.find(static_cast<Config::BlockType>(*block_info))->second;
-			//Load next position to be ready
-			//block_info += 4;
-
-			blocks[x][y].type = static_cast<Config::BlockType>(static_cast<unsigned int>(block_image.getPixel(x, y).toInteger() >> 8));
-			blocks[x][y].friction = Config::BlockToFrictionMap.find(static_cast<Config::BlockType>(static_cast<unsigned int>(block_image.getPixel(x, y).toInteger() >> 8)))->second;
-		}
-	}
-	*/
 
 	//Create new drawable image
 	createImageFromBlockImage(blocktextures);
@@ -222,60 +135,10 @@ sf::Sprite * Map::getDrawable()
 	return &(drawable);
 }
 
-void Map::createImage(const std::map<Config::BlockType, sf::Image>& blocktextures)
+void Map::createImageFromBase(const std::map<Config::BlockType, sf::Image>& blocktextures, const sf::Vector2u size, const Config::BlockType base_block_type)
 {
-	//Create image to correct size
-	image.create(blocks.size(), blocks[0].size(), sf::Color::Red);
+	//Creates the image a lot faster than pixel-by-pixel
 
-	//Loop over positions and copy pixel-by-pixel the image
-	for (std::size_t x = 0; x < blocks.size(); x++)
-	{
-		for (std::size_t y = 0; y < blocks[0].size(); y++)
-		{
-			image.copy(blocktextures.find(blocks[x][y].getType())->second, x, y, sf::IntRect(x % 50, y % 50, 1, 1));
-		}
-	}
-
-	//Load image to texture
-	texture.loadFromImage(image);
-	//Load texture to sprite
-	drawable.setTexture(texture);
-}
-
-void Map::createImage2(const std::map<Config::BlockType, sf::Image>& blocktextures)
-{
-	//Create image to correct size
-	image.create(blocks.size(), blocks[0].size(), sf::Color::Red);
-
-	//Loop over positions and copy pixel-by-pixel the image
-	for (std::size_t x = 0; x < blocks.size(); x++)
-	{
-		for (std::size_t y = 0; y < blocks[0].size(); y++)
-		{
-			image.copy(blocktextures.find(blocks[x][y].getType())->second, x, y, sf::IntRect(x % 50, y % 50, 1, 1));
-		}
-	}
-
-	//Load image to texture
-	texture.loadFromImage(image);
-	//Load texture to sprite
-	drawable.setTexture(texture);
-
-	//Do the same to block_image
-	block_image.create(blocks.size(), blocks[0].size());
-
-	//Loop over positions and copy pixel-by-pixel the image
-	for (std::size_t x = 0; x < blocks.size(); x++)
-	{
-		for (std::size_t y = 0; y < blocks[0].size(); y++)
-		{
-			block_image.setPixel(x, y, sf::Color((static_cast<std::uint32_t>(blocks[x][y].getType()) << 8) + 255));
-		}
-	}
-}
-
-void Map::createNewImage(const std::map<Config::BlockType, sf::Image>& blocktextures, const sf::Vector2u size, const Config::BlockType base_block_type)
-{
 	//Insert base blocks to fill map
 	blocks.assign(size.x, std::vector<Block>(size.y, Block(base_block_type, Config::BlockToFrictionMap.find(base_block_type)->second)));
 
@@ -306,6 +169,8 @@ void Map::createNewImage(const std::map<Config::BlockType, sf::Image>& blocktext
 
 void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>& blocktextures)
 {
+	//YES, IS SLOW, WILL BE OPTIMIZED IF POSSIBLE
+
 	//Empty old image
 	image.create(block_image.getSize().x, block_image.getSize().y);
 	//Copy new one
@@ -325,73 +190,7 @@ void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>
 	drawable.setTexture(texture);
 }
 
-void Map::updateImageBox(const std::map<Config::BlockType, sf::Image>& blocktextures, const sf::Vector2u location, const Config::BlockType type, const int brush_size)
-{
-	//Image of block type to draw
-	const sf::Image * temp_image = &(blocktextures.find(type)->second);
-	
-	//Box brush
-	//Loop over brush size
-	for (int x = 0; x < brush_size; x++)
-	{
-		for (int y = 0; y < brush_size; y++)
-		{
-			//Check that we are in bounds of the image
-			if (((location.x + x - (brush_size - 1) / 2) >= 0 && (location.x + x - (brush_size - 1) / 2) < image.getSize().x)
-				&& ((location.y + y - (brush_size - 1) / 2) >= 0 && (location.y + y - (brush_size - 1) / 2) < image.getSize().y))
-			{
-				//Check if given pixel is already of desired type to avoid unnecessary processing
-				if (blocks[x + location.x - (brush_size - 1) / 2][y + location.y - (brush_size - 1) / 2].getType() == type)
-					continue;
-
-				//Change pixel to desired color
-				image.setPixel(x + location.x - (brush_size - 1) / 2, y + location.y - (brush_size - 1) / 2,
-					temp_image->getPixel((location.x + x - (brush_size - 1) / 2) % temp_image->getSize().x, (location.y + y - (brush_size - 1) / 2) % temp_image->getSize().y));
-
-				//Also change block
-				blocks[x + location.x - (brush_size - 1) / 2][y + location.y - (brush_size - 1) / 2].type = type;
-				blocks[x + location.x - (brush_size - 1) / 2][y + location.y - (brush_size - 1) / 2].friction = Config::BlockToFrictionMap.find(type)->second;
-			}
-		}
-	}
-}
-
-void Map::updateImageCircle(const std::map<Config::BlockType, sf::Image>& blocktextures, const sf::Vector2u location, const Config::BlockType type, const int brush_size)
-{
-	//Image of block type to draw
-	const sf::Image * temp_image = &(blocktextures.find(type)->second);
-
-	//Circle brush
-	//Loop over brush size
-	for (int x = 0; x < brush_size; x++)
-	{
-		for (int y = 0; y < brush_size; y++)
-		{
-			//Check that we are in bounds of the image
-			if (((location.x + x - (brush_size - 1) / 2) >= 0 && (location.x + x - (brush_size - 1) / 2) < image.getSize().x)
-				&& ((location.y + y - (brush_size - 1) / 2) >= 0 && (location.y + y - (brush_size - 1) / 2) < image.getSize().y))
-			{
-				//Check if given pixel is already of desired type to avoid unnecessary processing
-				if (blocks[x + location.x - (brush_size - 1) / 2][y + location.y - (brush_size - 1) / 2].getType() == type)
-					continue;
-
-				//Comparison if current pixel is inside given circle
-				if (std::sqrt(std::pow((brush_size - 1) / 2 - x, 2) + std::pow((brush_size - 1) / 2 - y, 2)) <= ((brush_size - 1) / 2))
-				{
-					//Change pixel to desired color
-					image.setPixel(x + location.x - (brush_size - 1) / 2, y + location.y - (brush_size - 1) / 2,
-						temp_image->getPixel((location.x + x - (brush_size - 1) / 2) % temp_image->getSize().x, (location.y + y - (brush_size - 1) / 2) % temp_image->getSize().y));
-
-					//Also change Block
-					blocks[x + location.x - (brush_size - 1) / 2][y + location.y - (brush_size - 1) / 2].type = type;
-					blocks[x + location.x - (brush_size - 1) / 2][y + location.y - (brush_size - 1) / 2].friction = Config::BlockToFrictionMap.find(type)->second;
-				}
-			}
-		}
-	}
-}
-
-void Map::updateImageCircle2(sf::Vector2i location, const Config::BlockType type, const int brush_size)
+void Map::updateImageBox(const sf::Vector2i location, const Config::BlockType type, const int brush_size)
 {
 	//If fully out do nothing
 	if (location.x + brush_size / 2 <= 0)
@@ -399,8 +198,40 @@ void Map::updateImageCircle2(sf::Vector2i location, const Config::BlockType type
 	if (location.y + brush_size / 2 <= 0)
 		return;
 
-	//If partly out draw partly -- combined with below
-	//If inside draw normally
+	//Copy wanted piece properly to the map image
+	image.copy(block_textures[static_cast<int>(type)],
+		(location.x - (brush_size - 1) / 2 < 0) ? (0) : (location.x - (brush_size - 1) / 2),
+		(location.y - (brush_size - 1) / 2 < 0) ? (0) : (location.y - (brush_size - 1) / 2),
+		sf::IntRect(
+			(location.x - (brush_size - 1) / 2 < 0) ? ((location.x < 0) ? (50 + brush_size / 2) : (brush_size / 2)) : (location.x % 50),
+			(location.y - (brush_size - 1) / 2 < 0) ? ((location.y < 0) ? (50 + brush_size / 2) : (brush_size / 2)) : (location.y % 50),
+			(location.x - (brush_size - 1) / 2 < 0) ? ((location.x < 0) ? (brush_size / 2 - std::abs(location.x)) : (brush_size / 2 + location.x)) : (brush_size),
+			(location.y - (brush_size - 1) / 2 < 0) ? ((location.y < 0) ? (brush_size / 2 - std::abs(location.y)) : (brush_size / 2 + location.y)) : (brush_size)));
+
+	//Change wanted blocks to the block image
+	sf::Image temp_block;
+	temp_block.create(100, 100, sf::Color(static_cast<std::uint32_t>((static_cast<unsigned int>(type) << 8) + 255)));
+
+	block_image.copy(temp_block,
+		(location.x - (brush_size - 1) / 2 < 0) ? (0) : (location.x - (brush_size - 1) / 2),
+		(location.y - (brush_size - 1) / 2 < 0) ? (0) : (location.y - (brush_size - 1) / 2),
+		sf::IntRect(
+			(location.x - (brush_size - 1) / 2 < 0) ? ((location.x < 0) ? (50 + brush_size / 2) : (brush_size / 2)) : (location.x % 50),
+			(location.y - (brush_size - 1) / 2 < 0) ? ((location.y < 0) ? (50 + brush_size / 2) : (brush_size / 2)) : (location.y % 50),
+			(location.x - (brush_size - 1) / 2 < 0) ? ((location.x < 0) ? (brush_size / 2 - std::abs(location.x)) : (brush_size / 2 + location.x)) : (brush_size),
+			(location.y - (brush_size - 1) / 2 < 0) ? ((location.y < 0) ? (brush_size / 2 - std::abs(location.y)) : (brush_size / 2 + location.y)) : (brush_size)));
+}
+
+void Map::updateImageCircle(sf::Vector2i location, const Config::BlockType type, const int brush_size)
+{
+	//If fully out do nothing
+	if (location.x + brush_size / 2 <= 0)
+		return;
+	if (location.y + brush_size / 2 <= 0)
+		return;
+
+	//If partly out draw partly
+	//If inside draw normally --- combined with above condition inside image copy function with conditionals
 
 	//Establish a medium to copy correctly from
 	sf::Image temp;
@@ -409,7 +240,6 @@ void Map::updateImageCircle2(sf::Vector2i location, const Config::BlockType type
 	temp.copy(circle_brush_masks[brush_size - 1], ((location.x >= 0) ? (location.x % 50) : (50 - std::abs(location.x))),
 		((location.y >= 0) ? (location.y % 50) : (50 - std::abs(location.y))), sf::IntRect(0, 0, brush_size, brush_size), true);
 	temp.createMaskFromColor(sf::Color::Red);
-	//temp.createMaskFromColor(sf::Color(254, 254, 254, 254));
 
 	//Copy wanted piece properly to the map image
 	image.copy(temp,
@@ -424,12 +254,10 @@ void Map::updateImageCircle2(sf::Vector2i location, const Config::BlockType type
 
 	//Change blocks using the same type of function as above
 	sf::Image temp_block;
-	//temp_block.create(100, 100, sf::Color(static_cast<unsigned int>(type));
 	temp_block.create(100, 100, sf::Color(static_cast<std::uint32_t>((static_cast<unsigned int>(type) << 8) + 255)));
 	temp_block.copy(circle_brush_masks[brush_size - 1], ((location.x >= 0) ? (location.x % 50) : (50 - std::abs(location.x))),
 		((location.y >= 0) ? (location.y % 50) : (50 - std::abs(location.y))), sf::IntRect(0, 0, brush_size, brush_size), true);
 	temp_block.createMaskFromColor(sf::Color::Red);
-	//temp_block.createMaskFromColor(sf::Color(254, 254, 254, 254));
 
 	//Change wanted blocks to the block image
 	block_image.copy(temp_block,
