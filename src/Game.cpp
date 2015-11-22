@@ -1,5 +1,5 @@
 #include "Game.h"
-#include <iostream>
+
 
 Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
@@ -58,9 +58,7 @@ void Game::initProjectiles()
 
 void Game::initMap(std::string mapdata)
 {
-	// read map file here and create appropriate Blocks
-	// store the blocks into the Map
-	return;
+	map.loadFromImage(mapdata, *resourcemanager->getBlockTextures());
 }
 
 /*

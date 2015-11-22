@@ -109,7 +109,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
-	//window->draw(map.getDrawable());							//TODO: Map			'BOTTOM' drawing
+	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
 	//Engine::draw_projectiless(projectiles);		// Projectiles don't overwrite on vehicles
 	Engine::draw_vehicles(window, vehicles);			// On top of everything
 	window.display();							// Update drawings

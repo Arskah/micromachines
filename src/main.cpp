@@ -8,12 +8,12 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
 	window.setFramerateLimit(60);
-	std::string name = "Okko";
+	std::string name = "Playah";
 	Config::ObjectType type = Config::ObjectType::Car;
 	std::pair<const std::string, Config::ObjectType> pair(name, type);
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
 	playerdata.push_back(pair);
-	std::string mapdata = "lol";
+	std::string mapdata = "src/resources/mapsavetest.png";
 
 	ResourceManager resourcemanager;
 
