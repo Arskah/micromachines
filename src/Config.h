@@ -13,7 +13,8 @@ namespace Config
 		None,
 		OilSpill,
 		Car,
-		Boat
+		Boat,
+		Mine
 	};
 
 	enum class BlockType

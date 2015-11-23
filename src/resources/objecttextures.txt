@@ -7,3 +7,4 @@
 #1
 2 src/resources/car1.png
 #3
+4 src/resources/mine.png

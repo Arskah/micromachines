@@ -70,12 +70,13 @@ void Game::run()
 	float tickrate = 1.f / 60;
 	float dt = 0.f;
 
+	
 	sf::Music music;
 	music.setLoop(true);
 	music.setVolume(50);
 	if (music.openFromFile("src/resources/sounds/themesong.wav"))
 		music.play();
-
+	
 
 	while (window.isOpen())
 	{
