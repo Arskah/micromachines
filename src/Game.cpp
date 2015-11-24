@@ -162,7 +162,7 @@ void Game::run()
 			}
 			
 			// The engine draws the game state here
-			Engine::update(window, &vehicles, &projectiles, map, userinput, dt);
+			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt);
 			userinput.clear();
 			clock.restart();
 		}

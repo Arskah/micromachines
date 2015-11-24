@@ -1,10 +1,10 @@
 #pragma once
 #include "Engine.h"
 
-void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
+void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
 {
 	/* AI and player movement handling */
-	Engine::handleInput(userinput, dt, projectiles);
+	Engine::handleInput(userinput, dt, projectiles, resourcemanager);
 
 	/* Move vehicles. Players and AI move depends on input handling */
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
@@ -29,7 +29,7 @@ void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, s
 }
 
 /* Handles userinput before moving the vehicle*/
-void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, std::vector<Projectile> * projectiles)
+void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, std::vector<Projectile> * projectiles, ResourceManager * resourcemanager)
 {
 	for (auto it : userinput)
 	{
@@ -51,7 +51,12 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 			break;
 		case Config::InputType::Shoot:
 			if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
+			{
 				projectiles->emplace_back(player->getVehicle()->shoot());
+				sf::Sound collision(resourcemanager->getSounds()->find("collision")->second);
+				collision.play();
+			}
+				
 			break;
 		default:
 			break;
