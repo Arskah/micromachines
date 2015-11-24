@@ -30,17 +30,42 @@ Vehicle * Game::initVehicle(Config::ObjectType type)
 						parameters.push_back(std::stof(token));
 					}
 					
-					Config::ObjectType weapontype = Config::VehicleToProjectileMap.find(type)->second;
-					//Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), sf::Vector2f(0.f, 0.f), 0.f, weapontype, 0.f);
 					// The loaded vehicle is added to the vehicles -vector here
-					vehicles.emplace_back(&(resourcemanager->getObjectTextures()->find(type)->second), type, parameters[1], parameters[2], parameters[3], parameters[4],
-											Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), sf::Vector2f(0.f, 0.f), 0.f, weapontype, 0.f));
+					vehicles.emplace_back(&(resourcemanager->getObjectTextures()->find(type)->second), type, parameters[1], parameters[2], parameters[3], parameters[4], createProjectile(type));
 					return &vehicles.back();
 				}
 			}
 		}
 	}
 	return nullptr;
+}
+
+Projectile Game::createProjectile(Config::ObjectType type)
+{
+	Config::ObjectType weapontype = Config::VehicleToProjectileMap.find(type)->second;
+	std::string line;
+	std::ifstream objectfile;
+	objectfile.open("src/resources/objects.txt", std::ifstream::in);
+	if (objectfile.is_open())
+	{
+		while (std::getline(objectfile, line))
+		{
+			if (line[0] != '#')
+			{
+				if (static_cast<int>(type) == int(line[0]) - 48)
+				{
+					std::stringstream stream(line);
+					std::string token;
+					std::vector<float> parameters;
+					while (std::getline(stream, token, ' '))
+					{
+						parameters.push_back(std::stof(token));
+					}
+					return Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), sf::Vector2f(0.f, 0.f), parameters[1], weapontype, parameters[2]);
+				}
+			}
+		}
+	}
 }
 
 void Game::initPlayers(std::vector<std::pair<const std::string, Config::ObjectType>> playerdata)
@@ -128,9 +153,16 @@ void Game::run()
 				pair.second = Config::InputType::Brake;
 				userinput.push_back(pair);
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				std::pair<Player *, Config::InputType> pair;
+				pair.first = &players.front();
+				pair.second = Config::InputType::Shoot;
+				userinput.push_back(pair);
+			}
 			
 			// The engine draws the game state here
-			Engine::update(window, &vehicles, projectiles, map, userinput, dt);
+			Engine::update(window, &vehicles, &projectiles, map, userinput, dt);
 			userinput.clear();
 			clock.restart();
 		}

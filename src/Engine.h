@@ -21,14 +21,14 @@ namespace Engine
 	- userinput: this structure maps the player (by name) to the input the player gave
 	this list is passed to the engine with every cycle of the loop
 	*/
-	void update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt);
+	void update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt);
 
 	/* Input handling
 	Parameters:
 	- userinput: this structure maps the player to the input the player gave.
 	This vector structure is passed to the engine with every cycle of the loop
 	*/
-	void handleInput(std::vector<std::pair<Player*, Config::InputType>>, float dt);
+	void handleInput(std::vector<std::pair<Player*, Config::InputType>>, float dt, std::vector<Projectile> * projectiles);
 
 	/* Function that handles moving of objects each frame. Executed after input handling
 	Parameters:
@@ -49,7 +49,7 @@ namespace Engine
 	*/
 	void draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehicles);
 
-	//void draw_projectiles(sf::renderWindow * window, std::vector<Projectile> projectiles);
+	void draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> * projectiles);
 
 	/* Main function for drawing a frame.
 	Parameters:
@@ -58,5 +58,5 @@ namespace Engine
 	- projectiles: list of projectiles
 	- map: game map.
 	*/
-	void draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map);
+	void draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map);
 }

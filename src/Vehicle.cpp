@@ -5,21 +5,16 @@ Vehicle default constructor.
 NOTE: Location and speed are set to (0,0) and 0 by default.
 */
 Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, const float acceleration, 
-				const float maxspeed, const float turnrate, const float weapontimer, Projectile projectile) : Object(texture, sf::Vector2f(0.f, 0.f), 0.f, type) 
+				const float maxspeed, const float turnrate, const float weapontimer, Projectile projectile) : Object(texture, sf::Vector2f(0.f, 0.f), 0.f, type), weapon(projectile)
 {
 	this->acceleration = acceleration;
 	this->maxspeed = maxspeed;
 	this->turnrate = turnrate;
 	this->weapontimer = weapontimer;
-	this->setWeapon(projectile);
-	//this->setScale(sf::Vector2f(0.5, 0.5));
+	this->setScale(sf::Vector2f(0.5, 0.5));
+	this->weapon.setScale(0.3, 0.3);
 }
 
-void Vehicle::setWeapon(Projectile projectile)
-{
-	this->weapon = projectile;
-
-}
 
 /**
  * Prototype of accelerate.
@@ -82,8 +77,24 @@ void Vehicle::slow(float friction, float dt)
  *
  * Needs to be decided on how to deliver shot Projectile to engine.
  */
-void Vehicle::shoot()
+Projectile Vehicle::shoot()
 {
 	this->weapon.setPosition(this->getPosition().x, this->getPosition().y);
+	this->weapontimer = 0.f;
+	return this->weapon;
+}
 
+Projectile * Vehicle::getWeapon()
+{
+	return &this->weapon;
+}
+
+float Vehicle::getWeapontimer()
+{
+	return weapontimer;
+}
+
+void Vehicle::setWeapontimer(float dt)
+{
+	this->weapontimer += dt;
 }

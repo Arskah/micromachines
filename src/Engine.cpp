@@ -1,15 +1,16 @@
 #pragma once
 #include "Engine.h"
 
-void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
+void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
 {
 	/* AI and player movement handling */
-	Engine::handleInput(userinput, dt);
+	Engine::handleInput(userinput, dt, projectiles);
 
 	/* Move vehicles. Players and AI move depends on input handling */
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
 	{
 		it->slow(Engine::getFriction(&(*it), map), dt);
+		it->setWeapontimer(dt);
 		//std::cout << Engine::getFriction(&(*it), map) << std::endl;
 		Engine::moveVehicle(&(*it));
 	}
@@ -28,7 +29,7 @@ void Engine::update(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, s
 }
 
 /* Handles userinput before moving the vehicle*/
-void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
+void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, std::vector<Projectile> * projectiles)
 {
 	for (auto it : userinput)
 	{
@@ -49,7 +50,8 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 			player->getVehicle()->brake(dt);
 			break;
 		case Config::InputType::Shoot:
-			player->getVehicle()->shoot();
+			if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
+				projectiles->emplace_back(player->getVehicle()->shoot());
 			break;
 		default:
 			break;
@@ -98,24 +100,24 @@ void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehi
 	}
 }
 
-/*
-void Engine::draw_projectiles(sf::renderWindow* window, std::vector<Projectile> projectiles)
+
+void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> * projectiles)
 {
-	for (auto it = projectiles.begin(); it != projectiles.end(); it++)
+	for (auto it = projectiles->begin(); it != projectiles->end(); it++)
 	{
-		window.draw(it);
+		window.draw(*it);
 	}
 }
-*/
+
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile>& projectiles, Map& map)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map)
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
 	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
-	//Engine::draw_projectiless(projectiles);		// Projectiles don't overwrite on vehicles
+	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
 	Engine::draw_vehicles(window, vehicles);   // On top of everything
 	
 	// This is a ghetto version of the centered view.

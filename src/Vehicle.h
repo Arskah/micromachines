@@ -20,15 +20,15 @@ public:
 	//Increases rotation angle of the Vehicle by a function of member variable turnrate.
 	void turn(bool left, float dt);
 	//Launches a Projectile from the Vehicle.
-	void shoot();
+	Projectile shoot();
 	//Decreases the speed based on the friction of the underlying block.
 	void slow(float friction, float dt);
 
+	Projectile * getWeapon();
+	float getWeapontimer();
+	void setWeapontimer(float dt);
 
 private:
-	//Creates the Projectile object for the weapon.
-	void setWeapon(Projectile projectile);
-
 	float acceleration;
 	float maxspeed;
 	float turnrate;
