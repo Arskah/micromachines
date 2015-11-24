@@ -42,7 +42,7 @@ private:
 	Pushes the created Vehicle to the objects list.
 	Returns a pointer to the created vehicle.
 	*/
-	Vehicle * initVehicle(Config::ObjectType);
+	void initVehicle(Config::ObjectType);
 
 	/* createProjectile()
 	Constructs a Projectile and returns it.

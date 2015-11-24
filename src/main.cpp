@@ -8,11 +8,15 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
 	window.setFramerateLimit(60);
+
 	std::string name = "Playah";
+	std::string name2 = "Kalle";
 	Config::ObjectType type = Config::ObjectType::Car;
 	std::pair<const std::string, Config::ObjectType> pair(name, type);
+	std::pair<const std::string, Config::ObjectType> pair2(name2, type);
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
 	playerdata.push_back(pair);
+	playerdata.push_back(pair2);
 	std::string mapdata = "src/resources/mapsavetest.png";
 
 	ResourceManager resourcemanager;

@@ -119,16 +119,34 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
+	/*
+	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
+	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
+	Engine::draw_vehicles(window, vehicles);   // On top of everything
+	*/
+
+	// This is a ghetto version of the centered view.
+	sf::View view1;
+	view1.setCenter(sf::Vector2f(vehicles->at(0).getPosition().x, vehicles->at(0).getPosition().y));
+	view1.setSize(640.f, 720.f);
+	view1.setRotation(vehicles->at(0).getRotation() - 180.f);
+	view1.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
+	window.setView(view1);
+
+	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
+	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
+	Engine::draw_vehicles(window, vehicles);   // On top of everything
+
+	sf::View view2;
+	view2.setCenter(sf::Vector2f(vehicles->at(1).getPosition().x, vehicles->at(1).getPosition().y));
+	view2.setSize(640.f, 720.f);
+	view2.setRotation(vehicles->at(1).getRotation() - 180.f);
+	view2.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
+	window.setView(view2);
+	
 	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
 	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
 	Engine::draw_vehicles(window, vehicles);   // On top of everything
 	
-	// This is a ghetto version of the centered view.
-	sf::View view;
-	view.setCenter(sf::Vector2f(vehicles->back().getPosition().x, vehicles->back().getPosition().y));
-	view.setSize(1280.f, 720.f);
-	view.setRotation(vehicles->back().getRotation() - 180.f);
-
-	window.setView(view);
 	window.display();							// Update drawings
 }
