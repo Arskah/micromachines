@@ -19,7 +19,7 @@ public:
 
 	std::map<Config::ObjectType, sf::Texture> * getObjectTextures();
 	std::map<Config::BlockType, sf::Image> * getBlockTextures();
-	std::map<std::string, sf::SoundBuffer> * getSounds();
+	void playSound(std::string name);
 
 private:
 	/*

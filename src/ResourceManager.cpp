@@ -68,11 +68,11 @@ void ResourceManager::loadBlockTextures()
 void ResourceManager::loadSounds()
 {
 	std::string line;
-	std::ifstream texturefile;
-	texturefile.open("src/resources/sounds.txt", std::ifstream::in);
-	if (texturefile.is_open())
+	std::ifstream soundfile;
+	soundfile.open("src/resources/sounds.txt", std::ifstream::in);
+	if (soundfile.is_open())
 	{
-		while (std::getline(texturefile, line))
+		while (std::getline(soundfile, line))
 		{
 			if (line[0] != '#' && line[0] != '\n')
 			{
@@ -86,7 +86,8 @@ void ResourceManager::loadSounds()
 				std::pair<std::string, sf::SoundBuffer> soundpair;
 				soundpair.first = tokens[0];
 				sf::SoundBuffer buffer;
-				buffer.loadFromFile(tokens[1]);
+				if (!buffer.loadFromFile(tokens[1]))
+					throw;
 				soundpair.second = buffer;
 				sounds.insert(soundpair);
 			}
@@ -104,7 +105,9 @@ std::map<Config::BlockType, sf::Image> * ResourceManager::getBlockTextures()
 	return &blocktextures;
 }
 
-std::map<std::string, sf::SoundBuffer> * ResourceManager::getSounds()
+void ResourceManager::playSound(std::string name)
 {
-	return &sounds;
+	sf::Sound sound;
+	sound.setBuffer(this->sounds.find(name)->second);
+	sound.play();
 }

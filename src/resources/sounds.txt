@@ -1,1 +1,2 @@
 collision src/resources/sounds/collision.wav
+shoot src/resources/sounds/shoot.wav

@@ -53,10 +53,8 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 			if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
 			{
 				projectiles->emplace_back(player->getVehicle()->shoot());
-				sf::Sound collision(resourcemanager->getSounds()->find("collision")->second);
-				collision.play();
+				resourcemanager->playSound("shoot");
 			}
-				
 			break;
 		default:
 			break;
