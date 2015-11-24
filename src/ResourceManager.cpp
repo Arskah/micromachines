@@ -4,7 +4,7 @@ ResourceManager::ResourceManager()
 {
 	loadObjectTextures();
 	loadBlockTextures();
-	loadSounds();
+	loadSoundBuffers();
 }
 
 void ResourceManager::loadObjectTextures()
@@ -65,7 +65,7 @@ void ResourceManager::loadBlockTextures()
 	}
 }
 
-void ResourceManager::loadSounds()
+void ResourceManager::loadSoundBuffers()
 {
 	std::string line;
 	std::ifstream soundfile;
@@ -83,13 +83,7 @@ void ResourceManager::loadSounds()
 				{
 					tokens.push_back(token);
 				}
-				std::pair<std::string, sf::SoundBuffer> soundpair;
-				soundpair.first = tokens[0];
-				sf::SoundBuffer buffer;
-				if (!buffer.loadFromFile(tokens[1]))
-					throw;
-				soundpair.second = buffer;
-				sounds.insert(soundpair);
+				soundbuffers[tokens[0]].loadFromFile(tokens[1]);
 			}
 		}
 	}
@@ -107,7 +101,34 @@ std::map<Config::BlockType, sf::Image> * ResourceManager::getBlockTextures()
 
 void ResourceManager::playSound(std::string name)
 {
-	sf::Sound sound;
-	sound.setBuffer(this->sounds.find(name)->second);
-	sound.play();
+	if (sounds.size() == 0)
+	{
+		sounds.push_back(sf::Sound());
+		sounds[0].setBuffer(soundbuffers[name]);
+		sounds[0].play();
+	}
+	else
+	{
+		size_t index = -1;
+		for (size_t i = 0; i < sounds.size(); i++)
+		{
+			if (sounds[i].getStatus() != sf::Sound::Playing && index == -1)
+			{
+				index = i;
+			}
+		}
+
+		if (index != -1)
+		{
+			sounds[index].setBuffer(soundbuffers[name]);
+			sounds[index].play();
+		}
+		else
+		{
+			sounds.push_back(sf::Sound());
+			sounds[sounds.size() - 1].setBuffer(soundbuffers[name]);
+			sounds[sounds.size() - 1].play();
+		}
+	}
+
 }

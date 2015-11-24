@@ -34,10 +34,11 @@ private:
 	*/
 	void loadBlockTextures();
 
-	void loadSounds();
+	void loadSoundBuffers();
 
 
 	std::map<Config::ObjectType, sf::Texture> objecttextures;
 	std::map<Config::BlockType, sf::Image> blocktextures;
-	std::map<std::string, sf::SoundBuffer> sounds;
+	std::map<std::string, sf::SoundBuffer> soundbuffers;
+	std::vector<sf::Sound> sounds;
 };
