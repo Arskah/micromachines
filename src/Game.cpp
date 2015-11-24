@@ -189,6 +189,13 @@ void Game::run()
 				pair.second = Config::InputType::Brake;
 				userinput.push_back(pair);
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+			{
+				std::pair<Player *, Config::InputType> pair;
+				pair.first = &players[1];
+				pair.second = Config::InputType::Shoot;
+				userinput.push_back(pair);
+			}
 
 			
 			// The engine draws the game state here
