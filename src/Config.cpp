@@ -14,6 +14,10 @@ namespace Config
 		{ "water", BlockType::Water },
 		{ "rockwall", BlockType::RockWall } };
 
+	extern const std::map<Config::ObjectType, Config::ObjectType> VehicleToProjectileMap = {
+		{ ObjectType::Car, ObjectType::Mine }
+	};
+
 	extern const std::map<BlockType, float> BlockToFrictionMap = {
 		{ BlockType::None, 0.f },
 		{ BlockType::Ground, 1.f },

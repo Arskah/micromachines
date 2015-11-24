@@ -29,8 +29,12 @@ Vehicle * Game::initVehicle(Config::ObjectType type)
 					{
 						parameters.push_back(std::stof(token));
 					}
+					
+					Config::ObjectType weapontype = Config::VehicleToProjectileMap.find(type)->second;
+					//Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), sf::Vector2f(0.f, 0.f), 0.f, weapontype, 0.f);
 					// The loaded vehicle is added to the vehicles -vector here
-					vehicles.emplace_back(&(resourcemanager->getObjectTextures()->find(type)->second), type, parameters[1], parameters[2], parameters[3], parameters[4]);
+					vehicles.emplace_back(&(resourcemanager->getObjectTextures()->find(type)->second), type, parameters[1], parameters[2], parameters[3], parameters[4],
+											Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), sf::Vector2f(0.f, 0.f), 0.f, weapontype, 0.f));
 					return &vehicles.back();
 				}
 			}
@@ -70,13 +74,13 @@ void Game::run()
 	float tickrate = 1.f / 60;
 	float dt = 0.f;
 
-	
+	/*
 	sf::Music music;
 	music.setLoop(true);
 	music.setVolume(50);
 	if (music.openFromFile("src/resources/sounds/themesong.wav"))
 		music.play();
-	
+	*/
 
 	while (window.isOpen())
 	{

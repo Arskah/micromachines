@@ -1,6 +1,13 @@
+# This file defines the objects (vehicles and projectiles)
+#
+# Vehicles:
 # type acceleration maxspeed turnrate weapontimer
+#
+# Projectiles:
+# type cooldown null null null
+#
 0 0.0 0.0 0.0 0.0
-1 0.0 0.0 0.0 10.0
-2 5.0 10.0 120.0 30.0
-3 3.0 20.0 5.0 30.0
-4 0.0 0.0 0.0 0.0
+1 0.0 0.0 0.0 0.0
+2 5.0 10.0 120.0 0.0
+3 3.0 20.0 5.0 0.0
+4 10.0 0.0 0.0 0.0
