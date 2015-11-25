@@ -1,21 +1,95 @@
 #include "Menu.h"
-/* BASE CLASS FOR ALL MENUS*/
+
+
+/* BASE CLASS MAIN MENU*/
 Menu::Menu(sf::RenderWindow& window) : window(window)
 {
-	if (!font.loadFromFile("arial.ttf"))
-	{
-		// handle error
-	}
+	//if (!font.loadFromFile("arial.ttf"))
+	//{
+	//	// handle error
+	//}
 	width = window.getSize().x;
 	height = window.getSize().y;
 	this->draw(window);
-	this->eventLoop(window);
+	this->runMenu(window);
+
+}
+void Menu::loadContent() {
+	// create num1
+	tex_num1.loadFromFile("resources\\num1.png");
+	spri_num1.setTexture(tex_num1);
+	// create num2
+	tex_num2.loadFromFile("resources\\num2.png");
+	spri_num1.setTexture(tex_num2);
+	// create num3
+	tex_num3.loadFromFile("resources\\num3.png");
+	spri_num1.setTexture(tex_num3);
+	// create num4
+	tex_num4.loadFromFile("resources\\num4.png");
+	spri_num1.setTexture(tex_num4);
+
+	//load player/AI/off content
+	tex_player_N.loadFromFile("resources\\N_player.png");
+	tex_player_O.loadFromFile("resources\\O_player.png");
+	tex_player_P.loadFromFile("resources\\P_player.png");
+
+	tex_ai_N.loadFromFile("resources\\N_ai.png");
+	tex_ai_O.loadFromFile("resources\\O_ai.png");
+	tex_ai_P.loadFromFile("resources\\P_ai.png");
+
+	tex_off_N.loadFromFile("resources\\N_off.png");
+	tex_off_O.loadFromFile("resources\\O_off.png");
+	tex_off_P.loadFromFile("resources\\P_off.png");
+
+	spri_player.setTexture(tex_player_N);
+
+	//load start/exit content
+	tex_start_N.loadFromFile("resources\\N_start.png");
+	tex_start_O.loadFromFile("resources\\O_start.png");
+	tex_start_P.loadFromFile("resources\\P_start.png");
+	spri_start.setTexture(tex_start_N);
+
+	tex_exit_N.loadFromFile("resources\\N_exit.png");
+	tex_exit_O.loadFromFile("resources\\O_exit.png");
+	tex_exit_P.loadFromFile("resources\\P_exit.png");
+	spri_exit.setTexture(tex_exit_N);
 }
 
-void Menu::eventLoop(sf::RenderWindow& window)
+void Menu::createButtons(){
+	// create player option menus
+	for (int i = 0; i < amount_players; i++) {
+		button plaioff;
+		plaioff.state = 0;
+		plaioff.max_states = 3;
+		plaioff.loc_x = 100;
+		plaioff.loc_y = 100;
+		plaioff.textures.push_back(tex_player_N);
+		plaioff.textures.push_back(tex_player_O);
+		plaioff.textures.push_back(tex_player_P);
+		plaioff.textures.push_back(tex_ai_N);
+		plaioff.textures.push_back(tex_ai_O);
+		plaioff.textures.push_back(tex_ai_P);
+		plaioff.textures.push_back(tex_off_N);
+		plaioff.textures.push_back(tex_off_O);
+		plaioff.textures.push_back(tex_off_P);
+		plaioff.spri = spri_player;
+
+		button cars;
+		cars.max_states = 
+
+	}
+
+
+
+
+}
+
+
+bool Menu::runMenu(sf::RenderWindow& window)
 {
 	while (window.isOpen())
 	{
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -26,17 +100,24 @@ void Menu::eventLoop(sf::RenderWindow& window)
 				break;
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		if(event.type == sf::Event::MouseMoved)
 		{
-			this->select();
+			if(sf::Mouse::getPosition == )
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))		//TODO Mouse over selection
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
-			this->moveDown();
+			//tähän kaikki sprite tarkistukset
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))		//TODO Mouse over selection
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
-			this->moveUp();
+			//lopeta peli
+			return false; 
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+		{
+			// aloita peli
+			return true;
 		}
 	}
 }
@@ -58,24 +139,6 @@ void Menu::draw(sf::RenderWindow& window)
 	window.display();
 }
 
-void Menu::moveUp()
-{
-	if (this->selectedItem > 0)
-	{
-		this->getSelected().setColor(sf::Color::White);
-		this->selectedItem--;
-		this->getSelected().setColor(sf::Color::Red);
-	}
-}
-void Menu::moveDown()
-{
-	if (this->selectedItem < this->getAmountItems())
-	{
-		this->getSelected().setColor(sf::Color::White);
-		this->selectedItem++;
-		this->getSelected().setColor(sf::Color::Red);
-	}
-}
 
 int Menu::getAmountItems() const
 {
@@ -86,64 +149,51 @@ sf::Text Menu::getSelected() const
 	return this->items.at(selectedItem).first;
 }
 
-/* END OF BASE CLASS*/
+/* END OF MENU CLASS*/
 
-/* MAIN MENU*/
-void MainMenu::select()
-{
-	switch (selectedItem)		// TODO: from up to down, these will call functions that do things in menus. Like if MainMenu top selection is 'Single Player', case 0 will call Single Player Menu. Enum good here??
-	{
-	case 0:		// Want to play Single player
-		SinglePlayerMenu::SinglePlayerMenu(this->window);
-		break;
-	case 1:		// Want to play multiplayer
-		MultiplayerMenu::MultiPlayerMenu(this->window);
-		break;
-	case 2:		// Open settings
-		SettingsMenu::SettingsMenu(this->window);
-		break;
-	case 3:		//EXIT GAME
-		window.close();
-		break;
-	}
-}
 
-/* SETTINGS MENU*/
-void SettingsMenu::select()
-{
-	switch (selectedItem)
-	{
-	case 0:
-		break;
-	}
-}
 
-/* SINGLEPLAYER MENU*/
-void SinglePlayerMenu::select()
-{
-	switch (selectedItem)
-	{
-	case 0:		// Start game
-		break;	// TODO: car changing; # of AI etc. settings. Maybe need to tweak base class items to take other objects than text as well
-	}
-}
 
-/* MULTIPLAYER MENU*/
-void MultiPlayerMenu::select()
-{
-	switch (selectedItem)
-	{
-	case 0:		// Start game
-		break;
-	}
-}
 
-/* PAUSE MENU*/
-void PauseMenu::select()
-{
-	switch (selectedItem)
-	{
-	case 0:		// Continue
-		break;
-	}
-}
+
+
+// Not in use - Jan G.
+///* SETTINGS MENU*/
+//void SettingsMenu::select()
+//{
+//	switch (selectedItem)
+//	{
+//	case 0:
+//		break;
+//	}
+//}
+//
+///* SINGLEPLAYER MENU*/
+//void SinglePlayerMenu::select()
+//{
+//	switch (selectedItem)
+//	{
+//	case 0:		// Start game
+//		break;	// TODO: car changing; # of AI etc. settings. Maybe need to tweak base class items to take other objects than text as well
+//	}
+//}
+//
+///* MULTIPLAYER MENU*/
+//void MultiPlayerMenu::select()
+//{
+//	switch (selectedItem)
+//	{
+//	case 0:		// Start game
+//		break;
+//	}
+//}
+//
+///* PAUSE MENU*/
+//void PauseMenu::select()
+//{
+//	switch (selectedItem)
+//	{
+//	case 0:		// Continue
+//		break;
+//	}
+//}
