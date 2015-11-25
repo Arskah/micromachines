@@ -128,7 +128,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 	{
 		sf::View view;
 		view.setCenter(sf::Vector2f(vehicles->at(i).getPosition().x, vehicles->at(i).getPosition().y));
-		view.setSize(640.f, 720.f);
+		view.setSize(window.getSize().x /2, window.getSize().y);
 		view.setRotation(vehicles->at(i).getRotation() - 180.f);
 		view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
 		window.setView(view);
