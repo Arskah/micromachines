@@ -11,7 +11,6 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 	{
 		it->slow(Engine::getFriction(&(*it), map), dt);
 		it->setWeapontimer(dt);
-		//std::cout << Engine::getFriction(&(*it), map) << std::endl;
 		Engine::moveVehicle(&(*it));
 	}
 
@@ -84,7 +83,6 @@ void Engine::moveVehicle(Vehicle * vehicle)
 		sf::Transform t;		// create dummy object for vector handling
 		t.rotate(rotation);
 		movementVec = t.transformPoint(forwardVec);
-		//TODO friction etc.
 		vehicle->move(movementVec * speed);
 	}
 }
@@ -125,28 +123,19 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 	Engine::draw_vehicles(window, vehicles);   // On top of everything
 	*/
 
-	// This is a ghetto version of the centered view.
-	sf::View view1;
-	view1.setCenter(sf::Vector2f(vehicles->at(0).getPosition().x, vehicles->at(0).getPosition().y));
-	view1.setSize(640.f, 720.f);
-	view1.setRotation(vehicles->at(0).getRotation() - 180.f);
-	view1.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
-	window.setView(view1);
-
-	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
-	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
-	Engine::draw_vehicles(window, vehicles);   // On top of everything
-
-	sf::View view2;
-	view2.setCenter(sf::Vector2f(vehicles->at(1).getPosition().x, vehicles->at(1).getPosition().y));
-	view2.setSize(640.f, 720.f);
-	view2.setRotation(vehicles->at(1).getRotation() - 180.f);
-	view2.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
-	window.setView(view2);
-	
-	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
-	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
-	Engine::draw_vehicles(window, vehicles);   // On top of everything
+	// This is a ghetto version of the centered view. TODO: implement check for AI vs Human player.
+	for (size_t i = 0; i < vehicles->size(); i++)
+	{
+		sf::View view;
+		view.setCenter(sf::Vector2f(vehicles->at(i).getPosition().x, vehicles->at(i).getPosition().y));
+		view.setSize(640.f, 720.f);
+		view.setRotation(vehicles->at(i).getRotation() - 180.f);
+		view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		window.setView(view);
+		window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
+		Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
+		Engine::draw_vehicles(window, vehicles);   // On top of everything
+	}
 	
 	window.display();							// Update drawings
 }
