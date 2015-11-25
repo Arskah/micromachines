@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "Config.h"
+#include "Menu.h"
 
 int main()
 {
@@ -12,6 +13,10 @@ int main()
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
 	playerdata.push_back(pair);
 	std::string mapdata = "lol";
+
+
+	//playerdata, mapdata Menu menu();
+
 
 	Game game(window, playerdata, mapdata);
 	game.run();
