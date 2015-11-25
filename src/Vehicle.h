@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "Projectile.h"
+#include <cmath>
 
 /*
 The class defining a Vehicle object.

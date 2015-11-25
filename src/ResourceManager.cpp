@@ -109,7 +109,7 @@ void ResourceManager::playSound(std::string name)
 	}
 	else
 	{
-		size_t index = -1;
+		int index = -1;
 		for (size_t i = 0; i < sounds.size(); i++)
 		{
 			if (sounds[i].getStatus() != sf::Sound::Playing && index == -1)
