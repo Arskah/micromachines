@@ -3,8 +3,9 @@
 # This file associates BlockTypes to their textures.
 # On each line there's BlockType and the texture filepath
 # separated by space.
-#0 
+0 src/resources/none.png
 1 src/resources/ground.png
 2 src/resources/grass.png
 3 src/resources/sand.png
 4 src/resources/water.png
+5 src/resources/rockwall.png

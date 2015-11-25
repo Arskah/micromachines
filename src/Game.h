@@ -1,11 +1,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include <map>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include "Player.h"
 #include "Object.h"
 #include "Map.h"
@@ -13,6 +13,7 @@
 #include "Vehicle.h"
 #include "Config.h"
 #include "Engine.h"
+#include "ResourceManager.h"
 
 /*
 This class keeps track of the map, players and objects, runs the event loop
@@ -28,7 +29,7 @@ public:
 	- playerdata: list of player names and their vehicle choices (vehicle type)
 	- mapdata: filepath to the map data
 	*/
-	Game(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata);
+	Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata);
 
 	/* run()
 	The game loop. Runs the event loop, gathers user input and passes it to the Engine.
@@ -37,18 +38,6 @@ public:
 
 
 private:
-	/* initObjectTextures()
-	Loads all the textures to a map containing object types and texture files.
-	This is ran only by the constructor.
-	*/
-	void initObjectTextures();
-
-	/* initMapTextures()
-	Loads all the textures to a map containing object types and texture files.
-	This is ran only by the constructor.
-	*/
-	void initBlockTextures();
-
 	/* initVehicle()
 	Creates a Vehicle from a file.
 	Pushes the created Vehicle to the objects list.
@@ -82,20 +71,18 @@ private:
 	players: list of players
 	vehicles: list of vehicles
 	projectiles: list of projectiles
-	map: map (duh)
+	map: the game map
 	window: the application window
+	resourcemanager: reference to the resource manager (for accessing textures)
 	userinput: this structure maps the player (by name) to the input the player gave
 			   this list is passed to the engine with every cycle of the loop
-	objecttextures: map containing ObjectTypes and textures
-	blocktextures: map containing BlockTypes and textures
 	*/
 	std::vector<Player> players;
 	std::vector<Vehicle> vehicles;
 	std::vector<Projectile> projectiles;
 	Map map;
 	sf::RenderWindow& window;
-
+	ResourceManager * resourcemanager;
 	std::vector<std::pair<Player *, Config::InputType>> userinput;
-	std::map<Config::ObjectType, sf::Texture> objecttextures;
-	std::map<Config::BlockType, sf::Image> blocktextures;
+
 };

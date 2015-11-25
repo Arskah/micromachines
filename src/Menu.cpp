@@ -137,7 +137,6 @@ void Menu::draw(sf::RenderWindow& window)
 		y_place++;
 	}
 	window.display();
-}
 
 
 int Menu::getAmountItems() const

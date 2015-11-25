@@ -11,6 +11,7 @@ Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, con
 	this->maxspeed = maxspeed;
 	this->turnrate = turnrate;
 	this->weapontimer = weapontimer;
+	//this->setScale(sf::Vector2f(0.5, 0.5));
 }
 
 /**
@@ -18,9 +19,17 @@ Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, con
  *
  * Exponential function of increasing speed to be added later.
  */
-void Vehicle::accelerate()
+void Vehicle::accelerate(float dt)
 {
-	this->setSpeed(this->getSpeed() + acceleration);
+	if (this->getSpeed() < maxspeed)
+	{
+		this->setSpeed(this->getSpeed() + acceleration * dt);
+	}
+	else
+	{
+		this->setSpeed(maxspeed);
+	}
+
 }
 
 /**
@@ -28,17 +37,37 @@ void Vehicle::accelerate()
 *
 * Exponential function of decreasing speed to be added later.
 */
-void Vehicle::brake()
+void Vehicle::brake(float dt)
 {
-	this->setSpeed(this->getSpeed() - acceleration);
+	if (this->getSpeed() > 0)
+	{
+		this->setSpeed(this->getSpeed() - 1.5 * acceleration * dt);
+		if (this->getSpeed() < 0)
+			this->setSpeed(0.f);
+	}
+	else
+	{
+		this->setSpeed(this->getSpeed() + 1.5 * acceleration * dt);
+		if (this->getSpeed() > 0)
+			this->setSpeed(0.f);
+	}
+
 }
 
-void Vehicle::turn(bool left)
+void Vehicle::turn(bool left, float dt)
 {
 	if (left)
-		this->setRotation(this->getRotation() - turnrate);
+		this->setRotation(this->getRotation() - turnrate * dt);
 	else
-		this->setRotation(this->getRotation() + turnrate);
+		this->setRotation(this->getRotation() + turnrate * dt);
+}
+
+void Vehicle::slow(float friction, float dt)
+{
+	if (this->getSpeed() > 0)
+	{
+		this->setSpeed(this->getSpeed() - friction * dt);
+	}
 }
 
 /**
