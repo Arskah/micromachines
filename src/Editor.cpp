@@ -57,12 +57,9 @@ void Editor::runEditor()
 	window.create(sf::VideoMode(unsigned int(resolution.x - 40), unsigned int(resolution.y - 40 * 16.f / 9.f)), "Level Editor");
 	window.setPosition(sf::Vector2i(0, 0));
 
-	//DEBUG
-	initMap();
-	//initEditor();	
+	initEditor();	
 
 	//Set editor_view to scale the whole map at once
-	//sf::View editor_view = window.getDefaultView();
 	editor_view = window.getDefaultView();
 	if (map.image.getSize().x * 9.f / 16.f > map.image.getSize().y)
 		editor_view.setSize(sf::Vector2f(float(map.image.getSize().x), float(map.image.getSize().x * 9.f / 16.f)));
@@ -72,7 +69,6 @@ void Editor::runEditor()
 	window.setView(editor_view);
 
 	//Minimap settings
-	//sf::View minimap_view;
 	minimap_view.setCenter(float(map.image.getSize().x / 2), float(map.image.getSize().y / 2));
 	minimap_view.setSize(sf::Vector2f(map.image.getSize()));
 	minimap_view.setViewport(sf::FloatRect(0.85f, 0.f, 0.15f, 0.15f));
@@ -120,7 +116,6 @@ void Editor::runEditor()
 		"Left mouse button to draw\n";
 
 	//Map update functions
-	//void (Map::*updateImageFunc)(const sf::Vector2i, const Config::BlockType, const int) = &Map::updateImageCircle;
 	void (Editor::*updateImageFunc)(const sf::Vector2i, const Config::BlockType, const int) = &Editor::updateImageCircle;
 
 	//What block the brush draws, set Ground to default on start
@@ -408,7 +403,6 @@ void Editor::initMap()
 {
 	sf::Vector2u size;
 	
-	/*
 	std::string size_x = "", size_y = "";
 	while (size_x == "")
 		size_x = openTextbox("Please enter map size X", BoxTypes::Number);
@@ -417,15 +411,14 @@ void Editor::initMap()
 
 	size.x = std::stoi(size_x);
 	size.y = std::stoi(size_y);
-	*/
 
-	size.x = 4000;
-	size.y = 4000;
+	//size.x = 4000;
+	//size.y = 4000;
 
-	//std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
+	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
 
 	//DEBUG BASE
-	std::string base = "sand";
+	//std::string base = "sand";
 
 	//Change inputted string to lowercase
 	std::transform(base.begin(), base.end(), base.begin(), ::tolower);
@@ -440,8 +433,6 @@ void Editor::initMap()
 	}
 
 	//Create an image of the map
-	//map.createImageFromBase((*blocktextures), size, base_block_type);
-
 	//Insert base blocks to fill map
 	map.blocks.assign(size.x, std::vector<Block>(size.y, Block(base_block_type, Config::BlockToFrictionMap.find(base_block_type)->second)));
 

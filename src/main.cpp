@@ -24,7 +24,7 @@ int main()
 	/*
 	//EXAMPLE HOW EASY IT IS TO START THE EDITOR
 	//ESC escapes from editor and doesn't close window
-	Editor editor(window, resourcemanager.getBlockTextures());
+	Editor editor(window, *resourcemanager.getBlockTextures());
 	editor.runEditor();
 	*/
 	
