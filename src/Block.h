@@ -5,8 +5,8 @@
 class Block
 {
 public:
-	//Give map access to be able to update blocks while under editing
-	friend class Map;
+	//Give Editor access to be able to update blocks while under editing
+	friend class Editor;
 
 	//Alternative that initializes with values
 	Block(const Config::BlockType type, const float friction);

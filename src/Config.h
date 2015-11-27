@@ -24,7 +24,8 @@ namespace Config
 		Grass,
 		Sand,
 		Water,
-		RockWall
+		RockWall,
+		Checkerboard
 	};
 
 	enum class InputType

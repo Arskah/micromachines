@@ -24,7 +24,8 @@ namespace Config
 		{ BlockType::Grass, 2.f },
 		{ BlockType::Sand, 3.f },
 		{ BlockType::Water, 1.f },
-		{ BlockType::RockWall, 100.f } };
+		{ BlockType::RockWall, 100.f },
+		{ BlockType::Checkerboard, 1.f } };
 
 	extern const float FrameCap = 60.0f;
 }
