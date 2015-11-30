@@ -14,6 +14,7 @@ static Block buildBlock(const int type_int)
 	return Block(static_cast<Config::BlockType>(type_int), Config::BlockToFrictionMap.find(static_cast<Config::BlockType>(type_int))->second);
 }
 
+
 bool Map::loadFromImage(const std::string & filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
 {
 	//Load image
@@ -21,10 +22,10 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 		return false;
 
 	//Clear old
-	blocks.clear();
-	//Fill with empty ones first
-	blocks.assign(block_image.getSize().x, std::vector<Block>(block_image.getSize().y, Block(Config::BlockType::None, Config::BlockToFrictionMap.find(Config::BlockType::None)->second)));
-	
+	blockrow.clear();
+	//Fill with empty ones first -- Is This necessary?
+	blockrow.assign(block_image.getSize().x * block_image.getSize().y, Config::BlockType::None);
+
 	//Raw pointer to block types, will need a conversion
 	const sf::Uint8 * block_info = block_image.getPixelsPtr();
 	//Right starting position to start reading from (pixel is 4x sf::Uint8)
@@ -34,7 +35,7 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	sf::Uint32 * ptr_u = (sf::Uint32 *)block_info;
 	//Get type values from pixels
 	std::vector<sf::Uint8> type_values((const sf::Uint32 *)ptr_u, ((const sf::Uint32 *)ptr_u + block_image.getSize().x * block_image.getSize().y));
-	
+
 
 	//Count how many of certain blocks in a row
 	std::vector<std::pair<Config::BlockType, int>> block_counts;
@@ -53,17 +54,9 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	block_counts.push_back(std::make_pair(static_cast<Config::BlockType>(current), count));
 
 	//Build a vector of blocks
-	std::vector<Block> blockrow;
 	for (std::size_t i = 0; i < block_counts.size(); i++)
 	{
-		blockrow.insert(blockrow.end(), std::size_t(block_counts[i].second), Block(block_counts[i].first, Config::BlockToFrictionMap.find(block_counts[i].first)->second));
-	}
-
-	//Insert built vector into class vector of blocks
-	for (std::size_t i = 0; i < block_image.getSize().x; i++)
-	{
-		sf::Vector2u size = block_image.getSize();
-		blocks[i].assign(blockrow.begin() + block_image.getSize().y * i, blockrow.begin() + block_image.getSize().y * (i + 1));
+		blockrow.insert(blockrow.end(), std::size_t(block_counts[i].second), block_counts[i].first);
 	}
 
 	//Create new drawable image
@@ -73,10 +66,10 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	return true;
 }
 
-Block Map::getBlock(const std::size_t x, const std::size_t y) const
+Block Map::getBlock(const int x, const int y) const
 {
-	if (x < blocks.size() && y < blocks.at(x).size())
-		return blocks[x][y];
+	if (x >= 0 && y >= 0 && x < int(block_image.getSize().x) && y < int(block_image.getSize().y))
+		return Block(blockrow[x + (y * block_image.getSize().x)], Config::BlockToFrictionMap.find(blockrow[x + (y * block_image.getSize().x)])->second);
 	else
 		return Block(Config::BlockType::None, Config::BlockToFrictionMap.find(Config::BlockType::None)->second);
 }
@@ -145,7 +138,8 @@ void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>
 	{
 		sf::Image temp;
 		//Create image to correct size
-		temp.create(blocks.size(), blocks[0].size(), sf::Color::Red);
+		//temp.create(blocks.size(), blocks[0].size(), sf::Color::Red);
+		temp.create(block_image.getSize().x, block_image.getSize().y, sf::Color::Red);
 		//Sizes
 		sf::Vector2u block_texture_size = blocktextures.find(static_cast<Config::BlockType>(i))->second.getSize();
 		for (std::size_t x = 0; x < block_image.getSize().x; x += block_texture_size.x)
@@ -174,7 +168,7 @@ void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>
 			map_sized_textures[i].createMaskFromColor(sf::Color(sf::Uint8(255), sf::Uint8(255), sf::Uint8(j), sf::Uint8(255)));
 
 		//Copy temp to Map image
-		image.copy(map_sized_textures[i], 0, 0, sf::IntRect(0, 0, blocks.size(), blocks[0].size()), true);
+		image.copy(map_sized_textures[i], 0, 0, sf::IntRect(0, 0, block_image.getSize().x, block_image.getSize().y), true);
 	}
 
 	//Load image to texture

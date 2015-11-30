@@ -434,13 +434,13 @@ void Editor::initMap()
 
 	//Create an image of the map
 	//Insert base blocks to fill map
-	map.blocks.assign(size.x, std::vector<Block>(size.y, Block(base_block_type, Config::BlockToFrictionMap.find(base_block_type)->second)));
+	map.blockrow.assign(size.x * size.y, base_block_type);
 
 	//Create image to correct size
-	map.image.create(map.blocks.size(), map.blocks[0].size(), sf::Color::Red);
+	map.image.create(size.x, size.y, sf::Color::Red);
 
 	//Create Block Image
-	map.block_image.create(map.blocks.size(), map.blocks[0].size(), sf::Color(sf::Uint32((static_cast<int>(base_block_type) << 8) + 255 + (255 << 16) + (255 << 24))));
+	map.block_image.create(size.x, size.y, sf::Color(sf::Uint32((static_cast<int>(base_block_type) << 8) + 255 + (255 << 16) + (255 << 24))));
 
 	//Load drawable image from Block Image
 	map.createImageFromBlockImage(*blocktextures);

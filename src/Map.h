@@ -23,7 +23,7 @@ public:
 	void createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures);
 
 	//Returns block from position x,y
-	Block getBlock(const std::size_t x, const std::size_t y) const;
+	Block getBlock(const int x, const int y) const;
 
 	//Returns sprite of the Map that is drawable
 	sf::Sprite * getDrawable();
@@ -36,7 +36,7 @@ private:
 	bool saveToImage(const std::string &filename);
 
 	//Map Blocks
-	std::vector<std::vector<Block>> blocks;
+	std::vector<Config::BlockType> blockrow;
 
 	//Block image, build blocks after editing from this
 	sf::Image block_image;
