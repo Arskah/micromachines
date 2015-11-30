@@ -7,7 +7,7 @@
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
-	window.setFramerateLimit(60);
+	//window.setFramerateLimit(60);
 
 	std::string name = "Playah";
 	std::string name2 = "Kalle";

@@ -125,6 +125,8 @@ void Game::run()
 		// Once enough time (always the same) has passed, process the events of the 'tick'
 		if (dt >= tickrate)
 		{
+			clock.restart();
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
 				std::pair<Player *, Config::InputType> pair;
@@ -196,12 +198,9 @@ void Game::run()
 				pair.second = Config::InputType::Shoot;
 				userinput.push_back(pair);
 			}
-
-			
 			// The engine draws the game state here
 			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt);
 			userinput.clear();
-			clock.restart();
 		}
 	}
 }

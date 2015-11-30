@@ -23,8 +23,6 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 
 	//Clear old
 	blockrow.clear();
-	//Fill with empty ones first -- Is This necessary?
-	blockrow.assign(block_image.getSize().x * block_image.getSize().y, Config::BlockType::None);
 
 	//Raw pointer to block types, will need a conversion
 	const sf::Uint8 * block_info = block_image.getPixelsPtr();
