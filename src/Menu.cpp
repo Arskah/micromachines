@@ -53,16 +53,21 @@ void Menu::loadContent() {
 	tex_exit_O.loadFromFile("resources\\O_exit.png");
 	tex_exit_P.loadFromFile("resources\\P_exit.png");
 	spri_exit.setTexture(tex_exit_N);
+
+	//Load cars for develot use
+	tex_map1.loadFromFile("resources\\map1.png");
+	spri_map1.setTexture(tex_map1);
 }
 
 void Menu::createButtons(){
 	// create player option menus
+	//std::map<Config::ObjectType, sf::Texture> tex_cars = *resourcemanager->getObjectTextures();
 	for (int i = 0; i < amount_players; i++) {
 		button plaioff;
 		plaioff.state = 0;
 		plaioff.max_states = 3;
-		plaioff.loc_x = 100;
-		plaioff.loc_y = 100;
+		plaioff.loc_x = offset_x;
+		plaioff.loc_y = offset_y;
 		plaioff.textures.push_back(tex_player_N);
 		plaioff.textures.push_back(tex_player_O);
 		plaioff.textures.push_back(tex_player_P);
@@ -73,10 +78,36 @@ void Menu::createButtons(){
 		plaioff.textures.push_back(tex_off_O);
 		plaioff.textures.push_back(tex_off_P);
 		plaioff.spri = spri_player;
+		plaioff.player = i;
+
+		buttons.push_back(plaioff);
 
 		button cars;
-		cars.max_states = 
+		cars.state = 0;
+		cars.loc_x = offset_x;
+		cars.loc_y = offset_y + 100;
+		cars.player = i;
 
+
+		//for finding all cars from ogjectTExturemap *****TODO****
+		for (unsigned int j = 0; j < resourcemanager.getObjectTextures()->size(); j++) {
+			std::string type = "Car" + std::to_string(j);
+			//std::map<Config::ObjectType, sf::Texture>::iterator
+			auto it_cars = resourcemanager.getObjectTextures->find(type);
+			if (it_cars != resourcemanager.getObjectTextures->end) {
+				cars.textures.push_back(it_cars->second);
+				cars.max_states++;
+			}
+		}
+		buttons.push_back(cars);
+
+
+		/*for (auto it = tex_cars.begin; it != tex_cars.end; it++) {
+			if (it->first == Config::ObjectType::Car) {
+				cars.textures.push_back(it->second);
+				cars.max_states++;
+			}
+		}*/
 	}
 
 
@@ -89,7 +120,7 @@ bool Menu::runMenu(sf::RenderWindow& window)
 {
 	while (window.isOpen())
 	{
-
+		sf::Vector2i mouse_loc = sf::Mouse::getPosition(window);
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -102,12 +133,41 @@ bool Menu::runMenu(sf::RenderWindow& window)
 		}
 		if(event.type == sf::Event::MouseMoved)
 		{
-			if(sf::Mouse::getPosition == )
+			mouse_loc = sf::Mouse::getPosition(window);
+			for (auto it_button : buttons) {
+				if (it_button.spri.getLocalBounds == mouse_loc){
+					it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 1], true);
+			}
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
 			//t‰h‰n kaikki sprite tarkistukset
+			mouse_loc = sf::Mouse::getPosition(window);
+			for (auto it_button : buttons) {
+				if (it_button.spri.getLocalBounds == mouse_loc) {
+					it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
+					if (it_button.state == it_button.max_states)
+						it_button.state = 0;
+					else
+						it_button.state++;
+				}
+			}
+		}
+		//Mit‰s jos nappulasta p‰‰setet‰‰n irti? TODO
+		//if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		//{
+		//	//t‰h‰n kaikki sprite tarkistukset
+		//	mouse_loc = sf::Mouse::getPosition(window);
+		//	for (auto it_button : buttons) {
+		//		if (it_button.spri.getLocalBounds == mouse_loc) {
+		//			it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
+		//			if (it_button.state == it_button.max_states)
+		//				it_button.state = 0;
+		//			else
+		//				it_button.state++;
+		//		}
+		//	}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{

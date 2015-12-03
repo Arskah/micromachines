@@ -1,7 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "ResourceManager.h"
+#include "Config.h"
 
 struct button {
+	int player;
 	int state;
 	int max_states;
 	int loc_y;
@@ -31,8 +34,12 @@ public:
 	int width;
 	int height;
 private:
+
+	int offset_x = 100;
+	int offset_y = 100;
 	int amount_players;
-	
+	ResourceManager  resourcemanager;
+
 	sf::Image* backgroundImage;
 
 	std::vector<struct button> buttons;
@@ -44,9 +51,6 @@ private:
 
 	sf::Texture tex_num2;
 	sf::Sprite spri_num2;
-
-	sf::Texture tex_num3;
-	sf::Sprite spri_num3;
 
 	sf::Texture tex_num3;
 	sf::Sprite spri_num3;
@@ -78,6 +82,11 @@ private:
 	sf::Texture tex_exit_P;
 	sf::Sprite spri_exit;
 
+
+
+	//Load car texture for develop use
+	sf::Texture tex_map1;
+	sf::Sprite spri_map1;
 };
 
 
