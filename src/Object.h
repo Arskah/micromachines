@@ -12,6 +12,8 @@ public:
 	float getSpeed() const;
 	//Returns type from Object.
 	Config::ObjectType getType() const;
+	//Return m_vertices from Object
+	sf::VertexArray getVertices() const;
 
 private:
 	sf::Vector2f location;

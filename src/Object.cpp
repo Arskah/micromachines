@@ -25,6 +25,14 @@ Config::ObjectType Object::getType() const
 	return type;
 }
 
+/*
+Returns vertices, mainly for Hitbox
+*/
+sf::VertexArray Object::getVertices() const
+{
+	return m_vertices;
+}
+
 void Object::loadTexture(sf::Texture * const texture)
 {
 	//Assign texture to self
