@@ -96,8 +96,18 @@ THE GAME RUNS HERE
 void Game::run()
 {
 	sf::Clock clock;
+	sf::Clock gametimer;
 	float tickrate = 1.f / 60;
 	float dt = 0.f;
+	float time = 0.f;
+
+	sf::Font font;
+	font.loadFromFile("Arial.ttf");
+	sf::Text gametime;
+	gametime.setFont(font);
+	gametime.setStyle(sf::Text::Bold);
+	gametime.setScale(0.7f, 0.7f);
+
 
 	/*
 	sf::Music music;
@@ -198,8 +208,11 @@ void Game::run()
 				pair.second = Config::InputType::Shoot;
 				userinput.push_back(pair);
 			}
+
+			gametime.setString(std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100));
+
 			// The engine draws the game state here
-			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt);
+			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime);
 			userinput.clear();
 		}
 	}

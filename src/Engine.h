@@ -23,7 +23,8 @@ namespace Engine
 	- userinput: this structure maps the player (by name) to the input the player gave
 	this list is passed to the engine with every cycle of the loop
 	*/
-	void update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt);
+	void update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
+		std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime);
 
 	/* Input handling
 	Parameters:
@@ -61,5 +62,5 @@ namespace Engine
 	- projectiles: list of projectiles
 	- map: game map.
 	*/
-	void draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map);
+	void draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime);
 }

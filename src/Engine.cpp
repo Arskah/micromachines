@@ -1,7 +1,8 @@
 #pragma once
 #include "Engine.h"
 
-void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, std::vector<std::pair<Player*, Config::InputType>> userinput, float dt)
+void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
+	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime)
 {
 	/* AI and player movement handling */
 	Engine::handleInput(userinput, dt, projectiles, resourcemanager);
@@ -25,7 +26,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 	*/
 
 	/* Call function to handle all drawing */
-	Engine::draw(window, vehicles, projectiles, map);
+	Engine::draw(window, vehicles, projectiles, map, gametime);
 }
 
 /* Handles userinput before moving the vehicle*/
@@ -130,7 +131,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					}
 
 					//Y-coordinate
-					if (std::abs(vehicle_1->getPosition().y - vehicle_2->getPosition().y) > vehicle_1->getVertices()[2].position.y)
+					//if (std::abs(vehicle_1->getPosition().y - vehicle_2->getPosition().y) > vehicle_1->getVertices()[2].position.y)
 					{
 						if (vehicle_1->getPosition().y < vehicle_2->getPosition().y)
 						{
@@ -182,7 +183,7 @@ void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime)
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
@@ -204,7 +205,16 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 		window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
 		Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
 		Engine::draw_vehicles(window, vehicles);   // On top of everything
+		if (i == 0)
+		{
+			gametime.setRotation(vehicles->at(0).getRotation() - 180.f);
+			sf::Vector2i pixelpos = sf::Vector2i(0,0);
+			sf::Vector2f worldpos = window.mapPixelToCoords(pixelpos);
+			gametime.setPosition(worldpos);
+			window.draw(gametime);
+		}
 	}
-	
+
+
 	window.display();							// Update drawings
 }
