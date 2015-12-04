@@ -11,9 +11,8 @@ int main()
 
 	std::string name = "Playah";
 	std::string name2 = "Kalle";
-	Config::ObjectType type = Config::ObjectType::Car;
-	std::pair<const std::string, Config::ObjectType> pair(name, type);
-	std::pair<const std::string, Config::ObjectType> pair2(name2, type);
+	std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
+	std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
 	playerdata.push_back(pair);
 	playerdata.push_back(pair2);

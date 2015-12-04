@@ -12,7 +12,8 @@ namespace Config
 	{
 		None,
 		OilSpill,
-		Car,
+		Car1,
+		Car2,
 		Boat,
 		Mine
 	};

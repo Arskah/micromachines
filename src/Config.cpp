@@ -15,7 +15,8 @@ namespace Config
 		{ "rockwall", BlockType::RockWall } };
 
 	extern const std::map<Config::ObjectType, Config::ObjectType> VehicleToProjectileMap = {
-		{ ObjectType::Car, ObjectType::Mine }
+		{ ObjectType::Car1, ObjectType::Mine },
+		{ ObjectType::Car2, ObjectType::Mine }
 	};
 
 	extern const std::map<BlockType, float> BlockToFrictionMap = {

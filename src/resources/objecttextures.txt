@@ -6,5 +6,6 @@
 #0 
 #1
 2 src/resources/car1.png
-#3
-4 src/resources/mine.png
+3 src/resources/car2.png
+#4s
+5 src/resources/mine.png
