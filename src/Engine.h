@@ -9,6 +9,7 @@
 #include "Projectile.h"
 #include "ResourceManager.h"
 #include "Vehicle.h"
+#include "Hitbox.h"
 
 namespace Engine
 {
@@ -42,6 +43,7 @@ namespace Engine
 	void moveProjectile(Projectile);
 	*/
 
+	void checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles);
 
 	/* Function draws all vehicles
 	Parameters:

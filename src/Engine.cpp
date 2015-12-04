@@ -14,6 +14,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Engine::moveVehicle(&(*it));
 	}
 
+	Engine::checkCollisions(vehicles, projectiles);
 
 	//TODO: projectiles
 	/*
@@ -93,11 +94,79 @@ void Engine::moveProjectile(Vehicle& projectile)
 }
 */
 
+void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles)
+{
+	//Checks Vehicle - Vehicle collisions and moves them apart
+	//Loop all vehicles through
+	for (auto vehicle_1 = vehicles->begin(); vehicle_1 != vehicles->end(); vehicle_1++)
+	{
+		for (auto vehicle_2 = vehicles->begin(); vehicle_2 != vehicles->end(); vehicle_2++)
+		{
+			//Don't want to check collisions on self
+			if (vehicle_1 != vehicle_2)
+			{
+				//While we are still in collision state
+				while (Hitbox::checkCollision(&(*vehicle_1), &(*vehicle_2)))
+				{
+
+					//THIS WHOLE PART CAN BE CHANGED
+					//THIS WAS JUST EXPERIMENTAL
+
+					const float magic_number = 0.5f;
+					//Move vehicles apart from each other on the xy-grid by amount magic_number, 0.5f selected for smooth movement
+					//X-coordinate
+					if (std::abs(vehicle_1->getPosition().x - vehicle_2->getPosition().x) > vehicle_1->getVertices()[1].position.x)
+					{
+						if (vehicle_1->getPosition().x < vehicle_2->getPosition().x)
+						{
+							vehicle_1->move(sf::Vector2f(-magic_number, 0.f));
+							vehicle_2->move(sf::Vector2f(magic_number, 0.f));
+						}
+						else
+						{
+							vehicle_1->move(sf::Vector2f(magic_number, 0.f));
+							vehicle_2->move(sf::Vector2f(-magic_number, 0.f));
+						}
+					}
+
+					//Y-coordinate
+					if (std::abs(vehicle_1->getPosition().y - vehicle_2->getPosition().y) > vehicle_1->getVertices()[2].position.y)
+					{
+						if (vehicle_1->getPosition().y < vehicle_2->getPosition().y)
+						{
+							vehicle_1->move(sf::Vector2f(0.f, -magic_number));
+							vehicle_2->move(sf::Vector2f(0.f, magic_number));
+						}
+						else
+						{
+							vehicle_1->move(sf::Vector2f(0.f, magic_number));
+							vehicle_2->move(sf::Vector2f(0.f, -magic_number));
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//Checks Vehicle - Projectile collisions
+	for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
+	{
+		for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
+		{
+			//Need something to happen per ObjectType of projectile
+		}
+	}
+
+}
+
 void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehicles)
 {
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
 	{
 		window.draw(*it);
+
+		//For debug purposes
+		window.draw(Hitbox::createHitboxRect(&(*it)));
 	}
 }
 
