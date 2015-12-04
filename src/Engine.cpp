@@ -130,7 +130,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					}
 
 					//Y-coordinate
-					if (std::abs(vehicle_1->getPosition().y - vehicle_2->getPosition().y) > vehicle_1->getVertices()[2].position.y)
+					//if (std::abs(vehicle_1->getPosition().y - vehicle_2->getPosition().y) > vehicle_1->getVertices()[2].position.y)
 					{
 						if (vehicle_1->getPosition().y < vehicle_2->getPosition().y)
 						{
