@@ -10,8 +10,8 @@ Menu::Menu(sf::RenderWindow& window) : window(window)
 	//}
 	width = window.getSize().x;
 	height = window.getSize().y;
-	this->draw(window);
-	this->runMenu(window);
+//	this->draw(window);
+//	this->runMenu(window);
 
 }
 void Menu::loadContent() {
@@ -27,7 +27,7 @@ void Menu::loadContent() {
 	// create num4
 	tex_num4.loadFromFile("resources\\num4.png");
 	spri_num1.setTexture(tex_num4);
-
+        
 	//load player/AI/off content
 	tex_player_N.loadFromFile("resources\\N_player.png");
 	tex_player_O.loadFromFile("resources\\O_player.png");
@@ -137,8 +137,11 @@ void Menu::createButtons(){
 }
 
 
-bool Menu::runMenu(sf::RenderWindow& window)
-{
+std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata)
+{   
+    Menu::loadContent();
+    Menu::createButtons();
+
 	while (window.isOpen())
 	{
 		sf::Vector2f mouse_loc = sf::Mouse::getPosition(window);

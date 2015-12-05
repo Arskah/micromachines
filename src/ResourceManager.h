@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Config.h"
 #include <fstream>
 #include <sstream>
@@ -18,6 +19,7 @@ public:
 
 	std::map<Config::ObjectType, sf::Texture> * getObjectTextures();
 	std::map<Config::BlockType, sf::Image> * getBlockTextures();
+	void playSound(std::string name);
 
 private:
 	/*
@@ -32,7 +34,11 @@ private:
 	*/
 	void loadBlockTextures();
 
+	void loadSoundBuffers();
+
 
 	std::map<Config::ObjectType, sf::Texture> objecttextures;
 	std::map<Config::BlockType, sf::Image> blocktextures;
+	std::map<std::string, sf::SoundBuffer> soundbuffers;
+	std::vector<sf::Sound> sounds;
 };

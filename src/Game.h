@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include <vector>
 #include <map>
 #include <fstream>
@@ -41,8 +40,14 @@ private:
 	/* initVehicle()
 	Creates a Vehicle from a file.
 	Pushes the created Vehicle to the objects list.
+	Returns a pointer to the created vehicle.
 	*/
-	Vehicle * initVehicle(Config::ObjectType);
+	void initVehicle(Config::ObjectType);
+
+	/* createProjectile()
+	Constructs a Projectile and returns it.
+	*/
+	Projectile Game::createProjectile(Config::ObjectType type);
 
 	/* initPlayers()
 	Initializes the list of players based on the information passed to the constructor.

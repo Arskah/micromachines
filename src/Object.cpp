@@ -25,6 +25,14 @@ Config::ObjectType Object::getType() const
 	return type;
 }
 
+/*
+Returns vertices, mainly for Hitbox
+*/
+sf::VertexArray Object::getVertices() const
+{
+	return m_vertices;
+}
+
 void Object::loadTexture(sf::Texture * const texture)
 {
 	//Assign texture to self
@@ -40,9 +48,9 @@ void Object::loadTexture(sf::Texture * const texture)
 
 	//Build box according to these sizes
 	m_vertices[0].position = sf::Vector2f(0, 0);
-	m_vertices[1].position = sf::Vector2f(textureX, 0);
-	m_vertices[2].position = sf::Vector2f(textureX, textureY);
-	m_vertices[3].position = sf::Vector2f(0, textureY);
+	m_vertices[1].position = sf::Vector2f(textureX / 4.f, 0);
+	m_vertices[2].position = sf::Vector2f(textureX / 4.f, textureY / 4.f);
+	m_vertices[3].position = sf::Vector2f(0, textureY / 4.f);
 
 	//Also the same box for the actual texture
 	m_vertices[0].texCoords = sf::Vector2f(0, 0);
@@ -51,7 +59,7 @@ void Object::loadTexture(sf::Texture * const texture)
 	m_vertices[3].texCoords = sf::Vector2f(0, textureY);
 
 	//Set origin to middle of box. This is the coordinate that the inherited getPosition() returns.
-	this->setOrigin(textureX / 2, textureY / 2);
+	this->setOrigin(m_vertices[2].position.x / 2, m_vertices[2].position.y / 2);
 }
 
 void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const

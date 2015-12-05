@@ -12,7 +12,8 @@ namespace Config
 	{
 		None,
 		OilSpill,
-		Car,
+		Car1,
+		Car2,
 		Boat,
 		Mine
 	};
@@ -24,7 +25,8 @@ namespace Config
 		Grass,
 		Sand,
 		Water,
-		RockWall
+		RockWall,
+		Checkerboard
 	};
 
 	enum class InputType
@@ -39,6 +41,7 @@ namespace Config
 
 	extern const std::map<std::string, Config::BlockType> StringToBlockTypeMap;
 	extern const std::map<BlockType, float> BlockToFrictionMap;
+	extern const std::map<ObjectType, ObjectType> VehicleToProjectileMap;
 
 	extern const float FrameCap;
 }

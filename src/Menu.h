@@ -23,7 +23,7 @@ public:
 	void loadContent();
 	void createButtons();
 
-	bool runMenu(sf::RenderWindow& window);
+	std::vector<std::pair<const std::string, Config::ObjectType>> runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata);
 	void draw(sf::RenderWindow& window);
 
 
@@ -40,7 +40,7 @@ private:
 	int amount_players = 4;
         
         //static buttons 
-        botton start;
+        button start;
         button exit;
         
 	ResourceManager  resourcemanager;
