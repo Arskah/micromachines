@@ -109,9 +109,30 @@ void Menu::createButtons(){
 			}
 		}*/
 	}
-
-
-
+        
+        
+        start.state = 0;
+	start.max_states = 2;
+	start.loc_x = offset_x;
+	start.loc_y = offset_y;
+	start.textures.push_back(tex_start_N);
+        start.textures.push_back(tex_start_O);
+        start.textures.push_back(tex_start_P);
+        start.spri = spri_start;
+	start.player = 99;
+        buttons.push_back(start);
+        
+       
+        exit.state = 0;
+	exit.max_states = 2;
+	exit.loc_x = offset_x;
+	exit.loc_y = offset_y;
+	exit.textures.push_back(tex_start_N);
+        exit.textures.push_back(tex_start_O);
+        exit.textures.push_back(tex_start_P);
+        exit.spri = spri_exit;
+	exit.player = 99;
+        buttons.push_back(exit);
 
 }
 
@@ -120,7 +141,7 @@ bool Menu::runMenu(sf::RenderWindow& window)
 {
 	while (window.isOpen())
 	{
-		sf::Vector2i mouse_loc = sf::Mouse::getPosition(window);
+		sf::Vector2f mouse_loc = sf::Mouse::getPosition(window);
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -142,22 +163,25 @@ bool Menu::runMenu(sf::RenderWindow& window)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
-			//tähän kaikki sprite tarkistukset
+			//all button pressed checked
 			mouse_loc = sf::Mouse::getPosition(window);
 			for (auto it_button : buttons) {
 				if (it_button.spri.getLocalBounds == mouse_loc) {
 					it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
 					if (it_button.state == it_button.max_states)
 						it_button.state = 0;
-					else
+                                                it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
+					else{
 						it_button.state++;
-				}
+                                                it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
+                                        }
 			}
+                        
 		}
-		//Mitäs jos nappulasta pääsetetään irti? TODO
+		//what if button is released? TODO
 		//if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		//{
-		//	//tähän kaikki sprite tarkistukset
+		//	//tï¿½hï¿½n kaikki sprite tarkistukset
 		//	mouse_loc = sf::Mouse::getPosition(window);
 		//	for (auto it_button : buttons) {
 		//		if (it_button.spri.getLocalBounds == mouse_loc) {
@@ -179,9 +203,14 @@ bool Menu::runMenu(sf::RenderWindow& window)
 			// aloita peli
 			return true;
 		}
-	}
+                }
+                if(start.state == 1){
+                    
+                }
+                    
+                
+        }
 }
-
 void Menu::draw(sf::RenderWindow& window)
 {
 	window.clear(sf::Color::Black);

@@ -37,7 +37,12 @@ private:
 
 	int offset_x = 100;
 	int offset_y = 100;
-	int amount_players;
+	int amount_players = 4;
+        
+        //static buttons 
+        botton start;
+        button exit;
+        
 	ResourceManager  resourcemanager;
 
 	sf::Image* backgroundImage;
