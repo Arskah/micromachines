@@ -29,7 +29,7 @@ int main()
 	editor.runEditor();
 	*/
         
-        Menu menu(window);
+        Menu menu(window, &resourcemanager);
         playerdata = menu.runMenu(window, playerdata);
 	
 	/*

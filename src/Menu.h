@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "Config.h"
+#include <stdlib.h>
 
 struct button {
 	int player;
@@ -17,7 +18,7 @@ struct button {
 class Menu
 {
 public:
-	Menu(sf::RenderWindow& window);
+	Menu(sf::RenderWindow& window, ResourceManager * resourcemanager);
 	~Menu() {}
 
 	void loadContent();
@@ -27,26 +28,27 @@ public:
 	void draw(sf::RenderWindow& window);
 
 
-	int getAmountItems() const;
-	sf::Text getSelected() const;
+//	int getAmountItems() const;
+//	sf::Text getSelected() const;
 
-	sf::RenderWindow window;
+//	sf::RenderWindow window;
 	int width;
 	int height;
 private:
-
-	int offset_x = 100;
-	int offset_y = 100;
+    
+	float offset_x = 100;
+	float offset_y = 100;
 	int amount_players = 4;
         
+        sf::Font font;
         //static buttons 
         button start;
         button exit;
         
-	ResourceManager  resourcemanager;
-
+	ResourceManager * resourcemanager;
+        sf::RenderWindow& window;
 	sf::Image* backgroundImage;
-
+        
 	std::vector<struct button> buttons;
 
 	// declare all button images
@@ -62,7 +64,8 @@ private:
 
 	sf::Texture tex_num4;
 	sf::Sprite spri_num4;
-	// player opptions
+	
+        // player opptions
 	sf::Texture tex_player_N;
 	sf::Texture tex_player_O;
 	sf::Texture tex_player_P;
@@ -89,9 +92,12 @@ private:
 
 
 
-	//Load car texture for develop use
+	//Load map texture for develop use
 	sf::Texture tex_map1;
 	sf::Sprite spri_map1;
+        
+        //Load car textures
+        sf::Sprite spri_car;
 };
 
 
