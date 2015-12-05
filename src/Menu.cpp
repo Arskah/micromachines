@@ -88,7 +88,7 @@ void Menu::createButtons(){
 		plaioff.textures.push_back(tex_off_P);
 		plaioff.type = buttonType::pao;
                 plaioff.spri = spri_player;
-		plaioff.player = i;
+		plaioff.player = i+1;
 
 		buttons.push_back(plaioff);
 
@@ -136,15 +136,15 @@ void Menu::createButtons(){
         
        
         exit.state = 0;
-	exit.max_states = 2;
-	exit.loc_x = offset_x;
-	exit.loc_y = offset_y + 200;
-	exit.textures.push_back(tex_start_N);
+		exit.max_states = 2;
+		exit.loc_x = offset_x;
+		exit.loc_y = offset_y + 200;
+		exit.textures.push_back(tex_start_N);
         exit.textures.push_back(tex_start_O);
         exit.textures.push_back(tex_start_P);
         exit.spri = spri_exit;
         exit.type = buttonType::exit; 
-	exit.player = 99;
+		exit.player = 99;
         
 
 }
@@ -211,34 +211,65 @@ std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || start.state == 1)
 		{
 			// start game
+			std::string name;
                     for(auto it_button : buttons)
-                    { 
+                    {
                             if(it_button.type == buttonType::pao)
                             {
-                                std::string name;
                                 switch(it_button.state)
                                 {
                                         case 0:
-                                            name = "Akke";
-                                                continue;
+											switch (it_button.player)
+											{
+											case 1:
+												name = "Akke";
+												continue;
+											case 2:
+												name = "Okko";
+												continue;
+											case 3:
+												name = "Aarni";
+												continue;
+											case 4:
+												name = "Jan";
+												continue;
+											}
+											{
+												
+											}
                                         case 1:
-                                            name = "AI1";
-                                                continue;;
+											switch (it_button.player)
+											{
+											case 1:
+												name = "AI1";
+												continue;
+											case 2:
+												name = "AI2";
+												continue;
+											case 3:
+												name = "AI3";
+												continue;
+											case 4:
+												name = "AI4";
+												continue;
+											}
                                         case 2:
                                             name = "Off";
-                                                continue;;
+                                                continue;
                                 }
                             }
                             if(it_button.type == buttonType::car)
                             {
-                                switch(it_button.state)
-                                {
-                                        case 0:
-                                            playerdata.push_back(std::vector<std::pair<const std::string, Config::ObjectType>> palyer(name, Config::ObjectType::Car1));
-                                                continue;;
-                                        case 1:
-                                            playerdata.push_back(std::vector<std::pair<const std::string, Config::ObjectType>> palyer(name, Config::ObjectType::Car2));
-                                                continue;;
+								if (it_button.state == 0)
+								{
+									std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car1);
+									playerdata.push_back(player1);
+									continue;
+								}
+								if (it_button.state == 1){
+										std::pair<const std::string, Config::ObjectType> player2(name, Config::ObjectType::Car2);
+                                        playerdata.push_back(player2);
+											continue;
                                 }
                             }
                         }

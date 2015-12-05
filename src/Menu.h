@@ -15,8 +15,8 @@ struct button {
 	int player;
 	int state;
 	int max_states;
-	int loc_y;
-	int loc_x;
+	float loc_y;
+	float loc_x;
         buttonType type;
         
 	sf::Sprite spri;
