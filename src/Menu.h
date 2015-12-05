@@ -4,12 +4,21 @@
 #include "Config.h"
 #include <stdlib.h>
 
+enum class buttonType {
+    pao,
+    car,
+    start,
+    exit
+};
+
 struct button {
 	int player;
 	int state;
 	int max_states;
 	int loc_y;
 	int loc_x;
+        buttonType type;
+        
 	sf::Sprite spri;
 	std::vector<sf::Texture> textures;
 };

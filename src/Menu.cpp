@@ -86,7 +86,8 @@ void Menu::createButtons(){
 		plaioff.textures.push_back(tex_off_N);
 		plaioff.textures.push_back(tex_off_O);
 		plaioff.textures.push_back(tex_off_P);
-		plaioff.spri = spri_player;
+		plaioff.type = buttonType::pao;
+                plaioff.spri = spri_player;
 		plaioff.player = i;
 
 		buttons.push_back(plaioff);
@@ -130,8 +131,8 @@ void Menu::createButtons(){
         start.textures.push_back(tex_start_O);
         start.textures.push_back(tex_start_P);
         start.spri = spri_start;
+        start.type = buttonType::start;
 	start.player = 98;
-        buttons.push_back(start);
         
        
         exit.state = 0;
@@ -142,6 +143,7 @@ void Menu::createButtons(){
         exit.textures.push_back(tex_start_O);
         exit.textures.push_back(tex_start_P);
         exit.spri = spri_exit;
+        exit.type = buttonType::exit; 
 	exit.player = 99;
         
 
@@ -175,14 +177,15 @@ std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::
 					it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 1], true);
                                 }
                         }
-
+                }
 		if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
 			//all button pressed checked
 			//mouse_loc = sf::Mouse::getPosition(window);
 			for(auto it_button : buttons) {
 				sf::IntRect rect(it_button.spri.getPosition().x, it_button.spri.getPosition().y, it_button.spri.getGlobalBounds().width, it_button.spri.getGlobalBounds().height);
-                                if(rect.contains(sf::Mouse::getPosition())) {
+                                if(rect.contains(sf::Mouse::getPosition()))
+                                {
 					it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
 					if(it_button.state == it_button.max_states)
                                         {
@@ -205,18 +208,47 @@ std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::
 			window.close();
                         
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || start.state == 1)
 		{
 			// start game
-			return true;
-		}
-                }
-                if(start.state == 1){
+                    for(auto it_button : buttons)
+                    { 
+                            if(it_button.type == buttonType::pao)
+                            {
+                                std::string name;
+                                switch(it_button.state)
+                                {
+                                        case 0:
+                                            name = "Akke";
+                                                continue;
+                                        case 1:
+                                            name = "AI1";
+                                                continue;;
+                                        case 2:
+                                            name = "Off";
+                                                continue;;
+                                }
+                            }
+                            if(it_button.type == buttonType::car)
+                            {
+                                switch(it_button.state)
+                                {
+                                        case 0:
+                                            playerdata.push_back(std::vector<std::pair<const std::string, Config::ObjectType>> palyer(name, Config::ObjectType::Car1));
+                                                continue;;
+                                        case 1:
+                                            playerdata.push_back(std::vector<std::pair<const std::string, Config::ObjectType>> palyer(name, Config::ObjectType::Car2));
+                                                continue;;
+                                }
+                            }
+                        }
                     
-                }
+                    
+                    return playerdata;
+		}
+        }
                     
                 
-        }
 }
 void Menu::draw(sf::RenderWindow& window)
 {
@@ -248,7 +280,9 @@ void Menu::draw(sf::RenderWindow& window)
 	}
         
         start.spri.setPosition(start.loc_x, start.loc_y);
+        window.draw(start.spri);
         exit.spri.setPosition(exit.loc_x, exit.loc_y);
+        window.draw(exit.spri);
         
 	window.display();
 
