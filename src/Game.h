@@ -47,7 +47,7 @@ private:
 	/* createProjectile()
 	Constructs a Projectile and returns it.
 	*/
-	Projectile Game::createProjectile(Config::ObjectType type);
+	Projectile createProjectile(Config::ObjectType type);
 
 	/* initPlayers()
 	Initializes the list of players based on the information passed to the constructor.

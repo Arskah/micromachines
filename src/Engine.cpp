@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include "Engine.h"
 
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 

@@ -54,7 +54,7 @@ private:
         button start;
         button exit;
         
-	ResourceManager * resourcemanager;
+	ResourceManager* resourcemanager;
         sf::RenderWindow& window;
 	sf::Image* backgroundImage;
         
