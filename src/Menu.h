@@ -56,7 +56,7 @@ private:
         
 	ResourceManager* resourcemanager;
         sf::RenderWindow& window;
-	sf::Image* backgroundImage;
+	sf::Image backgroundImage;
         
 	std::vector<struct button> buttons;
 

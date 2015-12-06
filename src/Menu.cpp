@@ -18,6 +18,9 @@ Menu::Menu(sf::RenderWindow& window, ResourceManager* resourcemanager) : window(
 
 }
 void Menu::loadContent() {
+	//Background
+	backgroundImage.loadFromFile("src/resources/menu/background.png");
+
 	// create num1
 	tex_num1.loadFromFile("src/resources/menu/num1.png");
 	spri_num1.setTexture(tex_num1);
@@ -60,8 +63,6 @@ void Menu::loadContent() {
 	//Load maps for develop use
         //tex_map1.loadFromFile("src/resources/menu/map1.png");
 	//spri_map1.setTexture(tex_map1);
-        
-        backgroundImage->create(1280,720,sf::Color::Yellow);
         
         //font 
         font.loadFromFile("src/resources/arial.ttf");
@@ -287,10 +288,11 @@ void Menu::draw(sf::RenderWindow& window)
         
     // Can't draw image, need to attch it to a texture of sf::drawable
     sf::Texture texture;
-    texture.loadFromImage(*(this->backgroundImage));
+    texture.loadFromImage(this->backgroundImage);
     sf::Sprite sprite;
     sprite.setTexture(texture, true);
-    window.draw(sprite); //TODO
+    window.draw(sprite);
+
     int y_place = 1;
 
     spri_num1.setPosition(offset_x, offset_y);
