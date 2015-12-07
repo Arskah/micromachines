@@ -33,7 +33,7 @@ public:
 	void loadContent();
 	void createButtons();
 
-	std::vector<std::pair<const std::string, Config::ObjectType>> runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata);
+	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata);
 	void draw(sf::RenderWindow& window);
 
 

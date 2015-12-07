@@ -155,7 +155,7 @@ void Menu::createButtons(){
 }
 
 
-std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata)
+bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata)
 {   
     Menu::loadContent();
     Menu::createButtons();
@@ -213,6 +213,7 @@ std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::
         {
                 //end game
                 window.close();
+				return false;
 
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || start.state == 1)
@@ -278,9 +279,11 @@ std::vector<std::pair<const std::string, Config::ObjectType>> Menu::runMenu(sf::
                     }
                 }
             }
-            return playerdata;
+            return true;
         }
-    }              
+		Menu::draw(window);
+    }
+	return false;
 }
 void Menu::draw(sf::RenderWindow& window)
 {

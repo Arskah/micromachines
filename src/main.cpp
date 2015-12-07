@@ -11,6 +11,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
 	//window.setFramerateLimit(60);
 
+	bool menudata;
 	std::string name = "Playah";
 	std::string name2 = "Kalle";
 	std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
@@ -30,7 +31,7 @@ int main()
 	*/
         
         Menu menu(window, &resourcemanager);
-        playerdata = menu.runMenu(window, playerdata);
+        menudata = menu.runMenu(window, playerdata, mapdata);
 	
 	/*
 	//EXAMPLE ON HOW EASY IT IS TO USE A MAP
