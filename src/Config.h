@@ -11,10 +11,12 @@ namespace Config
 	enum class ObjectType
 	{
 		None,
-		OilSpill,
 		Car1,
 		Car2,
+		Car3,
+		Car4,
 		Boat,
+		Oilspill,
 		Mine
 	};
 

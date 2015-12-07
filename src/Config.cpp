@@ -16,7 +16,9 @@ namespace Config
 
 	extern const std::map<Config::ObjectType, Config::ObjectType> VehicleToProjectileMap = {
 		{ ObjectType::Car1, ObjectType::Mine },
-		{ ObjectType::Car2, ObjectType::Mine }
+		{ ObjectType::Car2, ObjectType::Mine },
+		{ ObjectType::Car3, ObjectType::Mine },
+		{ ObjectType::Car4, ObjectType::Mine }
 	};
 
 	extern const std::map<BlockType, float> BlockToFrictionMap = {
