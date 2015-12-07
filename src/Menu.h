@@ -8,7 +8,8 @@ enum class buttonType {
     pao,
     car,
     start,
-    exit
+    exit,
+	map
 };
 
 struct button {
@@ -17,7 +18,7 @@ struct button {
 	int max_states;
 	float loc_y;
 	float loc_x;
-        buttonType type;
+    buttonType type;
         
 	sf::Sprite spri;
 	std::vector<sf::Texture> textures;
@@ -32,6 +33,7 @@ public:
 
 	void loadContent();
 	void createButtons();
+	std::string checkName(button it_button);
 
 	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata);
 	void draw(sf::RenderWindow& window);
@@ -43,22 +45,26 @@ public:
 //	sf::RenderWindow window;
 	int width;
 	int height;
+
 private:
     
 	float offset_x = 100;
 	float offset_y = 100;
 	int amount_players = 4;
-        
-        sf::Font font;
-        //static buttons 
-        button start;
-        button exit;
+	int heightDivider = 7;
+
+    sf::Font font;
+    //static buttons 
+	button map;
+	button start;
+    button exit;
         
 	ResourceManager* resourcemanager;
-        sf::RenderWindow& window;
+    sf::RenderWindow& window;
 	sf::Image backgroundImage;
         
 	std::vector<struct button> buttons;
+
 
 	// declare all button images
 	// numerators
@@ -105,8 +111,8 @@ private:
 	sf::Texture tex_map1;
 	sf::Sprite spri_map1;
         
-        //Load car textures
-        sf::Sprite spri_car;
+    //Load car textures
+    sf::Sprite spri_car;
 };
 
 

@@ -26,13 +26,13 @@ void Menu::loadContent() {
 	spri_num1.setTexture(tex_num1);
 	// create num2
 	tex_num2.loadFromFile("src/resources/menu/num2.png");
-	spri_num1.setTexture(tex_num2);
+	spri_num2.setTexture(tex_num2);
 	// create num3
 	tex_num3.loadFromFile("src/resources/menu/num3.png");
-	spri_num1.setTexture(tex_num3);
+	spri_num3.setTexture(tex_num3);
 	// create num4
 	tex_num4.loadFromFile("src/resources/menu/num4.png");
-	spri_num1.setTexture(tex_num4);
+	spri_num4.setTexture(tex_num4);
         
 	//load player/AI/off content
 	tex_player_N.loadFromFile("src/resources/menu/N_player.png");
@@ -60,12 +60,12 @@ void Menu::loadContent() {
 	tex_exit_P.loadFromFile("src/resources/menu/P_exit.png");
 	spri_exit.setTexture(tex_exit_N);
 
-	//Load maps for develop use
-        //tex_map1.loadFromFile("src/resources/menu/map1.png");
-	//spri_map1.setTexture(tex_map1);
-        
-        //font 
-        font.loadFromFile("src/resources/arial.ttf");
+	//load maps for develop use
+    tex_map1.loadFromFile("src/resources/menu/map1.png");
+	spri_map1.setTexture(tex_map1);
+       
+    //font 
+    font.loadFromFile("src/resources/arial.ttf");
 }
 
 void Menu::createButtons(){
@@ -76,8 +76,8 @@ void Menu::createButtons(){
 		button plaioff;
 		plaioff.state = 0;
 		plaioff.max_states = 3;
-		plaioff.loc_x = offset_x;
-		plaioff.loc_y = offset_y;
+		plaioff.loc_x = width / 2 - 100;
+		plaioff.loc_y = height / heightDivider * (i+2);
 		plaioff.textures.push_back(tex_player_N);
 		plaioff.textures.push_back(tex_player_O);
 		plaioff.textures.push_back(tex_player_P);
@@ -88,26 +88,26 @@ void Menu::createButtons(){
 		plaioff.textures.push_back(tex_off_O);
 		plaioff.textures.push_back(tex_off_P);
 		plaioff.type = buttonType::pao;
-                plaioff.spri = spri_player;
-                plaioff.spri.setPosition(plaioff.loc_x, plaioff.loc_y);
+        plaioff.spri = spri_player;
+        plaioff.spri.setPosition(plaioff.loc_x, plaioff.loc_y);
 		plaioff.player = i+1;
-
 		buttons.push_back(plaioff);
 
 		button cars;
 		cars.state = 0;
-		cars.loc_x = offset_x;
-		cars.loc_y = offset_y + 100;
+		cars.loc_x = width / 2;
+		cars.loc_y = height / heightDivider * (i+2);
 		cars.player = i;
-                cars.spri = spri_car;
-                cars.spri.setPosition(cars.loc_x, cars.loc_y);
+        cars.spri = spri_car;
+        cars.spri.setPosition(cars.loc_x, cars.loc_y);
+		cars.spri.setScale(0.14, 0.14);
 
 		//for finding all cars from ogjectTexturemap
-                //Now static over ride version
-                cars.textures.push_back(resourcemanager->getObjectTextures()->find(Config::ObjectType::Car1)->second);
-                cars.textures.push_back(resourcemanager->getObjectTextures()->find(Config::ObjectType::Car1)->second);
+        //Now static over ride version
+        cars.textures.push_back(resourcemanager->getObjectTextures()->find(Config::ObjectType::Car1)->second);
+        cars.textures.push_back(resourcemanager->getObjectTextures()->find(Config::ObjectType::Car2)->second);
                 
-                //for future use
+        //for future use
 //		for(unsigned int j = 0; j < resourcemanager->getObjectTextures()->size(); j++) {
 //			std::string type = "Car" + std::to_string(j);
 //                        auto it_cars = resourcemanager->getObjectTextures(); //std::map<Config::ObjectType, sf::Texture>::iterator
@@ -116,42 +116,98 @@ void Menu::createButtons(){
 //				cars.textures.push_back(it_cars->second);
 //				cars.max_states++;
 //			}
-//                }
+//      }
                 
-                cars.spri.setTexture(cars.textures[1]);
+        cars.spri.setTexture(cars.textures[1]);
 		buttons.push_back(cars);
 
-		offset_x = offset_x + i*100;
 	}
+		
+	map.state = 0;
+	map.max_states = 1;
+	map.loc_x = (width / 2 - 40);
+	map.loc_y = (height / heightDivider * 1 - 10);
+	map.textures.push_back(tex_map1);
+	map.spri = spri_map1;
+	map.spri.setPosition(map.loc_x, map.loc_y);
+	map.type = buttonType::map;
+	map.player = 97;
+	buttons.push_back(map);
 
-        
-        
-        start.state = 0;
+       
+    start.state = 0;
 	start.max_states = 2;
-	start.loc_x = offset_x;
-	start.loc_y = offset_y + 100;
+	start.loc_x = (width / 2 + 50);
+	start.loc_y = (height / heightDivider * 6);
 	start.textures.push_back(tex_start_N);
-        start.textures.push_back(tex_start_O);
-        start.textures.push_back(tex_start_P);
-        start.spri = spri_start;
-        start.spri.setPosition(start.loc_x,start.loc_y);
-        start.type = buttonType::start;
+    start.textures.push_back(tex_start_O);
+    start.textures.push_back(tex_start_P);
+    start.spri = spri_start;
+    start.spri.setPosition(start.loc_x,start.loc_y);
+    start.type = buttonType::start;
 	start.player = 98;
+	buttons.push_back(start);
         
        
-        exit.state = 0;
-		exit.max_states = 2;
-		exit.loc_x = offset_x;
-		exit.loc_y = offset_y + 200;
-		exit.textures.push_back(tex_start_N);
-        exit.textures.push_back(tex_start_O);
-        exit.textures.push_back(tex_start_P);
-        exit.spri = spri_exit;
-        exit.spri.setPosition(exit.loc_x,exit.loc_y);
-        exit.type = buttonType::exit; 
-		exit.player = 99;
+    exit.state = 0;
+	exit.max_states = 2;
+	exit.loc_x = width / 2 - 150;
+	exit.loc_y = height / heightDivider * 6;
+	exit.textures.push_back(tex_start_N);
+    exit.textures.push_back(tex_start_O);
+    exit.textures.push_back(tex_start_P);
+    exit.spri = spri_exit;
+    exit.spri.setPosition(exit.loc_x,exit.loc_y);
+    exit.type = buttonType::exit; 
+	exit.player = 99;
+	buttons.push_back(exit);
         
 
+}
+
+std::string Menu::checkName(button it_button)
+{
+	std::string name; 
+	switch (it_button.state)
+	{
+	case 0:
+		switch (it_button.player)
+		{
+		case 1:
+			name = "Akke";
+			return name;
+		case 2:
+			name = "Okko";
+			return name;
+		case 3:
+			name = "Aarni";
+			return name;
+		case 4:
+			name = "Jan";
+			return name;
+		}
+	case 1:
+		switch (it_button.player)
+		{
+		case 1:
+			name = "AI1";
+			return name;
+		case 2:
+			name = "AI2";
+			return name;
+		case 3:
+			name = "AI3";
+			return name;
+		case 4:
+			name = "AI4";
+			return name;
+		}
+	case 2:
+		name = "Off";
+		return name;
+	}
+	name = "Failed_load_name";
+	return name;
 }
 
 
@@ -183,6 +239,10 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
                 {
                     it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 1], true);
                 }
+				else
+				{
+					it_button.spri.setTexture(it_button.textures[it_button.state * 2], true);
+				}
             }
         }
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
@@ -224,44 +284,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
             {
                 if(it_button.type == buttonType::pao)
                 {
-                    switch(it_button.state)
-                    {
-                        case 0:
-                            switch (it_button.player)
-                            {
-                                case 1:
-                                name = "Akke";
-                                continue;
-                                case 2:
-                                name = "Okko";
-                                continue;
-                                case 3:
-                                name = "Aarni";
-                                continue;
-                                case 4:
-                                name = "Jan";
-                                continue;
-                            }
-                        case 1:
-                            switch (it_button.player)
-                            {
-                            case 1:
-                                name = "AI1";
-                                continue;
-                            case 2:
-                                name = "AI2";
-                                continue;
-                            case 3:
-                                name = "AI3";
-                                continue;
-                            case 4:
-                                name = "AI4";
-                                continue;
-                            }
-                        case 2:
-                            name = "Off";
-                            continue;
-                    }
+					name = checkName(it_button);
                 }
                 if(it_button.type == buttonType::car)
                 {
@@ -288,7 +311,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 void Menu::draw(sf::RenderWindow& window)
 {
     window.clear(sf::Color::Black);
-        
+	sf::Text text;
     // Can't draw image, need to attch it to a texture of sf::drawable
     sf::Texture texture;
     texture.loadFromImage(this->backgroundImage);
@@ -298,10 +321,10 @@ void Menu::draw(sf::RenderWindow& window)
 
     int y_place = 1;
 
-    spri_num1.setPosition(offset_x, offset_y);
-    spri_num2.setPosition(offset_x, offset_y + 100);
-    spri_num3.setPosition(offset_x, offset_y + 200);
-    spri_num4.setPosition(offset_x, offset_y + 300);
+    spri_num1.setPosition(width / 2 - 200, height / heightDivider * 2);
+    spri_num2.setPosition(width / 2 - 200, height / heightDivider * 3);
+    spri_num3.setPosition(width / 2 - 200, height / heightDivider * 4);
+    spri_num4.setPosition(width / 2 - 200, height / heightDivider * 5);
     window.draw(spri_num1);
     window.draw(spri_num2);
     window.draw(spri_num3);
@@ -313,17 +336,19 @@ void Menu::draw(sf::RenderWindow& window)
         it_but.spri.setPosition(it_but.loc_x, it_but.loc_y);
         window.draw(it_but.spri);
 
-//          item.first.setFont(font);
-//          item.first.setColor(sf::Color::White);
-//          item.first.setString(item.second);
-//          item.first setPosition;
-//          window.draw(item.first);
-//          y_place++;
+		if (it_but.type == buttonType::pao)
+		{
+			text.setString(checkName(it_but));
+			text.setFont(font);
+			text.setColor(sf::Color::Blue);
+			text.setCharacterSize(30);
+			text.setStyle(sf::Text::Regular);
+			text.setPosition(it_but.loc_x + 200, it_but.loc_y);
+			window.draw(text);
+		}
     }
 
-    start.spri.setPosition(start.loc_x, start.loc_y);
     window.draw(start.spri);
-    exit.spri.setPosition(exit.loc_x, exit.loc_y);
     window.draw(exit.spri);
 
     window.display();
