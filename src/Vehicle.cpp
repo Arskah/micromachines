@@ -77,7 +77,14 @@ void Vehicle::slow(float friction, float dt)
  */
 Projectile Vehicle::shoot()
 {
-	this->weapon.setPosition(this->getPosition().x, this->getPosition().y);
+	// This solution actually only applies to mines and such
+	sf::Transform t;
+	t.rotate(this->getRotation() + 180.f); // This points to the opposite direction of the car's heading
+	sf::Vector2f vec(0.f, 1.f);
+	sf::Vector2f direction = t.transformPoint(vec);
+	direction *= 80.f; // Offset for the projectile
+
+	this->weapon.setPosition(direction + this->getPosition());
 	this->weapontimer = 0.f;
 	return this->weapon;
 }

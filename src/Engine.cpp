@@ -167,7 +167,7 @@ void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehi
 		window.draw(*it);
 
 		//For debug purposes
-		window.draw(Hitbox::createHitboxRect(&(*it)));
+		//window.draw(Hitbox::createHitboxRect(&(*it)));
 	}
 }
 
@@ -202,9 +202,11 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 		view.setRotation(vehicles->at(i).getRotation() - 180.f);
 		view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
 		window.setView(view);
-		window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
+		window.draw(*map.getDrawable());
 		Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
 		Engine::draw_vehicles(window, vehicles);   // On top of everything
+		
+		// Drawing the gametimer to the top-left corner TODO: add standings etc.
 		if (i == 0)
 		{
 			gametime.setRotation(vehicles->at(0).getRotation() - 180.f);
