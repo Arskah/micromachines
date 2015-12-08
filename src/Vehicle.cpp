@@ -39,19 +39,32 @@ void Vehicle::accelerate(float dt)
 */
 void Vehicle::brake(float dt)
 {
-	if (this->getSpeed() > 0)
+	// Normal braking situation (decreasing speed)
+	if (this->getSpeed() > 0.f)
 	{
-		this->setSpeed(this->getSpeed() - 1.5 * acceleration * dt);
-		if (this->getSpeed() < 0)
-			this->setSpeed(0.f);
-	}
-	else
-	{
-		this->setSpeed(this->getSpeed() + 1.5 * acceleration * dt);
-		if (this->getSpeed() > 0)
+		this->setSpeed(this->getSpeed() - 1.5f * acceleration * dt);
+		if (this->getSpeed() < 0.f)
 			this->setSpeed(0.f);
 	}
 
+	// Car is already standing still -> increase braketimer
+	if (this->getSpeed() == 0.f)
+	{
+		this->braketimer += dt;
+	}
+
+	// After 0.5 seconds of standing still the car can reverse
+	if (this->braketimer > 0.5f)
+	{
+		// The reversing acceleration is half of the forward acceleration
+		this->setSpeed(this->getSpeed() - 0.5f * acceleration * dt);
+		// The maximum reversing speed is half of the forward maximum speed
+		if (this->getSpeed() < - 0.5f * this->maxspeed)
+			this->setSpeed(- 0.5f * maxspeed);
+		// No longer reversing -> set the braketimer to zero again
+		if (this->getSpeed() >= 0.f)
+			this->braketimer = 0.f;
+	}
 }
 
 void Vehicle::turn(bool left, float dt)
@@ -64,9 +77,26 @@ void Vehicle::turn(bool left, float dt)
 
 void Vehicle::slow(float friction, float dt)
 {
+	// Slowing friction while going forward
 	if (this->getSpeed() > 0)
 	{
 		this->setSpeed(this->getSpeed() - friction * dt);
+		// Making sure the car stops properly and doesn't just reverse direction
+		if (this->getSpeed() < 0)
+		{
+			this->setSpeed(0.f);
+		}
+	}
+
+	// Same but backwards
+	if (this->getSpeed() < 0)
+	{
+		this->setSpeed(this->getSpeed() + friction * dt);
+		// Making sure the car stops properly and doesn't just reverse direction
+		if (this->getSpeed() > 0)
+		{
+			this->setSpeed(0.f);
+		}
 	}
 }
 

@@ -76,7 +76,7 @@ float Engine::getFriction(Vehicle * vehicle, Map& map)
 void Engine::moveVehicle(Vehicle * vehicle)
 {
 	float speed = vehicle->getSpeed();
-	if (speed > 0.0f)
+	if (speed != 0.f)
 	{
 		float rotation = vehicle->getRotation();
 		sf::Vector2f movementVec; //normal vector based on current direction

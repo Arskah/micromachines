@@ -34,5 +34,6 @@ private:
 	float maxspeed;
 	float turnrate;
 	float weapontimer;
+	float braketimer = 0.f;
 	Projectile weapon;
 };
