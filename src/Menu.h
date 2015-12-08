@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Config.h"
 #include <stdlib.h>
+#include <vector>
 
 enum class buttonType {
     pao,
@@ -34,6 +35,7 @@ public:
 	void loadContent();
 	void createButtons();
 	std::string checkName(button it_button);
+	std::string Menu::checkMap(button it_button);
 
 	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata);
 	void draw(sf::RenderWindow& window);
@@ -80,7 +82,7 @@ private:
 	sf::Texture tex_num4;
 	sf::Sprite spri_num4;
 	
-        // player opptions
+    // player opptions
 	sf::Texture tex_player_N;
 	sf::Texture tex_player_O;
 	sf::Texture tex_player_P;
@@ -92,12 +94,14 @@ private:
 	sf::Texture tex_off_N;
 	sf::Texture tex_off_O;
 	sf::Texture tex_off_P;
+
 	sf::Sprite spri_player;
 
 	// start/exit
 	sf::Texture tex_start_N;
 	sf::Texture tex_start_O;
 	sf::Texture tex_start_P;
+
 	sf::Sprite spri_start;
 
 	sf::Texture tex_exit_N;
@@ -111,7 +115,9 @@ private:
 	sf::Texture tex_map1;
 	sf::Sprite spri_map1;
         
-    //Load car textures
+    //Load car images
+	sf::Texture img_car1;
+	sf::Texture img_car2;
     sf::Sprite spri_car;
 };
 

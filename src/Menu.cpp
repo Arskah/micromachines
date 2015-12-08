@@ -49,21 +49,29 @@ void Menu::loadContent() {
 
 	spri_player.setTexture(tex_player_N);
 
-	//load start/exit content
+	//load start
 	tex_start_N.loadFromFile("src/resources/menu/N_start.png");
 	tex_start_O.loadFromFile("src/resources/menu/O_start.png");
 	tex_start_P.loadFromFile("src/resources/menu/P_start.png");
+
 	spri_start.setTexture(tex_start_N);
 
+	//load exit 
 	tex_exit_N.loadFromFile("src/resources/menu/N_exit.png");
 	tex_exit_O.loadFromFile("src/resources/menu/O_exit.png");
 	tex_exit_P.loadFromFile("src/resources/menu/P_exit.png");
+
 	spri_exit.setTexture(tex_exit_N);
 
 	//load maps for develop use
     tex_map1.loadFromFile("src/resources/menu/map1.png");
 	spri_map1.setTexture(tex_map1);
        
+	//Load car textures
+	img_car1.loadFromFile("src/resources/car1.png");
+	img_car2.loadFromFile("src/resources/car2.png");
+	spri_car.setTexture(img_car1);
+
     //font 
     font.loadFromFile("src/resources/arial.ttf");
 }
@@ -73,68 +81,82 @@ void Menu::createButtons(){
 	//std::map<Config::ObjectType, sf::Texture> tex_cars = *resourcemanager->getObjectTextures();
 	for (int i = 0; i < amount_players; i++) 
         {
-		button plaioff;
-		plaioff.state = 0;
-		plaioff.max_states = 3;
-		plaioff.loc_x = width / 2 - 100;
-		plaioff.loc_y = height / heightDivider * (i+2);
-		plaioff.textures.push_back(tex_player_N);
-		plaioff.textures.push_back(tex_player_O);
-		plaioff.textures.push_back(tex_player_P);
-		plaioff.textures.push_back(tex_ai_N);
-		plaioff.textures.push_back(tex_ai_O);
-		plaioff.textures.push_back(tex_ai_P);
-		plaioff.textures.push_back(tex_off_N);
-		plaioff.textures.push_back(tex_off_O);
-		plaioff.textures.push_back(tex_off_P);
-		plaioff.type = buttonType::pao;
-        plaioff.spri = spri_player;
-        plaioff.spri.setPosition(plaioff.loc_x, plaioff.loc_y);
-		plaioff.player = i+1;
-		buttons.push_back(plaioff);
+			// create Pleyer/AI/Off button for all players
+			button plaioff;
+			//choose 2 player to be player, 2 to be AI
+			if (i < 2)
+				plaioff.state = 0;
+			else
+				plaioff.state = 1;
+			plaioff.max_states = 3;
+			plaioff.loc_x = width / 2 - 100;
+			plaioff.loc_y = height / heightDivider * (i+2);
+			plaioff.textures.push_back(tex_player_N);
+			plaioff.textures.push_back(tex_player_O);
+			plaioff.textures.push_back(tex_player_P);
+			plaioff.textures.push_back(tex_ai_N);
+			plaioff.textures.push_back(tex_ai_O);
+			plaioff.textures.push_back(tex_ai_P);
+			plaioff.textures.push_back(tex_off_N);
+			plaioff.textures.push_back(tex_off_O);
+			plaioff.textures.push_back(tex_off_P);
+			plaioff.type = buttonType::pao;
+			plaioff.spri = spri_player;
+			plaioff.spri.setPosition(plaioff.loc_x, plaioff.loc_y);
+			plaioff.player = i+1;
+			buttons.push_back(plaioff);
 
-		button cars;
-		cars.state = 0;
-		cars.loc_x = width / 2;
-		cars.loc_y = height / heightDivider * (i+2);
-		cars.player = i;
-        cars.spri = spri_car;
-        cars.spri.setPosition(cars.loc_x, cars.loc_y);
-		cars.spri.setScale(0.14, 0.14);
+			// create car button for all players
+			button cars;
+			cars.state = 0;
+			cars.loc_x = width / 2;
+			cars.loc_y = height / heightDivider * (i+2);
+			cars.player = i;
+			cars.spri = spri_car;
+			cars.spri.setPosition(cars.loc_x, cars.loc_y);
+			cars.spri.setScale(0.14, 0.14);
+			cars.type = buttonType::car;	
+			//Now static over ride version
+			cars.textures.push_back(img_car1);
+			cars.textures.push_back(img_car1);
+			cars.textures.push_back(img_car1);
+			cars.textures.push_back(img_car2);
+			cars.textures.push_back(img_car2);
+			cars.textures.push_back(img_car2);
+		
+			//for finding all cars from ogjectTexturemap        
+			//for future use
+	//		for(unsigned int j = 0; j < resourcemanager->getObjectTextures()->size(); j++) {
+	//			std::string type = "Car" + std::to_string(j);
+	//                        auto it_cars = resourcemanager->getObjectTextures(); //std::map<Config::ObjectType, sf::Texture>::iterator
+	//			it_cars = resourcemanager->getObjectTextures()->find(type);
+	//			if(it_cars != resourcemanager->getObjectTextures()->end(){
+	//				cars.textures.push_back(it_cars->second);
+	//				cars.max_states++;
+	//			}
+	//      }
+        
 
-		//for finding all cars from ogjectTexturemap
-        //Now static over ride version
-        cars.textures.push_back(resourcemanager->getObjectTextures()->find(Config::ObjectType::Car1)->second);
-        cars.textures.push_back(resourcemanager->getObjectTextures()->find(Config::ObjectType::Car2)->second);
-                
-        //for future use
-//		for(unsigned int j = 0; j < resourcemanager->getObjectTextures()->size(); j++) {
-//			std::string type = "Car" + std::to_string(j);
-//                        auto it_cars = resourcemanager->getObjectTextures(); //std::map<Config::ObjectType, sf::Texture>::iterator
-//			it_cars = resourcemanager->getObjectTextures()->find(type);
-//			if(it_cars != resourcemanager->getObjectTextures()->end(){
-//				cars.textures.push_back(it_cars->second);
-//				cars.max_states++;
-//			}
-//      }
-                
-        cars.spri.setTexture(cars.textures[1]);
-		buttons.push_back(cars);
+			buttons.push_back(cars);
 
 	}
 		
+	//Create Map button
 	map.state = 0;
 	map.max_states = 1;
 	map.loc_x = (width / 2 - 40);
 	map.loc_y = (height / heightDivider * 1 - 10);
 	map.textures.push_back(tex_map1);
+	map.textures.push_back(tex_map1);
+	map.textures.push_back(tex_map1);
 	map.spri = spri_map1;
 	map.spri.setPosition(map.loc_x, map.loc_y);
+	//map.spri.setScale(0.1, 0.1);
 	map.type = buttonType::map;
 	map.player = 97;
 	buttons.push_back(map);
 
-       
+    //Create start game button
     start.state = 0;
 	start.max_states = 2;
 	start.loc_x = (width / 2 + 50);
@@ -142,13 +164,16 @@ void Menu::createButtons(){
 	start.textures.push_back(tex_start_N);
     start.textures.push_back(tex_start_O);
     start.textures.push_back(tex_start_P);
+	start.textures.push_back(tex_start_N);
+	start.textures.push_back(tex_start_O);
+	start.textures.push_back(tex_start_P);
     start.spri = spri_start;
     start.spri.setPosition(start.loc_x,start.loc_y);
     start.type = buttonType::start;
 	start.player = 98;
 	buttons.push_back(start);
         
-       
+    //Create exit game button   
     exit.state = 0;
 	exit.max_states = 2;
 	exit.loc_x = width / 2 - 150;
@@ -156,6 +181,9 @@ void Menu::createButtons(){
 	exit.textures.push_back(tex_start_N);
     exit.textures.push_back(tex_start_O);
     exit.textures.push_back(tex_start_P);
+	exit.textures.push_back(tex_start_N);
+	exit.textures.push_back(tex_start_O);
+	exit.textures.push_back(tex_start_P);
     exit.spri = spri_exit;
     exit.spri.setPosition(exit.loc_x,exit.loc_y);
     exit.type = buttonType::exit; 
@@ -210,6 +238,13 @@ std::string Menu::checkName(button it_button)
 	return name;
 }
 
+std::string Menu::checkMap(button it_button) {
+	std::string mapTemp;
+	if(it_button.state == 0)
+		mapTemp = "src/resources/mapsavetest.png";
+	return mapTemp;
+}
+
 
 bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata)
 {   
@@ -231,58 +266,62 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
         }
         if(event.type == sf::Event::MouseMoved)
         {
-            //mouse_loc = sf::Mouse::getPosition(window);
             for(auto it_button : buttons) 
             {
                 sf::IntRect rect(it_button.spri.getPosition().x, it_button.spri.getPosition().y, it_button.spri.getGlobalBounds().width, it_button.spri.getGlobalBounds().height);	
-                if(rect.contains(sf::Mouse::getPosition()))
-                {
-                    it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 1], true);
+				if(rect.contains(sf::Mouse::getPosition(window)))
+				{
+					spri_num1.setTexture(tex_num2, true);
+					it_button.spri.setTexture(it_button.textures.at(it_button.state * 3 + 1), true);
+					break;
                 }
 				else
 				{
-					it_button.spri.setTexture(it_button.textures[it_button.state * 2], true);
+					spri_num1.setTexture(tex_num1, true);
+					it_button.spri.setTexture(it_button.textures.at(it_button.state * 3), true);
 				}
             }
         }
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
             //all button pressed checked
-            //mouse_loc = sf::Mouse::getPosition(window);
-            for(auto it_button : buttons) 
+			for(auto it_button : buttons) 
             {
+
                 sf::IntRect rect(it_button.spri.getPosition().x, it_button.spri.getPosition().y, it_button.spri.getGlobalBounds().width, it_button.spri.getGlobalBounds().height);
-                if(rect.contains(sf::Mouse::getPosition()))
+				if(rect.contains(sf::Mouse::getPosition(window)))
                 {
-                    it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
-                    if(it_button.state == it_button.max_states)
+					it_button.spri.setTexture(it_button.textures.at(it_button.state * 3 + 2), true);
+                    if(it_button.state == it_button.max_states-1)
                     {
                         it_button.state = 0;
-                        it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
+						it_button.spri.setTexture(it_button.textures.at(it_button.state * 3 + 2), true);
                     }
                     else
                     {
                         it_button.state++;
-                        it_button.spri.setTexture(it_button.textures[it_button.state * 2 + 2], true);
+						it_button.spri.setTexture(it_button.textures.at(it_button.state * 3 + 2), true);
                     }
+					break;
                 }
             }
         }
         
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || exit.state == 1)
         {
                 //end game
-                window.close();
 				return false;
 
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || start.state == 1)
         {
+			// reset start button
+			start.state = 0;
             // start game
             std::string name;
             for(auto it_button : buttons)
             {
-                if(it_button.type == buttonType::pao)
+				if(it_button.type == buttonType::pao)
                 {
 					name = checkName(it_button);
                 }
@@ -300,7 +339,11 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
                         playerdata.push_back(player2);
                         continue;
                     }
-                }
+               }
+				if (it_button.type == buttonType::map)
+				{
+					mapdata = checkMap(it_button);
+				}
             }
             return true;
         }

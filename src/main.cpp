@@ -14,12 +14,12 @@ int main()
 	bool menudata;
 	std::string name = "Playah";
 	std::string name2 = "Kalle";
-	std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
-	std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
+	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
+	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
-	playerdata.push_back(pair);
-	playerdata.push_back(pair2);
-	std::string mapdata = "src/resources/mapsavetest.png";
+	//playerdata.push_back(pair);
+	//playerdata.push_back(pair2);
+	std::string mapdata; // = "src/resources/mapsavetest.png";
 
 	ResourceManager resourcemanager;
 
@@ -32,7 +32,10 @@ int main()
         
         Menu menu(window, &resourcemanager);
         menudata = menu.runMenu(window, playerdata, mapdata);
-	
+		if (menudata == false) 
+		{
+			exit(0);
+		}
 	/*
 	//EXAMPLE ON HOW EASY IT IS TO USE A MAP
 	//Loading takes a while still, please just wait
