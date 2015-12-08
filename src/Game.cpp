@@ -209,7 +209,8 @@ void Game::run()
 				userinput.push_back(pair);
 			}
 
-			gametime.setString(std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100));
+			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);
+			gametime.setString(time.substr(0, time.size()-4));
 
 			// The engine draws the game state here
 			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime);
