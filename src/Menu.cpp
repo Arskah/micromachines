@@ -193,7 +193,7 @@ void Menu::createButtons(){
 
 }
 
-std::string Menu::checkName(button it_button)
+std::string Menu::checkName(button &it_button)
 {
 	std::string name; 
 	switch (it_button.state)
@@ -287,50 +287,52 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
             //all button pressed checked
-			for(auto it_button : buttons) 
+			for(auto it_button2 : buttons) 
             {
 
-                sf::IntRect rect(it_button.spri.getPosition().x, it_button.spri.getPosition().y, it_button.spri.getGlobalBounds().width, it_button.spri.getGlobalBounds().height);
+                sf::IntRect rect(it_button2.spri.getPosition().x, it_button2.spri.getPosition().y, it_button2.spri.getGlobalBounds().width, it_button2.spri.getGlobalBounds().height);
 				if(rect.contains(sf::Mouse::getPosition(window)))
                 {
 					//for debugging texture problem 
 					spri_num2.setTexture(tex_num3, true);
-					int temp = it_button.state * 3 + 2;
-					sf::Texture tex = it_button.textures.at(temp);
-					it_button.spri.setTexture(tex, true);
-                    if(it_button.state == it_button.max_states-1)
+					int temp = it_button2.state * 3 + 2;
+					sf::Texture tex = it_button2.textures.at(temp);
+					//sf::Sprite pr;
+					//pr.setTexture(tex);
+					//pr.setPosition(10, 10);
+					//window.draw(pr);
+					it_button2.spri.setTexture(tex, true);
+                    if(it_button2.state == it_button2.max_states-1)
                     {
-                        it_button.state = 0;
-						temp = it_button.state * 3 + 2;
-						it_button.spri.setTexture(it_button.textures.at(temp), true);
+                        it_button2.state = 0;
+						it_button2.spri.setTexture(it_button2.textures.at(it_button2.state * 3 + 2), true);
                     }
                     else
                     {
-                        it_button.state++;
-						temp = it_button.state * 3 + 2;
-						it_button.spri.setTexture(it_button.textures.at(temp), true);
+                        it_button2.state++;
+						it_button2.spri.setTexture(it_button2.textures.at(it_button2.state * 3 + 2), true);
                     }
 
-					if (it_button.type == buttonType::exit && it_button.state == 1) 
+					if (it_button2.type == buttonType::exit && it_button2.state == 1) 
 					{
 						//end game
 						return false;
 					}
-					if(it_button.type == buttonType::start && it_button.state == 1)
+					if(it_button2.type == buttonType::start && it_button2.state == 1)
 					{
 						// reset start button
-						it_button.state = 0;
+						it_button2.state = 0;
 						// start game
 						std::string name;
-						for (auto it_button : buttons)
+						for (auto it_button3 : buttons)
 						{
-							if (it_button.type == buttonType::pao)
+							if (it_button3.type == buttonType::pao)
 							{
-								name = checkName(it_button);
+								name = checkName(it_button3);
 							}
-							if (it_button.type == buttonType::car)
+							if (it_button3.type == buttonType::car)
 							{
-								if (it_button.state == 0)
+								if (it_button3.state == 0)
 								{
 									if (name == "Off") {
 										continue;
@@ -342,7 +344,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 										continue;
 									}
 								}
-								if (it_button.state == 1)
+								if (it_button3.state == 1)
 								{
 									if (name == "Off") {
 										continue;
@@ -355,9 +357,9 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 									}
 								}
 							}
-							if (it_button.type == buttonType::map)
+							if (it_button3.type == buttonType::map)
 							{
-								mapdata = checkMap(it_button);
+								mapdata = checkMap(it_button3);
 							}
 						}
 						return true;
@@ -378,15 +380,15 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 
             // start game
             std::string name;
-            for(auto it_button : buttons)
+            for(auto it_button4 : buttons)
             {
-				if(it_button.type == buttonType::pao)
+				if(it_button4.type == buttonType::pao)
                 {
-					name = checkName(it_button);
+					name = checkName(it_button4);
                 }
-                if(it_button.type == buttonType::car)
+                if(it_button4.type == buttonType::car)
                 {
-                    if (it_button.state == 0)
+                    if (it_button4.state == 0)
                     {
 						if (name == "Off") {
 							continue;
@@ -398,7 +400,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 							continue;
 						}
                     }
-                    if (it_button.state == 1)
+                    if (it_button4.state == 1)
                     {
 						if (name == "Off") {
 							continue;
@@ -411,9 +413,9 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 						}
                     }
                }
-				if (it_button.type == buttonType::map)
+				if (it_button4.type == buttonType::map)
 				{
-					mapdata = checkMap(it_button);
+					mapdata = checkMap(it_button4);
 				}
             }
             return true;

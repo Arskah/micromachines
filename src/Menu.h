@@ -35,7 +35,7 @@ public:
 
 	void loadContent();
 	void createButtons();
-	std::string checkName(button it_button);
+	std::string checkName(button &it_button);
 	std::string Menu::checkMap(button it_button);
 
 	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata);
