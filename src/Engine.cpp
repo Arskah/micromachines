@@ -4,8 +4,17 @@
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
 	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime)
 {
-	/* AI and player movement handling */
-	Engine::handleInput(userinput, dt, projectiles, resourcemanager);
+	for (auto it : userinput)
+	{
+		Player* player = it.first;
+
+		/* Call AI calculations. */
+		if (!(player->getHuman()))
+			it.second = AI::calculateAIinput(player, vehicles, projectiles, map);
+
+		/* AI and player movement handling */
+		Engine::handleInput(player, it.second, dt, projectiles, resourcemanager);
+	}
 
 	/* Move vehicles. Players and AI move depends on input handling */
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
@@ -30,36 +39,32 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 }
 
 /* Handles userinput before moving the vehicle*/
-void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, std::vector<Projectile> * projectiles, ResourceManager * resourcemanager)
+void Engine::handleInput(Player* player, Config::InputType input, float dt, std::vector<Projectile> * projectiles, ResourceManager * resourcemanager)
 {
-	for (auto it : userinput)
+	/* This switch handles refreshing of movement for vehicle class attributes. Draw handles drawing on screen based on new position of vehicles */
+	switch (input)
 	{
-		Player* player = it.first;
-		Config::InputType input = it.second;
-		switch (input)
+	case Config::InputType::TurnLeft:
+		player->getVehicle()->turn(true, dt);
+		break;
+	case Config::InputType::TurnRight:
+		player->getVehicle()->turn(false, dt);
+		break;
+	case Config::InputType::Accelerate:
+		player->getVehicle()->accelerate(dt);
+		break;
+	case Config::InputType::Brake:
+		player->getVehicle()->brake(dt);
+		break;
+	case Config::InputType::Shoot:
+		if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
 		{
-		case Config::InputType::TurnLeft:
-			player->getVehicle()->turn(true, dt);
-			break;
-		case Config::InputType::TurnRight:
-			player->getVehicle()->turn(false, dt);
-			break;
-		case Config::InputType::Accelerate:
-			player->getVehicle()->accelerate(dt);
-			break;
-		case Config::InputType::Brake:
-			player->getVehicle()->brake(dt);
-			break;
-		case Config::InputType::Shoot:
-			if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
-			{
-				projectiles->emplace_back(player->getVehicle()->shoot());
-				resourcemanager->playSound("shoot");
-			}
-			break;
-		default:
-			break;
+			projectiles->emplace_back(player->getVehicle()->shoot());
+			resourcemanager->playSound("shoot");
 		}
+		break;
+	default:
+		break;
 	}
 }
 //TODO
