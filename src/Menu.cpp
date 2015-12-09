@@ -65,6 +65,8 @@ void Menu::loadContent() {
 
 	//load maps for develop use
     tex_map1.loadFromFile("src/resources/menu/map1.png");
+	tex_map2.loadFromFile("src/resources/menu/map2.png");
+	tex_map3.loadFromFile("src/resources/menu/map3.png");
 	spri_map1.setTexture(tex_map1);
        
 	//Load car textures
@@ -76,7 +78,8 @@ void Menu::loadContent() {
     font.loadFromFile("src/resources/arial.ttf");
 }
 
-void Menu::createButtons(){
+void Menu::createButtons()
+{
 	// create player option menus
 	//std::map<Config::ObjectType, sf::Texture> tex_cars = *resourcemanager->getObjectTextures();
 	for (int i = 0; i < amount_players; i++) 
@@ -109,6 +112,7 @@ void Menu::createButtons(){
 			// create car button for all players
 			button cars;
 			cars.state = 0;
+			cars.max_states = 2;
 			cars.loc_x = width / 2;
 			cars.loc_y = height / heightDivider * (i+2);
 			cars.player = i;
@@ -147,8 +151,8 @@ void Menu::createButtons(){
 	map.loc_x = (width / 2 - 40);
 	map.loc_y = (height / heightDivider * 1 - 10);
 	map.textures.push_back(tex_map1);
-	map.textures.push_back(tex_map1);
-	map.textures.push_back(tex_map1);
+	map.textures.push_back(tex_map2);
+	map.textures.push_back(tex_map3);
 	map.spri = spri_map1;
 	map.spri.setPosition(map.loc_x, map.loc_y);
 	//map.spri.setScale(0.1, 0.1);
@@ -178,12 +182,12 @@ void Menu::createButtons(){
 	exit.max_states = 2;
 	exit.loc_x = width / 2 - 150;
 	exit.loc_y = height / heightDivider * 6;
-	exit.textures.push_back(tex_start_N);
-    exit.textures.push_back(tex_start_O);
-    exit.textures.push_back(tex_start_P);
-	exit.textures.push_back(tex_start_N);
-	exit.textures.push_back(tex_start_O);
-	exit.textures.push_back(tex_start_P);
+	exit.textures.push_back(tex_exit_N);
+    exit.textures.push_back(tex_exit_O);
+    exit.textures.push_back(tex_exit_P);
+	exit.textures.push_back(tex_exit_N);
+	exit.textures.push_back(tex_exit_O);
+	exit.textures.push_back(tex_exit_P);
     exit.spri = spri_exit;
     exit.spri.setPosition(exit.loc_x,exit.loc_y);
     exit.type = buttonType::exit; 
@@ -266,73 +270,68 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
         }
         if(event.type == sf::Event::MouseMoved)
         {
-            for(auto it_button : buttons) 
+			for (auto it_button = buttons.begin(); it_button != buttons.end(); it_button++)
             {
-                sf::IntRect rect(it_button.spri.getPosition().x, it_button.spri.getPosition().y, it_button.spri.getGlobalBounds().width, it_button.spri.getGlobalBounds().height);	
+                sf::IntRect rect(it_button->spri.getPosition().x, it_button->spri.getPosition().y, it_button->spri.getGlobalBounds().width, it_button->spri.getGlobalBounds().height);
+				//If mouse is over some button
 				if(rect.contains(sf::Mouse::getPosition(window)))
 				{
-					spri_num1.setTexture(tex_num2, true);
-					int temp = it_button.state * 3 + 1;
-					it_button.spri.setTexture(it_button.textures.at(temp), true);
+					it_button->spri.setTexture(it_button->textures.at(it_button->state * 3 + 1), true);
 					break;
                 }
+				//If mouse is not over any button
 				else
 				{
-					spri_num1.setTexture(tex_num1, true);
-					int temp = it_button.state * 3;
-					it_button.spri.setTexture(it_button.textures.at(temp), true);
+					it_button->spri.setTexture(it_button->textures.at(it_button->state * 3), true);
 				}
             }
         }
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
             //all button pressed checked
-			for(auto it_button2 : buttons) 
+			for (auto it_button2 = buttons.begin(); it_button2 != buttons.end(); it_button2++)
             {
 
-                sf::IntRect rect(it_button2.spri.getPosition().x, it_button2.spri.getPosition().y, it_button2.spri.getGlobalBounds().width, it_button2.spri.getGlobalBounds().height);
+                sf::IntRect rect(it_button2->spri.getPosition().x, it_button2->spri.getPosition().y, it_button2->spri.getGlobalBounds().width, it_button2->spri.getGlobalBounds().height);
 				if(rect.contains(sf::Mouse::getPosition(window)))
                 {
-					//for debugging texture problem 
-					spri_num2.setTexture(tex_num3, true);
-					int temp = it_button2.state * 3 + 2;
-					sf::Texture tex = it_button2.textures.at(temp);
-					//sf::Sprite pr;
-					//pr.setTexture(tex);
-					//pr.setPosition(10, 10);
-					//window.draw(pr);
-					it_button2.spri.setTexture(tex, true);
-                    if(it_button2.state == it_button2.max_states-1)
+					it_button2->spri.setTexture(it_button2->textures.at(it_button2->state * 3 + 2), true);
+                    if(it_button2->state == it_button2->max_states-1 && it_button2->pressed == 0)
                     {
-                        it_button2.state = 0;
-						it_button2.spri.setTexture(it_button2.textures.at(it_button2.state * 3 + 2), true);
+                        it_button2->state = 0;
+						it_button2->spri.setTexture(it_button2->textures.at(it_button2->state * 3 + 2), true);
+						it_button2->pressed = 1;
                     }
                     else
                     {
-                        it_button2.state++;
-						it_button2.spri.setTexture(it_button2.textures.at(it_button2.state * 3 + 2), true);
+						if (it_button2->pressed == 0)
+						{
+							it_button2->state++;
+							it_button2->spri.setTexture(it_button2->textures.at(it_button2->state * 3 + 2), true);
+							it_button2->pressed = 1;
+						}
                     }
 
-					if (it_button2.type == buttonType::exit && it_button2.state == 1) 
+					if (it_button2->type == buttonType::exit && it_button2->state == 1)
 					{
 						//end game
 						return false;
 					}
-					if(it_button2.type == buttonType::start && it_button2.state == 1)
+					if(it_button2->type == buttonType::start && it_button2->state == 1)
 					{
 						// reset start button
-						it_button2.state = 0;
+						it_button2->state = 0;
 						// start game
 						std::string name;
-						for (auto it_button3 : buttons)
+						for (auto it_button3 = buttons.begin(); it_button3 != buttons.end(); it_button3++)
 						{
-							if (it_button3.type == buttonType::pao)
+							if (it_button3->type == buttonType::pao)
 							{
-								name = checkName(it_button3);
+								name = checkName(*it_button3);
 							}
-							if (it_button3.type == buttonType::car)
+							if (it_button3->type == buttonType::car)
 							{
-								if (it_button3.state == 0)
+								if (it_button3->state == 0)
 								{
 									if (name == "Off") {
 										continue;
@@ -344,7 +343,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 										continue;
 									}
 								}
-								if (it_button3.state == 1)
+								if (it_button3->state == 1)
 								{
 									if (name == "Off") {
 										continue;
@@ -357,9 +356,9 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 									}
 								}
 							}
-							if (it_button3.type == buttonType::map)
+							if (it_button3->type == buttonType::map)
 							{
-								mapdata = checkMap(it_button3);
+								mapdata = checkMap(*it_button3);
 							}
 						}
 						return true;
@@ -368,6 +367,18 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
                 }
             }
         }
+		if (event.type == sf::Event::MouseButtonReleased)
+		{
+			for (auto it_button3 = buttons.begin(); it_button3 != buttons.end(); it_button3++)
+			{
+				if (it_button3->pressed == 1) 
+				{
+					it_button3->pressed = 0;
+					it_button3->spri.setTexture(it_button3->textures.at(it_button3->state * 3 + 1), true);
+				}
+
+			}
+		}
         
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
@@ -380,15 +391,15 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 
             // start game
             std::string name;
-            for(auto it_button4 : buttons)
+			for (auto it_button4 = buttons.begin(); it_button4 != buttons.end(); it_button4++)
             {
-				if(it_button4.type == buttonType::pao)
+				if(it_button4->type == buttonType::pao)
                 {
-					name = checkName(it_button4);
+					name = checkName(*it_button4);
                 }
-                if(it_button4.type == buttonType::car)
+                if(it_button4->type == buttonType::car)
                 {
-                    if (it_button4.state == 0)
+                    if (it_button4->state == 0)
                     {
 						if (name == "Off") {
 							continue;
@@ -400,7 +411,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 							continue;
 						}
                     }
-                    if (it_button4.state == 1)
+                    if (it_button4->state == 1)
                     {
 						if (name == "Off") {
 							continue;
@@ -413,9 +424,9 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 						}
                     }
                }
-				if (it_button4.type == buttonType::map)
+				if (it_button4->type == buttonType::map)
 				{
-					mapdata = checkMap(it_button4);
+					mapdata = checkMap(*it_button4);
 				}
             }
             return true;
@@ -427,104 +438,48 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 }
 void Menu::draw(sf::RenderWindow& window)
 {
-    window.clear(sf::Color::Black);
+	window.clear(sf::Color::Black);
 	sf::Text text;
-    // Can't draw image, need to attch it to a texture of sf::drawable
-    sf::Texture texture;
-    texture.loadFromImage(this->backgroundImage);
-    sf::Sprite sprite;
-    sprite.setTexture(texture, true);
-    window.draw(sprite);
+	// Can't draw image, need to attch it to a texture of sf::drawable
+	sf::Texture texture;
+	texture.loadFromImage(this->backgroundImage);
+	sf::Sprite sprite;
+	sprite.setTexture(texture, true);
+	window.draw(sprite);
 
-    int y_place = 1;
+	int y_place = 1;
 
-    spri_num1.setPosition(width / 2 - 200, height / heightDivider * 2);
-    spri_num2.setPosition(width / 2 - 200, height / heightDivider * 3);
-    spri_num3.setPosition(width / 2 - 200, height / heightDivider * 4);
-    spri_num4.setPosition(width / 2 - 200, height / heightDivider * 5);
-    window.draw(spri_num1);
-    window.draw(spri_num2);
-    window.draw(spri_num3);
-    window.draw(spri_num4);
+	spri_num1.setPosition(width / 2 - 200, height / heightDivider * 2);
+	spri_num2.setPosition(width / 2 - 200, height / heightDivider * 3);
+	spri_num3.setPosition(width / 2 - 200, height / heightDivider * 4);
+	spri_num4.setPosition(width / 2 - 200, height / heightDivider * 5);
+	window.draw(spri_num1);
+	window.draw(spri_num2);
+	window.draw(spri_num3);
+	window.draw(spri_num4);
 
 
-    for(auto it_but : buttons)
-    {
-        it_but.spri.setPosition(it_but.loc_x, it_but.loc_y);
-        window.draw(it_but.spri);
+	for (auto it_but = buttons.begin(); it_but != buttons.end(); it_but++)
+	{
+		it_but->spri.setPosition(it_but->loc_x, it_but->loc_y);
+		window.draw(it_but->spri);
 
-		if (it_but.type == buttonType::pao)
+		if (it_but->type == buttonType::pao)
 		{
-			text.setString(checkName(it_but));
+			text.setString(checkName(*it_but));
 			text.setFont(font);
 			text.setColor(sf::Color::Blue);
 			text.setCharacterSize(30);
 			text.setStyle(sf::Text::Regular);
-			text.setPosition(it_but.loc_x + 200, it_but.loc_y);
+			text.setPosition(it_but->loc_x + 200, it_but->loc_y);
 			window.draw(text);
 		}
-    }
+	}
 
-    window.draw(start.spri);
-    window.draw(exit.spri);
+	window.draw(start.spri);
+	window.draw(exit.spri);
 
-    window.display();
+	window.display();
 
 
-//int Menu::getAmountItems() const
-//{
-//	return this->items.size();
-//}
-//sf::Text Menu::getSelected() const
-//{
-//	return this->items.at(selectedItem).first;
 }
-
-/* END OF MENU CLASS*/
-
-
-
-
-
-
-
-// Not in use - Jan G.
-///* SETTINGS MENU*/
-//void SettingsMenu::select()
-//{
-//	switch (selectedItem)
-//	{
-//	case 0:
-//		break;
-//	}
-//}
-//
-///* SINGLEPLAYER MENU*/
-//void SinglePlayerMenu::select()
-//{
-//	switch (selectedItem)
-//	{
-//	case 0:		// Start game
-//		break;	// TODO: car changing; # of AI etc. settings. Maybe need to tweak base class items to take other objects than text as well
-//	}
-//}
-//
-///* MULTIPLAYER MENU*/
-//void MultiPlayerMenu::select()
-//{
-//	switch (selectedItem)
-//	{
-//	case 0:		// Start game
-//		break;
-//	}
-//}
-//
-///* PAUSE MENU*/
-//void PauseMenu::select()
-//{
-//	switch (selectedItem)
-//	{
-//	case 0:		// Continue
-//		break;
-//	}
-//}

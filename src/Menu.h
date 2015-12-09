@@ -20,6 +20,7 @@ struct button {
 	int max_states;
 	float loc_y;
 	float loc_x;
+	int pressed = 0;
     buttonType type;
         
 	sf::Sprite spri;
@@ -114,6 +115,8 @@ private:
 
 	//Load map texture for develop use
 	sf::Texture tex_map1;
+	sf::Texture tex_map2;
+	sf::Texture tex_map3;
 	sf::Sprite spri_map1;
         
     //Load car images
@@ -121,66 +124,3 @@ private:
 	sf::Texture img_car2;
     sf::Sprite spri_car;
 };
-
-
-
-
-
-
-
-// Not in use - Jan G.
-//class SettingsMenu : public Menu
-//{
-//	SettingsMenu(sf::RenderWindow& window) : Menu(window)
-//	{
-//
-//	}
-//protected:
-//	virtual void select();
-//private:
-//	sf::Image* backgroundImage;
-//	//sf::Font font = ;
-//	std::vector<std::pair<sf::Text, std::string>> items;
-//};
-//
-//class SinglePlayerMenu : public Menu
-//{
-//	SinglePlayerMenu(sf::RenderWindow& window) : Menu(window)
-//	{
-//
-//	}
-//protected:
-//	virtual void select();
-//private:
-//	sf::Image* backgroundImage;
-//	//sf::Font font = ;
-//	std::vector<std::pair<sf::Text, std::string>> items;
-//};
-//
-//class MultiPlayerMenu : public Menu
-//{
-//	MultiPlayerMenu(sf::RenderWindow& window) : Menu(window)
-//	{
-//
-//	}
-//protected:
-//	virtual void select();
-//private:
-//	sf::Image* backgroundImage;
-//	//sf::Font font = ;
-//	std::vector<std::pair<sf::Text, std::string>> items;
-//};
-//
-//class PauseMenu : public Menu
-//{
-//	PauseMenu(sf::RenderWindow& window) : Menu(window)
-//	{
-//
-//	}
-//protected:
-//	virtual void select();
-//private:
-//	sf::Image* backgroundImage;
-//	//sf::Font font = ;
-//	std::vector<std::pair<sf::Text, std::string>> items;
-//};
