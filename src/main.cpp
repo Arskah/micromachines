@@ -3,20 +3,23 @@
 #include "Config.h"
 #include "ResourceManager.h"
 #include "Editor.h"
+#include "Game.h"
+#include "Menu.h"
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
 	//window.setFramerateLimit(60);
 
+	bool menudata;
 	std::string name = "Playah";
 	std::string name2 = "Kalle";
-	std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
-	std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
+	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
+	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
-	playerdata.push_back(pair);
-	playerdata.push_back(pair2);
-	std::string mapdata = "src/resources/mapsavetest.png";
+	//playerdata.push_back(pair);
+	//playerdata.push_back(pair2);
+	std::string mapdata; // = "src/resources/mapsavetest.png";
 
 	ResourceManager resourcemanager;
 
@@ -26,7 +29,13 @@ int main()
 	Editor editor(window, *resourcemanager.getBlockTextures());
 	editor.runEditor();
 	*/
-	
+        
+        Menu menu(window, &resourcemanager);
+        menudata = menu.runMenu(window, playerdata, mapdata);
+		if (menudata == false) 
+		{
+			exit(0);
+		}
 	/*
 	//EXAMPLE ON HOW EASY IT IS TO USE A MAP
 	//Loading takes a while still, please just wait
@@ -59,6 +68,8 @@ int main()
 		window.display();
 	}	
 	*/
+        
+        
 
 	Game game(window, &resourcemanager, playerdata, mapdata);
 	game.run();
