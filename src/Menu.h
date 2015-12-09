@@ -58,7 +58,7 @@ private:
     sf::Font font;
     //static buttons 
 	button map;
-	button start;
+	button *start;
     button exit;
         
 	ResourceManager* resourcemanager;

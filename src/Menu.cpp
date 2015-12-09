@@ -157,21 +157,21 @@ void Menu::createButtons(){
 	buttons.push_back(map);
 
     //Create start game button
-    start.state = 0;
-	start.max_states = 2;
-	start.loc_x = (width / 2 + 50);
-	start.loc_y = (height / heightDivider * 6);
-	start.textures.push_back(tex_start_N);
-    start.textures.push_back(tex_start_O);
-    start.textures.push_back(tex_start_P);
-	start.textures.push_back(tex_start_N);
-	start.textures.push_back(tex_start_O);
-	start.textures.push_back(tex_start_P);
-    start.spri = spri_start;
-    start.spri.setPosition(start.loc_x,start.loc_y);
-    start.type = buttonType::start;
-	start.player = 98;
-	buttons.push_back(start);
+    start->state = 0;
+	start->max_states = 2;
+	start->loc_x = (width / 2 + 50);
+	start->loc_y = (height / heightDivider * 6);
+	start->textures.push_back(tex_start_N);
+    start->textures.push_back(tex_start_O);
+    start->textures.push_back(tex_start_P);
+	start->textures.push_back(tex_start_N);
+	start->textures.push_back(tex_start_O);
+	start->textures.push_back(tex_start_P);
+    start->spri = spri_start;
+    start->spri.setPosition(start->loc_x,start->loc_y);
+    start->type = buttonType::start;
+	start->player = 98;
+	buttons.push_back(*start);
         
     //Create exit game button   
     exit.state = 0;
@@ -291,6 +291,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
                 sf::IntRect rect(it_button.spri.getPosition().x, it_button.spri.getPosition().y, it_button.spri.getGlobalBounds().width, it_button.spri.getGlobalBounds().height);
 				if(rect.contains(sf::Mouse::getPosition(window)))
                 {
+					spri_num2.setTexture(tex_num3, true);
 					it_button.spri.setTexture(it_button.textures.at(it_button.state * 3 + 2), true);
                     if(it_button.state == it_button.max_states-1)
                     {
@@ -300,7 +301,8 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
                     else
                     {
                         it_button.state++;
-						it_button.spri.setTexture(it_button.textures.at(it_button.state * 3 + 2), true);
+						sf::Texture temp = it_button.textures.at(it_button.state * 3 + 2);
+						it_button.spri.setTexture(temp, true);
                     }
 					break;
                 }
@@ -313,10 +315,10 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 				return false;
 
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || start.state == 1)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || start->state == 1)
         {
 			// reset start button
-			start.state = 0;
+			start->state = 0;
             // start game
             std::string name;
             for(auto it_button : buttons)
@@ -391,7 +393,7 @@ void Menu::draw(sf::RenderWindow& window)
 		}
     }
 
-    window.draw(start.spri);
+    window.draw(start->spri);
     window.draw(exit.spri);
 
     window.display();
