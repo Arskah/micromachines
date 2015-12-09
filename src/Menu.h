@@ -4,6 +4,7 @@
 #include "Config.h"
 #include <stdlib.h>
 #include <vector>
+#include <list>
 
 enum class buttonType {
     pao,
@@ -58,7 +59,7 @@ private:
     sf::Font font;
     //static buttons 
 	button map;
-	button *start;
+	button start;
     button exit;
         
 	ResourceManager* resourcemanager;
