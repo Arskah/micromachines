@@ -28,12 +28,21 @@ public:
 	//Returns sprite of the Map that is drawable
 	sf::Sprite * getDrawable();
 
+	//Returns vector of pointers to Blocks that are on leftside of track
+	std::vector<std::pair<std::size_t, std::size_t>> getLeftsideBlocks();
+
 private:
 	//Create map image after loading from image
 	void createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>& blocktextures);
 
 	//Saves map to a image file
 	bool saveToImage(const std::string &filename);
+
+	//Generates leftsideTrack vector
+	void createLeftsideTrack();
+	/* Functions that look for the next track block on left side of track. StartU for when start is up and StartR for right */
+	std::pair<std::size_t, std::size_t> checkNextLeftBlockStartU(std::pair<std::size_t, std::size_t> coordinates);
+	std::pair<std::size_t, std::size_t> checkNextLeftBlockStartR(std::pair<std::size_t, std::size_t> coordinates);
 
 	//Map Blocks
 	std::vector<Config::BlockType> blockrow;
@@ -46,4 +55,8 @@ private:
 	sf::Texture texture;
 	//Texture loaded to this sprite
 	sf::Sprite drawable;
+
+	// Blocks on the left side of the track. Used for standings and AI
+	std::vector<std::pair<std::size_t, std::size_t>> leftsideTrack;
+	Config::BlockType leftsideTrackMaterial;
 };

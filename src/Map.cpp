@@ -9,6 +9,121 @@ bool Map::saveToImage(const std::string & filename)
 	return block_image.saveToFile(filename);
 }
 
+void Map::createLeftsideTrack()
+{
+	//Get starting line
+	std::vector<std::pair<std::size_t, std::size_t>> finish_line_blocks;
+	std::pair<std::size_t, std::size_t> coordinates;
+
+	for (std::size_t x = 0; x < block_image.getSize().x; x++)
+	{
+		for (std::size_t y = 0; y < block_image.getSize().y; y++)
+		{
+			if (getBlock(x, y).getType() == Config::BlockType::Checkerboard)
+			{
+				coordinates.first = x;
+				coordinates.second = y;
+				finish_line_blocks.push_back(coordinates);
+			}
+		}
+	}
+
+
+	/* Get the coordinates of blocks on left side of track; coordinates pushed back to leftsideTrack vector */
+	///Assuming that start happens up or right from the most wide part of finish line
+	if ((finish_line_blocks.back().first - finish_line_blocks.front().first) >= (finish_line_blocks.back().second - finish_line_blocks.front().second))		// True if dx >= dy   =>   race starts towards up
+	{
+		coordinates.first = finish_line_blocks.back().first;
+		coordinates.second = finish_line_blocks.back().second - 1;
+		leftsideTrackMaterial = Map::getBlock(coordinates.first, coordinates.second).getType();
+		leftsideTrack.push_back(coordinates);	// First block of track is one tile up from first finish line block in vector
+
+		coordinates = Map::checkNextLeftBlockStartU(coordinates);
+		while ((coordinates.first != leftsideTrack.front().first) && (coordinates.second != leftsideTrack.front().second))				// LOOP until back in start block		 TODO: LOOP CONDITION: CHECKERBOARD comes before back in starting block
+		{																																	/* Maybe allow Checkerboard too in checkNext functions? */
+			leftsideTrack.push_back(coordinates);
+			coordinates = Map::checkNextLeftBlockStartU(coordinates);
+		}
+	}
+	else																																					// else going right
+	{
+		coordinates.first = finish_line_blocks.back().first + 1;
+		coordinates.second = finish_line_blocks.front().second;
+		leftsideTrackMaterial = Map::getBlock(coordinates.first, coordinates.second).getType();
+		leftsideTrack.push_back(coordinates);	// First block of track is one tile up from first finish line block in vector
+
+		coordinates = Map::checkNextLeftBlockStartR(coordinates);
+		while ((coordinates.first != leftsideTrack.front().first) && (coordinates.second != leftsideTrack.front().second))				// LOOP until back in start block
+		{
+			leftsideTrack.push_back(coordinates);
+			coordinates = Map::checkNextLeftBlockStartR(coordinates);
+		}
+	}
+	/* Now we have vector of all left side blocks of a track, now we need to figure out what to do with them */
+}
+
+std::pair<std::size_t, std::size_t> Map::checkNextLeftBlockStartU(std::pair<std::size_t, std::size_t> coordinates)
+{
+	if (Map::getBlock(coordinates.first - 1, coordinates.second).getType == leftsideTrackMaterial)				// x-1
+		coordinates.first = coordinates.first - 1;
+
+	else if (Map::getBlock(coordinates.first - 1, coordinates.second - 1).getType == leftsideTrackMaterial)		// y-1 x-1
+	{
+		coordinates.first = coordinates.first - 1;
+		coordinates.second = coordinates.second - 1;
+	}
+
+	else if (Map::getBlock(coordinates.first, coordinates.second - 1).getType == leftsideTrackMaterial)			// y-1
+		coordinates.first = coordinates.second - 1;
+
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType == leftsideTrackMaterial)		//x+1 y-1
+	{
+		coordinates.first = coordinates.first + 1;
+		coordinates.second = coordinates.second - 1;
+	}
+
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second).getType == leftsideTrackMaterial)			//x+1
+		coordinates.first = coordinates.first + 1;
+
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType == leftsideTrackMaterial)		//x+1 y+1
+	{
+		coordinates.first = coordinates.first + 1;
+		coordinates.second = coordinates.second + 1;
+	}
+	return coordinates;
+}
+
+std::pair<std::size_t, std::size_t> Map::checkNextLeftBlockStartR(std::pair<std::size_t, std::size_t> coordinates)
+{
+	if (Map::getBlock(coordinates.first, coordinates.second - 1).getType == leftsideTrackMaterial)				// y-1
+		coordinates.second = coordinates.second - 1;
+
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType == leftsideTrackMaterial)		// y-1 x+1
+	{
+		coordinates.first = coordinates.first + 1;
+		coordinates.second = coordinates.second - 1;
+	}
+
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second).getType == leftsideTrackMaterial)			// x+1
+		coordinates.first = coordinates.first + 1;
+
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType == leftsideTrackMaterial)		//y+1 x+1
+	{
+		coordinates.first = coordinates.first + 1;
+		coordinates.second = coordinates.second + 1;
+	}
+
+	else if (Map::getBlock(coordinates.first, coordinates.second + 1).getType == leftsideTrackMaterial)			//y+1
+		coordinates.second = coordinates.second + 1;
+
+	else if (Map::getBlock(coordinates.first - 1, coordinates.second + 1).getType == leftsideTrackMaterial)		//y+1 x-1
+	{
+		coordinates.first = coordinates.first - 1;
+		coordinates.second = coordinates.second + 1;
+	}
+	return coordinates;
+}
+
 static Block buildBlock(const int type_int)
 {
 	return Block(static_cast<Config::BlockType>(type_int), Config::BlockToFrictionMap.find(static_cast<Config::BlockType>(type_int))->second);
@@ -75,6 +190,11 @@ Block Map::getBlock(const int x, const int y) const
 sf::Sprite * Map::getDrawable()
 {
 	return &(drawable);
+}
+
+std::vector<std::pair<std::size_t, std::size_t>> Map::getLeftsideBlocks()
+{
+	return leftsideTrack;
 }
 
 void Map::createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
