@@ -173,40 +173,43 @@ void Game::run()
 				userinput.push_back(pair);
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			if (players.size() > 1)
 			{
-				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[1];
-				pair.second = Config::InputType::Accelerate;
-				userinput.push_back(pair);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			{
-				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[1];
-				pair.second = Config::InputType::TurnLeft;
-				userinput.push_back(pair);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			{
-				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[1];
-				pair.second = Config::InputType::TurnRight;
-				userinput.push_back(pair);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-			{
-				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[1];
-				pair.second = Config::InputType::Brake;
-				userinput.push_back(pair);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			{
-				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[1];
-				pair.second = Config::InputType::Shoot;
-				userinput.push_back(pair);
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+				{
+					std::pair<Player *, Config::InputType> pair;
+					pair.first = &players[1];
+					pair.second = Config::InputType::Accelerate;
+					userinput.push_back(pair);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+				{
+					std::pair<Player *, Config::InputType> pair;
+					pair.first = &players[1];
+					pair.second = Config::InputType::TurnLeft;
+					userinput.push_back(pair);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+				{
+					std::pair<Player *, Config::InputType> pair;
+					pair.first = &players[1];
+					pair.second = Config::InputType::TurnRight;
+					userinput.push_back(pair);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+				{
+					std::pair<Player *, Config::InputType> pair;
+					pair.first = &players[1];
+					pair.second = Config::InputType::Brake;
+					userinput.push_back(pair);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+				{
+					std::pair<Player *, Config::InputType> pair;
+					pair.first = &players[1];
+					pair.second = Config::InputType::Shoot;
+					userinput.push_back(pair);
+				}
 			}
 
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);

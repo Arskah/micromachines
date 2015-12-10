@@ -175,8 +175,8 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				sf::Vector2f movement = t.transformPoint(heading);
 
 				// Bumping the vehicle away from the rockwall and reversing it's speed
-				vehicle->move(movement * vehicle->getSpeed() * 2.f);
-				vehicle->accelerate(-vehicle->getSpeed() / 4.f);
+				vehicle->move(movement * vehicle->getSpeed() * 5.f);
+				vehicle->accelerate(- vehicle->getSpeed() / 3.5f);
 			}
 		}
 	}
@@ -210,20 +210,24 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
-	/*
-	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
-	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
-	Engine::draw_vehicles(window, vehicles);   // On top of everything
-	*/
+
 
 	// This is a ghetto version of the centered view. TODO: implement check for AI vs Human player.
 	for (size_t i = 0; i < vehicles->size(); i++)
 	{
 		sf::View view;
 		view.setCenter(sf::Vector2f(vehicles->at(i).getPosition().x, vehicles->at(i).getPosition().y));
-		view.setSize(window.getSize().x /2, window.getSize().y);
-		view.setRotation(vehicles->at(i).getRotation() - 180.f);
-		view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		if (vehicles->size() == 1)
+		{
+			view.setSize(window.getSize().x, window.getSize().y);
+			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+		}
+		else
+		{
+			view.setSize(window.getSize().x /2, window.getSize().y);
+			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		}
 		window.setView(view);
 		window.draw(*map.getDrawable());
 		Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
