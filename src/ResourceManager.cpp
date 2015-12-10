@@ -24,6 +24,7 @@ void ResourceManager::loadObjectTextures()
 				while (std::getline(stream, token, ' '))
 				{
 					tokens.push_back(token);
+
 				}
 				std::pair<Config::ObjectType, sf::Texture> texturepair;
 				texturepair.first = static_cast<Config::ObjectType>(std::stoi(tokens[0]));

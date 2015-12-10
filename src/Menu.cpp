@@ -76,6 +76,15 @@ void Menu::loadContent() {
 	tex_car4.loadFromFile("src/resources/car4.png");
 	spri_car.setTexture(tex_car1);
 
+	//load music textures
+	tex_music1.loadFromFile("src/resources/menu/N_music.png");
+	tex_music2.loadFromFile("src/resources/menu/O_music.png");
+	tex_music3.loadFromFile("src/resources/menu/P_music.png");
+	tex_music4.loadFromFile("src/resources/menu/N_muted.png");
+	tex_music5.loadFromFile("src/resources/menu/O_muted.png");
+	tex_music6.loadFromFile("src/resources/menu/P_muted.png");
+	spri_music.setTexture(tex_music1);
+
     //font 
     font.loadFromFile("src/resources/arial.ttf");
 }
@@ -113,7 +122,7 @@ void Menu::createButtons()
 
 			// create car button for all players
 			button cars;
-			cars.state = 0;
+			cars.state = i;
 			cars.max_states = 4;
 			cars.loc_x = width / 2;
 			cars.loc_y = height / heightDivider * (i+2);
@@ -171,7 +180,7 @@ void Menu::createButtons()
     //Create start game button
     start.state = 0;
 	start.max_states = 2;
-	start.loc_x = (width / 2 + 50);
+	start.loc_x = (width / 2 + 75);
 	start.loc_y = (height / heightDivider * 6);
 	start.textures.push_back(tex_start_N);
     start.textures.push_back(tex_start_O);
@@ -188,7 +197,7 @@ void Menu::createButtons()
     //Create exit game button   
     exit.state = 0;
 	exit.max_states = 2;
-	exit.loc_x = width / 2 - 150;
+	exit.loc_x = width / 2 - 225;
 	exit.loc_y = height / heightDivider * 6;
 	exit.textures.push_back(tex_exit_N);
     exit.textures.push_back(tex_exit_O);
@@ -201,7 +210,22 @@ void Menu::createButtons()
     exit.type = buttonType::exit; 
 	exit.player = 99;
 	buttons.push_back(exit);
-        
+
+	music.state = 0;
+	music.max_states = 2;
+	music.loc_x = (width / 2 - 50);
+	music.loc_y = (height / heightDivider * 6);
+	music.textures.push_back(tex_music1);
+	music.textures.push_back(tex_music2);
+	music.textures.push_back(tex_music3);
+	music.textures.push_back(tex_music4);
+	music.textures.push_back(tex_music5);
+	music.textures.push_back(tex_music6);
+	music.spri = spri_music;
+	music.spri.setPosition(music.loc_x, music.loc_y);
+	music.type = buttonType::music;
+	music.player = 96;
+	buttons.push_back(music);  
 
 }
 
@@ -258,7 +282,7 @@ std::string Menu::checkMap(button it_button) {
 }
 
 
-bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata)
+bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata, bool &musicon)
 {   
     Menu::loadContent();
     Menu::createButtons();
@@ -400,6 +424,13 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 							}
 						}
 						return true;
+					}
+					if(it_button2->type == buttonType::music)
+					{
+						if (it_button2->state == 1)
+							musicon = false;
+						else
+							musicon = true;
 					}
 					break;
                 }

@@ -11,7 +11,8 @@ enum class buttonType {
     car,
     start,
     exit,
-	map
+	map,
+	music
 };
 
 struct button {
@@ -39,7 +40,7 @@ public:
 	std::string checkName(button &it_button);
 	std::string Menu::checkMap(button it_button);
 
-	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata);
+	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata, bool &musicon);
 	void draw(sf::RenderWindow& window);
 
 
@@ -62,6 +63,7 @@ private:
 	button map;
 	button start;
     button exit;
+	button music;
         
 	ResourceManager* resourcemanager;
     sf::RenderWindow& window;
@@ -125,4 +127,13 @@ private:
 	sf::Texture tex_car3;
 	sf::Texture tex_car4;
     sf::Sprite spri_car;
+
+	//Load music texture for develop use
+	sf::Texture tex_music1;
+	sf::Texture tex_music2;
+	sf::Texture tex_music3;
+	sf::Texture tex_music4;
+	sf::Texture tex_music5;
+	sf::Texture tex_music6;
+	sf::Sprite spri_music;
 };

@@ -93,7 +93,7 @@ void Game::initMap(std::string mapdata)
 /*
 THE GAME RUNS HERE
 */
-void Game::run()
+void Game::run(bool &loading)
 {
 	sf::Clock clock;
 	sf::Clock gametimer;
@@ -206,6 +206,8 @@ void Game::run()
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);
 			gametime.setString(time.substr(0, time.size()-4));
 
+			//Exit the loading creen
+			loading = false;
 			// The engine draws the game state here
 			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime);
 			userinput.clear();
