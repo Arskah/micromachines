@@ -70,9 +70,14 @@ void Vehicle::brake(float dt)
 void Vehicle::turn(bool left, float dt)
 {
 	if (left)
-		this->setRotation(this->getRotation() - (this->getSpeed()/this->maxspeed) * turnrate * dt);
+	{
+		this->setRotation(this->getRotation() - (this->getSpeed() / this->maxspeed) * (1.6f - (this->getSpeed() / this->maxspeed)) * turnrate * dt);
+	}
+		
 	else
-		this->setRotation(this->getRotation() + (this->getSpeed()/this->maxspeed) * turnrate * dt);
+	{
+		this->setRotation(this->getRotation() + (this->getSpeed() / this->maxspeed) * (1.6f - (this->getSpeed() / this->maxspeed)) * turnrate * dt);
+	}
 }
 
 void Vehicle::slow(float friction, float dt)

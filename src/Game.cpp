@@ -108,15 +108,6 @@ void Game::run()
 	gametime.setStyle(sf::Text::Bold);
 	gametime.setScale(0.7f, 0.7f);
 
-
-	/*
-	sf::Music music;
-	music.setLoop(true);
-	music.setVolume(30);
-	if (music.openFromFile("src/resources/sounds/themesong.wav"))
-		music.play();
-	*/
-
 	while (window.isOpen())
 	{
 		sf::Event event;
