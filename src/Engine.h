@@ -44,7 +44,7 @@ namespace Engine
 	void moveProjectile(Projectile);
 	*/
 
-	void checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map);
+	void checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, ResourceManager * resourcemanager);
 
 	/* Function draws all vehicles
 	Parameters:

@@ -15,7 +15,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Engine::moveVehicle(&(*it));
 	}
 
-	Engine::checkCollisions(vehicles, projectiles, map);
+	Engine::checkCollisions(vehicles, projectiles, map, resourcemanager);
 
 	//TODO: projectiles
 	/*
@@ -95,7 +95,7 @@ void Engine::moveProjectile(Vehicle& projectile)
 }
 */
 
-void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map)
+void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, ResourceManager * resourcemanager)
 {
 	//Checks Vehicle - Vehicle collisions and moves them apart
 	//Loop all vehicles through
@@ -109,7 +109,6 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				//While we are still in collision state
 				while (Hitbox::checkCollision(&(*vehicle_1), &(*vehicle_2)))
 				{
-
 					//THIS WHOLE PART CAN BE CHANGED
 					//THIS WAS JUST EXPERIMENTAL
 
@@ -173,6 +172,10 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				sf::Transform t;
 				t.rotate(vehicle->getRotation() - 180);
 				sf::Vector2f movement = t.transformPoint(heading);
+
+				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall)
+				if (vehicle->getSpeed() >= 1.f)
+					resourcemanager->playSound("collision");
 
 				// Bumping the vehicle away from the rockwall and reversing it's speed
 				vehicle->move(movement * vehicle->getSpeed() * 5.f);
