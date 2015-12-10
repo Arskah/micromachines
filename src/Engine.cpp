@@ -15,7 +15,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Engine::moveVehicle(&(*it));
 	}
 
-	Engine::checkCollisions(vehicles, projectiles);
+	Engine::checkCollisions(vehicles, projectiles, map);
 
 	//TODO: projectiles
 	/*
@@ -95,7 +95,7 @@ void Engine::moveProjectile(Vehicle& projectile)
 }
 */
 
-void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles)
+void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map)
 {
 	//Checks Vehicle - Vehicle collisions and moves them apart
 	//Loop all vehicles through
@@ -155,6 +155,29 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 		for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
 		{
 			//Need something to happen per ObjectType of projectile
+		}
+	}
+
+	//Checks Vehicle - Obstacle (rockwall) collisions
+	for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
+	{
+		sf::VertexArray hitbox = Hitbox::createHitboxRect(&(*vehicle));
+
+		// Going through the corner points of the hitbox
+		for (size_t i = 0; i < hitbox.getVertexCount(); i++)
+		{	
+			sf::Vector2f position = hitbox[i].position;
+			if (map.getBlock(position.x, position.y).getType() == Config::BlockType::RockWall)
+			{
+				sf::Vector2f heading(0.f, 1.f);
+				sf::Transform t;
+				t.rotate(vehicle->getRotation() - 180);
+				sf::Vector2f movement = t.transformPoint(heading);
+
+				// Bumping the vehicle away from the rockwall and reversing it's speed
+				vehicle->move(movement * vehicle->getSpeed() * 2.f);
+				vehicle->accelerate(-vehicle->getSpeed() / 4.f);
+			}
 		}
 	}
 
