@@ -159,23 +159,27 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 			{
 				if (Hitbox::checkCollision(&(*vehicle), &(*projectile)))
 				{
-					// This is for later deleting the projectile (oil spills aren't deleted maybe?)
+					// This is for later deleting the projectile (if it's Mine at least)
 					projectileiterator = projectile;
 					found = true;
 
 					switch (projectile->getType())
 					{
 					case Config::ObjectType::Mine:
-						vehicle->accelerate(-(vehicle->getSpeed()/abs(vehicle->getSpeed()))*5.f);
+						vehicle->accelerate(-(vehicle->getSpeed()/abs(vehicle->getSpeed()))*3.f);
 						resourcemanager->playSound("mine");
+						break;
 					default:
 						break;
 					}
 				}
 			}
 		}
-		if (found)
+		if (found == true && projectileiterator->getType() == Config::ObjectType::Mine)
+		{
 			projectiles->erase(projectileiterator);
+		}
+			
 	}
 
 
