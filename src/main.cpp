@@ -23,6 +23,12 @@ int main()
 
 	ResourceManager resourcemanager;
 
+	sf::Music music;
+	music.setLoop(true);
+	music.setVolume(30);
+	if (music.openFromFile("src/resources/sounds/themesong.wav"))
+		music.play();
+
 	/*
 	//EXAMPLE HOW EASY IT IS TO START THE EDITOR
 	//ESC escapes from editor and doesn't close window

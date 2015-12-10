@@ -149,13 +149,34 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 	}
 
 	//Checks Vehicle - Projectile collisions
-	for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
+	if (projectiles->size() > 0)
 	{
-		for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
+		bool found = false;
+		std::vector<Projectile>::iterator projectileiterator;
+		for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
 		{
-			//Need something to happen per ObjectType of projectile
+			for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
+			{
+				if (Hitbox::checkCollision(&(*vehicle), &(*projectile)))
+				{
+					projectileiterator = projectile;
+					found = true;
+
+					switch (projectile->getType())
+					{
+					case Config::ObjectType::Mine:
+						vehicle->accelerate(-(vehicle->getSpeed()/abs(vehicle->getSpeed()))*5.f);
+						resourcemanager->playSound("mine");
+					default:
+						break;
+					}
+				}
+			}
 		}
+		if (found)
+			projectiles->erase(projectileiterator);
 	}
+
 
 	//Checks Vehicle - Obstacle (rockwall) collisions
 	for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
