@@ -70,9 +70,11 @@ void Menu::loadContent() {
 	spri_map1.setTexture(tex_map1);
        
 	//Load car textures
-	img_car1.loadFromFile("src/resources/car1.png");
-	img_car2.loadFromFile("src/resources/car2.png");
-	spri_car.setTexture(img_car1);
+	tex_car1.loadFromFile("src/resources/car1.png");
+	tex_car2.loadFromFile("src/resources/car2.png");
+	tex_car3.loadFromFile("src/resources/car3.png");
+	tex_car4.loadFromFile("src/resources/car4.png");
+	spri_car.setTexture(tex_car1);
 
     //font 
     font.loadFromFile("src/resources/arial.ttf");
@@ -112,7 +114,7 @@ void Menu::createButtons()
 			// create car button for all players
 			button cars;
 			cars.state = 0;
-			cars.max_states = 2;
+			cars.max_states = 4;
 			cars.loc_x = width / 2;
 			cars.loc_y = height / heightDivider * (i+2);
 			cars.player = i;
@@ -121,12 +123,18 @@ void Menu::createButtons()
 			cars.spri.setScale(0.14, 0.14);
 			cars.type = buttonType::car;	
 			//Now static over ride version
-			cars.textures.push_back(img_car1);
-			cars.textures.push_back(img_car1);
-			cars.textures.push_back(img_car1);
-			cars.textures.push_back(img_car2);
-			cars.textures.push_back(img_car2);
-			cars.textures.push_back(img_car2);
+			cars.textures.push_back(tex_car1);
+			cars.textures.push_back(tex_car1);
+			cars.textures.push_back(tex_car1);
+			cars.textures.push_back(tex_car2);
+			cars.textures.push_back(tex_car2);
+			cars.textures.push_back(tex_car2);
+			cars.textures.push_back(tex_car3);
+			cars.textures.push_back(tex_car3);
+			cars.textures.push_back(tex_car3);
+			cars.textures.push_back(tex_car4);
+			cars.textures.push_back(tex_car4);
+			cars.textures.push_back(tex_car4);
 		
 			//for finding all cars from ogjectTexturemap        
 			//for future use
@@ -355,6 +363,30 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 										continue;
 									}
 								}
+								if (it_button3->state == 2)
+								{
+									if (name == "Off") {
+										continue;
+									}
+									else
+									{
+										std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car3);
+										playerdata.push_back(player1);
+										continue;
+									}
+								}
+								if (it_button3->state == 3)
+								{
+									if (name == "Off") {
+										continue;
+									}
+									else
+									{
+										std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car4);
+										playerdata.push_back(player1);
+										continue;
+									}
+								}
 							}
 							if (it_button3->type == buttonType::map)
 							{
@@ -423,6 +455,30 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 							continue;
 						}
                     }
+					if (it_button4->state == 2)
+					{
+						if (name == "Off") {
+							continue;
+						}
+						else
+						{
+							std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car3);
+							playerdata.push_back(player1);
+							continue;
+						}
+					}
+					if (it_button4->state == 3)
+					{
+						if (name == "Off") {
+							continue;
+						}
+						else
+						{
+							std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car4);
+							playerdata.push_back(player1);
+							continue;
+						}
+					}
                }
 				if (it_button4->type == buttonType::map)
 				{

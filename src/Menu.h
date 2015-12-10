@@ -120,7 +120,9 @@ private:
 	sf::Sprite spri_map1;
         
     //Load car images
-	sf::Texture img_car1;
-	sf::Texture img_car2;
+	sf::Texture tex_car1;
+	sf::Texture tex_car2;
+	sf::Texture tex_car3;
+	sf::Texture tex_car4;
     sf::Sprite spri_car;
 };
