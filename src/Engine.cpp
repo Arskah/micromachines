@@ -159,6 +159,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 			{
 				if (Hitbox::checkCollision(&(*vehicle), &(*projectile)))
 				{
+					// This is for later deleting the projectile (oil spills aren't deleted maybe?)
 					projectileiterator = projectile;
 					found = true;
 
