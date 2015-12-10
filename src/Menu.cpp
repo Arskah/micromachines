@@ -282,7 +282,7 @@ std::string Menu::checkMap(button it_button) {
 }
 
 
-bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata, bool &musicon)
+bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata, sf::Music &music)
 {   
     Menu::loadContent();
     Menu::createButtons();
@@ -428,9 +428,9 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 					if(it_button2->type == buttonType::music)
 					{
 						if (it_button2->state == 1)
-							musicon = false;
+							music.pause();
 						else
-							musicon = true;
+							music.play();
 					}
 					break;
                 }

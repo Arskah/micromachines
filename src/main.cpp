@@ -11,7 +11,6 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
 	//window.setFramerateLimit(60);
 	
-	bool musicon = true;
 	bool menudata;
 	bool loading;
 	std::string name = "Playah";
@@ -29,7 +28,6 @@ int main()
 		music.setLoop(true);
 		music.setVolume(30);
 		if (music.openFromFile("src/resources/sounds/themesong.wav"))
-			if (musicon == true)
 				music.play();
 
 	
@@ -42,7 +40,7 @@ int main()
 	*/
         
         Menu menu(window, &resourcemanager);
-        menudata = menu.runMenu(window, playerdata, mapdata, musicon);
+        menudata = menu.runMenu(window, playerdata, mapdata, music);
 		if (menudata == false)
 		{
 			exit(0);
