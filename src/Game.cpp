@@ -112,7 +112,7 @@ void Game::run()
 	/*
 	sf::Music music;
 	music.setLoop(true);
-	music.setVolume(50);
+	music.setVolume(30);
 	if (music.openFromFile("src/resources/sounds/themesong.wav"))
 		music.play();
 	*/

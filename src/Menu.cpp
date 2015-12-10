@@ -263,6 +263,12 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
     Menu::loadContent();
     Menu::createButtons();
 
+	sf::Music music;
+	music.setLoop(true);
+	music.setVolume(30);
+	if (music.openFromFile("src/resources/sounds/themesong.wav"))
+		music.play();
+
     while (window.isOpen())
     {
         sf::Vector2i mouse_loc = sf::Mouse::getPosition(window);
