@@ -2,16 +2,17 @@
 #include "Engine.h"
 
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
-	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime)
+	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime, std::vector<Player*>* humanPlayers)
 {
 	for (auto it : userinput)
 	{
 		Player* player = it.first;
 
 		/* Call AI calculations. */
+		/*
 		if (!(player->getHuman()))
 			it.second = AI::calculateAIinput(player, vehicles, projectiles, map);
-
+		*/
 		/* AI and player movement handling */
 		Engine::handleInput(player, it.second, dt, projectiles, resourcemanager);
 	}
@@ -35,7 +36,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 	*/
 
 	/* Call function to handle all drawing */
-	Engine::draw(window, vehicles, projectiles, map, gametime);
+	Engine::draw(window, vehicles, projectiles, map, gametime, humanPlayers);
 }
 
 /* Handles userinput before moving the vehicle*/
@@ -240,26 +241,26 @@ void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime, std::vector<Player*>* humanPlayers)
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
 
 
 	// This is a ghetto version of the centered view. TODO: implement check for AI vs Human player.
-	for (size_t i = 0; i < vehicles->size(); i++)
+	for (int i = 0; i < humanPlayers->size(); i++)
 	{
 		sf::View view;
-		view.setCenter(sf::Vector2f(vehicles->at(i).getPosition().x, vehicles->at(i).getPosition().y));
-		if (vehicles->size() == 1)
+		view.setCenter(sf::Vector2f(humanPlayers->at(i)->getVehicle()->getPosition().x, humanPlayers->at(i)->getVehicle()->getPosition().y));
+		if (humanPlayers->size() == 1)			// I think modifiable for 4 players now
 		{
 			view.setSize(window.getSize().x, window.getSize().y);
-			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 		}
-		else
+		if (humanPlayers->size() == 2)
 		{
 			view.setSize(window.getSize().x /2, window.getSize().y);
-			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
 		}
 		window.setView(view);
@@ -270,7 +271,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 		// Drawing the gametimer to the top-left corner TODO: add standings etc.
 		if (i == 0)
 		{
-			gametime.setRotation(vehicles->at(0).getRotation() - 180.f);
+			gametime.setRotation(humanPlayers->at(0)->getVehicle()->getRotation() - 180.f);
 			sf::Vector2i pixelpos = sf::Vector2i(0,0);
 			sf::Vector2f worldpos = window.mapPixelToCoords(pixelpos);
 			gametime.setPosition(worldpos);

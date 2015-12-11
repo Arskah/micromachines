@@ -14,8 +14,8 @@ int main()
 	
 	bool menudata;
 	bool loading;
-	std::string name = "Playah";
-	std::string name2 = "Kalle";
+	//std::string name = "Playah";
+	//std::string name2 = "Kalle";
 	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
 	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
 	std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata;			// ((normal playerdata) isHumanPlayer?)

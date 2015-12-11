@@ -75,7 +75,7 @@ void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config
 	}
 	for (size_t i = 0; i < vehicles.size(); i++)
 	{
-		players.emplace_back(playerdata[i].first.first, &vehicles[i]);
+		players.emplace_back(playerdata[i].first.first, &vehicles[i], playerdata[i].second);
 	}
 }
 
@@ -108,6 +108,14 @@ void Game::run(bool &loading)
 	gametime.setStyle(sf::Text::Bold);
 	gametime.setScale(0.7f, 0.7f);
 
+	// Save human players in a vector for input handling
+	std::vector<Player*> humanPlayers;
+	for (auto it = players.begin(); it != players.end(); it++)
+	{
+		if (it->getHuman())
+			humanPlayers.push_back( &(*it) );
+	}
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -131,73 +139,73 @@ void Game::run(bool &loading)
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
 				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[0];
+				pair.first = humanPlayers[0];
 				pair.second = Config::InputType::Accelerate;
 				userinput.push_back(pair);
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
 				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[0];
+				pair.first = humanPlayers[0];
 				pair.second = Config::InputType::TurnLeft;
 				userinput.push_back(pair);
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
 				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[0];
+				pair.first = humanPlayers[0];
 				pair.second = Config::InputType::TurnRight;
 				userinput.push_back(pair);
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
 				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[0];
+				pair.first = humanPlayers[0];
 				pair.second = Config::InputType::Brake;
 				userinput.push_back(pair);
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
 				std::pair<Player *, Config::InputType> pair;
-				pair.first = &players[0];
+				pair.first = humanPlayers[0];
 				pair.second = Config::InputType::Shoot;
 				userinput.push_back(pair);
 			}
 
-			if (players.size() > 1)
+			if (humanPlayers.size() > 1)
 			{
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 				{
 					std::pair<Player *, Config::InputType> pair;
-					pair.first = &players[1];
+					pair.first = humanPlayers[1];
 					pair.second = Config::InputType::Accelerate;
 					userinput.push_back(pair);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 				{
 					std::pair<Player *, Config::InputType> pair;
-					pair.first = &players[1];
+					pair.first = humanPlayers[1];
 					pair.second = Config::InputType::TurnLeft;
 					userinput.push_back(pair);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 				{
 					std::pair<Player *, Config::InputType> pair;
-					pair.first = &players[1];
+					pair.first = humanPlayers[1];
 					pair.second = Config::InputType::TurnRight;
 					userinput.push_back(pair);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 				{
 					std::pair<Player *, Config::InputType> pair;
-					pair.first = &players[1];
+					pair.first = humanPlayers[1];
 					pair.second = Config::InputType::Brake;
 					userinput.push_back(pair);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
 				{
 					std::pair<Player *, Config::InputType> pair;
-					pair.first = &players[1];
+					pair.first = humanPlayers[1];
 					pair.second = Config::InputType::Shoot;
 					userinput.push_back(pair);
 				}
@@ -209,7 +217,7 @@ void Game::run(bool &loading)
 			//Exit the loading creen
 			loading = false;
 			// The engine draws the game state here
-			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime);
+			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, &humanPlayers);
 			userinput.clear();
 		}
 	}
