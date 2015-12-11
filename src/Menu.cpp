@@ -126,7 +126,7 @@ void Menu::createButtons()
 			cars.max_states = 4;
 			cars.loc_x = width / 2;
 			cars.loc_y = height / heightDivider * (i+2);
-			cars.player = i;
+			cars.player = i+1;
 			cars.spri = spri_car;
 			cars.spri.setPosition(cars.loc_x, cars.loc_y);
 			cars.spri.setScale(0.14, 0.14);
