@@ -3,11 +3,16 @@
 Config::InputType AI::calculateAIinput(Player * player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map)
 {
 	Config::InputType input;
-	if ((input = AI::isCrashing(player, vehicles, projectiles, map)) == Config::InputType::None)	//Turning and avoiding collisions is #1 priority
-		if (AI::doShoot(player, vehicles, projectiles, map))								// Shoot if opportunity
-			return Config::InputType::Shoot;
-		else
-			return Config::InputType::Accelerate;
+	if (player->getVehicle()->getSpeed() != 0)
+	{
+		if ((input = AI::isCrashing(player, vehicles, projectiles, map)) == Config::InputType::None)	//Turning and avoiding collisions is #1 priority
+			if (AI::doShoot(player, vehicles, projectiles, map))								// Shoot if opportunity
+				return Config::InputType::Shoot;
+			else
+				return Config::InputType::Accelerate;
+	}
+	else
+		input = Config::InputType::Accelerate;
 	return input;
 }
 
@@ -95,9 +100,9 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	float aiPosX = aiVehicle->getLocation().x;
 	float aiPosY = aiVehicle->getLocation().y;
 
-	for (int angle = minFov; angle < maxFov; angle++)
+	for (int angle = minFov; angle <= maxFov; angle++)
 	{
-		for (int distance = 0; distance < maxdistance; distance++)
+		for (int distance = 1; distance < maxdistance; distance++)
 		{
 			int x = aiPosX + distance * sin(angle * 3.14159265/180);		// Deg to rad
 			int y = aiPosY + distance * cos(angle * 3.14159265/180);

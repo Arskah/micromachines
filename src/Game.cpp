@@ -4,8 +4,8 @@
 Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
 {
-	initPlayers(playerdata);
 	initMap(mapdata);
+	initPlayers(playerdata);
 	initProjectiles();
 }
 
@@ -34,6 +34,27 @@ void Game::initVehicle(Config::ObjectType type)
 				}
 			}
 		}
+	}
+
+	int i = 0;
+	std::pair<std::size_t, std::size_t> finishLineL(map.getFinishline().first.first);
+	std::pair<std::size_t, std::size_t> finishLineR(map.getFinishline().first.second);
+	int diff;
+	if (map.getFinishline().second)
+		diff = (finishLineR.first - finishLineL.first) / vehicles.size();
+	else
+		diff = (finishLineR.second - finishLineL.second) / vehicles.size();
+
+	for (auto it = vehicles.begin(); it != vehicles.end(); it++)
+	{
+		if (map.getFinishline().second)
+			it->setPosition(finishLineL.first + (i * diff), finishLineL.second);
+		else
+		{
+			it->setPosition(finishLineL.first, finishLineL.second + (i * diff));
+			it->setRotation(90);
+		}
+		i++;
 	}
 }
 

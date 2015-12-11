@@ -29,10 +29,12 @@ public:
 	//Returns sprite of the Map that is drawable
 	sf::Sprite * getDrawable();
 
+	std::pair<std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_t>>, bool> getFinishline() const;
+
 	Config::BlockType getTrackMaterial();
 
 	//Returns vector of pointers to Blocks that are on leftside of track
-	std::vector<std::pair<std::size_t, std::size_t>> getLeftsideBlocks();
+	//std::vector<std::pair<std::size_t, std::size_t>> getLeftsideBlocks();
 
 private:
 	//Create map image after loading from image
@@ -44,8 +46,8 @@ private:
 	//Generates leftsideTrack vector
 	void createLeftsideTrack();
 	/* Functions that look for the next track block on left side of track. StartU for when start is up and StartR for right */
-	std::pair<std::size_t, std::size_t> checkNextLeftBlockStartU(std::pair<std::size_t, std::size_t> coordinates);
-	std::pair<std::size_t, std::size_t> checkNextLeftBlockStartR(std::pair<std::size_t, std::size_t> coordinates);
+	//std::pair<std::size_t, std::size_t> checkNextLeftBlockStartU(std::pair<std::size_t, std::size_t> coordinates);
+	//std::pair<std::size_t, std::size_t> checkNextLeftBlockStartR(std::pair<std::size_t, std::size_t> coordinates);
 
 	//Map Blocks
 	std::vector<Config::BlockType> blockrow;
@@ -59,7 +61,10 @@ private:
 	//Texture loaded to this sprite
 	sf::Sprite drawable;
 
+	//Finish line blocks for start and laps
+	std::pair<std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_t>>, bool> finishLine;		// Pair of Pair of 2 coordinate pairs and starting direction :P. True for up, false for right
+
 	// Blocks on the left side of the track. Used for standings and AI
-	std::vector<std::pair<std::size_t, std::size_t>> leftsideTrack;
+	//std::vector<std::pair<std::size_t, std::size_t>> leftsideTrack;
 	Config::BlockType TrackMaterial;
 };
