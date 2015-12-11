@@ -24,6 +24,7 @@ void ResourceManager::loadObjectTextures()
 				while (std::getline(stream, token, ' '))
 				{
 					tokens.push_back(token);
+
 				}
 				std::pair<Config::ObjectType, sf::Texture> texturepair;
 				texturepair.first = static_cast<Config::ObjectType>(std::stoi(tokens[0]));
@@ -105,6 +106,7 @@ void ResourceManager::playSound(std::string name)
 	{
 		sounds.push_back(sf::Sound());
 		sounds[0].setBuffer(soundbuffers[name]);
+		sounds[0].setVolume(50);
 		sounds[0].play();
 	}
 	else
@@ -121,12 +123,14 @@ void ResourceManager::playSound(std::string name)
 		if (index != -1)
 		{
 			sounds[index].setBuffer(soundbuffers[name]);
+			sounds[index].setVolume(50);
 			sounds[index].play();
 		}
 		else
 		{
 			sounds.push_back(sf::Sound());
 			sounds[sounds.size() - 1].setBuffer(soundbuffers[name]);
+			sounds[sounds.size() - 1].setVolume(50);
 			sounds[sounds.size() - 1].play();
 		}
 	}

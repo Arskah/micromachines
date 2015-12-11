@@ -35,5 +35,6 @@ private:
 	float turnrate;
 	float weapontimer;
 	float braketimer = 0.f;
+	float penaltytimer = 0.f;
 	Projectile weapon;
 };

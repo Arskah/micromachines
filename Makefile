@@ -1,11 +1,11 @@
 #compiler to use
-CXX=g++
+CXX=g++-4.9
 #arguments for compile
 CPPFLAGS=-c -g -std=c++0x -I$(INC_PATH)	#-Wall -Wextra
-LDFLAGS= -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
+LDFLAGS= -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 
-INC_PATH= /u/20/halinea1/unix/SFML-2.3.2/include
-LIB_PATH= /u/20/halinea1/unix/SFML-2.3.2/lib
+INC_PATH= /home/aarni/Ohjelmointi/Kirjastot/SFML-2.3.2/include
+LIB_PATH= /home/aarni/Ohjelmointi/Kirjastot/SFML-2.3.2/lib
 #Directories
 SRC_DIR = src
 OBJ_DIR = src

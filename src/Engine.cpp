@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include "Engine.h"
 
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
@@ -24,7 +24,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Engine::moveVehicle(&(*it));
 	}
 
-	Engine::checkCollisions(vehicles, projectiles);
+	Engine::checkCollisions(vehicles, projectiles, map, resourcemanager);
 
 	//TODO: projectiles
 	/*
@@ -100,7 +100,7 @@ void Engine::moveProjectile(Vehicle& projectile)
 }
 */
 
-void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles)
+void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, ResourceManager * resourcemanager)
 {
 	//Checks Vehicle - Vehicle collisions and moves them apart
 	//Loop all vehicles through
@@ -114,7 +114,6 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				//While we are still in collision state
 				while (Hitbox::checkCollision(&(*vehicle_1), &(*vehicle_2)))
 				{
-
 					//THIS WHOLE PART CAN BE CHANGED
 					//THIS WAS JUST EXPERIMENTAL
 
@@ -155,11 +154,64 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 	}
 
 	//Checks Vehicle - Projectile collisions
+	if (projectiles->size() > 0)
+	{
+		bool found = false;
+		std::vector<Projectile>::iterator projectileiterator;
+		for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
+		{
+			for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
+			{
+				if (Hitbox::checkCollision(&(*vehicle), &(*projectile)))
+				{
+					// This is for later deleting the projectile (if it's Mine at least)
+					projectileiterator = projectile;
+					found = true;
+
+					switch (projectile->getType())
+					{
+					case Config::ObjectType::Mine:
+						vehicle->accelerate(-(vehicle->getSpeed()/abs(vehicle->getSpeed()))*3.f);
+						resourcemanager->playSound("mine");
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+		if (found == true && projectileiterator->getType() == Config::ObjectType::Mine)
+		{
+			projectiles->erase(projectileiterator);
+		}
+			
+	}
+
+
+	//Checks Vehicle - Obstacle (rockwall) collisions
 	for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
 	{
-		for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
-		{
-			//Need something to happen per ObjectType of projectile
+		sf::VertexArray hitbox = Hitbox::createHitboxRect(&(*vehicle));
+
+		// Going through the corner points of the hitbox
+		for (size_t i = 0; i < hitbox.getVertexCount(); i++)
+		{	
+			sf::Vector2f position = hitbox[i].position;
+			if (map.getBlock(position.x, position.y).getType() == Config::BlockType::RockWall)
+			{
+				sf::Vector2f heading(0.f, 1.f);
+				sf::Transform t;
+				t.rotate(vehicle->getRotation() - 180);
+				sf::Vector2f movement = t.transformPoint(heading);
+
+				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall)
+				if (vehicle->getSpeed() >= 1.f)
+					resourcemanager->playSound("collision");
+
+				// Bumping the vehicle away from the rockwall and reversing it's speed
+				vehicle->move(movement * vehicle->getSpeed() * 5.f);
+				vehicle->accelerate(- vehicle->getSpeed() / 3.5f);
+			}
 		}
 	}
 
@@ -192,20 +244,24 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
-	/*
-	window.draw(*map.getDrawable());							//TODO: Map			'BOTTOM' drawing
-	Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
-	Engine::draw_vehicles(window, vehicles);   // On top of everything
-	*/
+
 
 	// This is a ghetto version of the centered view. TODO: implement check for AI vs Human player.
 	for (size_t i = 0; i < vehicles->size(); i++)
 	{
 		sf::View view;
 		view.setCenter(sf::Vector2f(vehicles->at(i).getPosition().x, vehicles->at(i).getPosition().y));
-		view.setSize(window.getSize().x /2, window.getSize().y);
-		view.setRotation(vehicles->at(i).getRotation() - 180.f);
-		view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		if (vehicles->size() == 1)
+		{
+			view.setSize(window.getSize().x, window.getSize().y);
+			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+		}
+		else
+		{
+			view.setSize(window.getSize().x /2, window.getSize().y);
+			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		}
 		window.setView(view);
 		window.draw(*map.getDrawable());
 		Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles

@@ -3,22 +3,34 @@
 #include "Config.h"
 #include "ResourceManager.h"
 #include "Editor.h"
+#include "Game.h"
+#include "Menu.h"
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
 	//window.setFramerateLimit(60);
-
+	
+	bool menudata;
+	bool loading;
 	std::string name = "Playah";
 	std::string name2 = "Kalle";
-	std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
-	std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
+	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
+	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
 	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
-	playerdata.push_back(pair);
-	playerdata.push_back(pair2);
-	std::string mapdata = "src/resources/mapsavetest.png";
+	//playerdata.push_back(pair);
+	//playerdata.push_back(pair2);
+	std::string mapdata; // = "src/resources/mapsavetest.png";
 
 	ResourceManager resourcemanager;
+
+		sf::Music music;
+		music.setLoop(true);
+		music.setVolume(30);
+		if (music.openFromFile("src/resources/sounds/themesong.wav"))
+				music.play();
+
+	
 
 	/*
 	//EXAMPLE HOW EASY IT IS TO START THE EDITOR
@@ -26,7 +38,15 @@ int main()
 	Editor editor(window, *resourcemanager.getBlockTextures());
 	editor.runEditor();
 	*/
-	
+        
+        Menu menu(window, &resourcemanager);
+        menudata = menu.runMenu(window, playerdata, mapdata, music);
+		if (menudata == false)
+		{
+			exit(0);
+		}
+		else
+			loading = true;
 	/*
 	//EXAMPLE ON HOW EASY IT IS TO USE A MAP
 	//Loading takes a while still, please just wait
@@ -60,8 +80,21 @@ int main()
 	}	
 	*/
 
+	//Integers for loading screen
+	sf::Sprite sprite;
+	sf::Texture tex_1;
+	tex_1.loadFromFile("src/resources/menu/loading3.png");
+	sprite.setPosition((window.getSize().x / 2 - 50), window.getSize().y / 2);
+	//draw loading screen
+	sprite.setTexture(tex_1, true);
+	window.draw(sprite);
+	window.display();
+	
+	
+        
+
 	Game game(window, &resourcemanager, playerdata, mapdata);
-	game.run();
+	game.run(loading);
 
 	/*
 	

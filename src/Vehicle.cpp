@@ -42,7 +42,7 @@ void Vehicle::brake(float dt)
 	// Normal braking situation (decreasing speed)
 	if (this->getSpeed() > 0.f)
 	{
-		this->setSpeed(this->getSpeed() - 1.5f * acceleration * dt);
+		this->setSpeed(this->getSpeed() - 2.f * acceleration * dt);
 		if (this->getSpeed() < 0.f)
 			this->setSpeed(0.f);
 	}
@@ -69,10 +69,24 @@ void Vehicle::brake(float dt)
 
 void Vehicle::turn(bool left, float dt)
 {
-	if (left)
-		this->setRotation(this->getRotation() - (this->getSpeed()/this->maxspeed) * turnrate * dt);
-	else
-		this->setRotation(this->getRotation() + (this->getSpeed()/this->maxspeed) * turnrate * dt);
+	/* This needs some explaining...
+	(this->getSpeed() / abs(this->getSpeed())) simply makes sure the sign of the speed stays the same (e.g. minus or plus)
+	sqrt(abs(this->getSpeed() / this->maxspeed)) makes the cars turn better when they have low speed
+	(1.5f - abs(this->getSpeed()) / this->maxspeed) makes it more dificult to steer when the speed gets high
+	turnrate * dt is simply the rate of turning
+	*/
+	if (this->getSpeed() != 0.f)
+	{
+		if (left)
+		{
+			this->setRotation(this->getRotation() - (this->getSpeed() / abs(this->getSpeed())) * sqrt(abs(this->getSpeed() / this->maxspeed)) * (1.5f - abs(this->getSpeed()) / this->maxspeed) * turnrate * dt);
+		}
+
+		else
+		{
+			this->setRotation(this->getRotation() + (this->getSpeed() / abs(this->getSpeed())) * sqrt(abs(this->getSpeed() / this->maxspeed)) * (1.5f - abs(this->getSpeed()) / this->maxspeed) * turnrate * dt);
+		}
+	}
 }
 
 void Vehicle::slow(float friction, float dt)
@@ -80,7 +94,7 @@ void Vehicle::slow(float friction, float dt)
 	// Slowing friction while going forward
 	if (this->getSpeed() > 0)
 	{
-		this->setSpeed(this->getSpeed() - friction * dt);
+		this->setSpeed(this->getSpeed() - (abs(this->getSpeed())/this->maxspeed) * pow(friction,3) * dt);
 		// Making sure the car stops properly and doesn't just reverse direction
 		if (this->getSpeed() < 0)
 		{
@@ -91,7 +105,7 @@ void Vehicle::slow(float friction, float dt)
 	// Same but backwards
 	if (this->getSpeed() < 0)
 	{
-		this->setSpeed(this->getSpeed() + friction * dt);
+		this->setSpeed(this->getSpeed() + (abs(this->getSpeed()) / this->maxspeed) * pow(friction,3) * dt);
 		// Making sure the car stops properly and doesn't just reverse direction
 		if (this->getSpeed() > 0)
 		{
@@ -112,7 +126,7 @@ Projectile Vehicle::shoot()
 	t.rotate(this->getRotation() + 180.f); // This points to the opposite direction of the car's heading
 	sf::Vector2f vec(0.f, 1.f);
 	sf::Vector2f direction = t.transformPoint(vec);
-	direction *= 80.f; // Offset for the projectile
+	direction *= 100.f; // Offset for the projectile
 
 	this->weapon.setPosition(direction + this->getPosition());
 	this->weapontimer = 0.f;

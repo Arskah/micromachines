@@ -33,7 +33,7 @@ public:
 	/* run()
 	The game loop. Runs the event loop, gathers user input and passes it to the Engine.
 	*/
-	void run();
+	void run(bool &loading);
 
 
 private:
@@ -74,7 +74,7 @@ private:
 
 	/*
 	players: list of players
-	vehicles: list of vehicles
+	vehicles: listf of vehicles
 	projectiles: list of projectiles
 	map: the game map
 	window: the application window
