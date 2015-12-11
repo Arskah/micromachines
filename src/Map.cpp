@@ -35,7 +35,7 @@ void Map::createLeftsideTrack()
 	{
 		coordinates.first = finish_line_blocks.back().first;
 		coordinates.second = finish_line_blocks.back().second + 1;
-		leftsideTrackMaterial = Map::getBlock(coordinates.first, coordinates.second).getType();
+		TrackMaterial = Map::getBlock(coordinates.first, coordinates.second).getType();
 		leftsideTrack.push_back(coordinates);	// First block of track is one tile up from first finish line block in vector
 
 		coordinates = Map::checkNextLeftBlockStartU(coordinates);
@@ -49,7 +49,7 @@ void Map::createLeftsideTrack()
 	{
 		coordinates.first = finish_line_blocks.back().first + 1;
 		coordinates.second = finish_line_blocks.back().second;
-		leftsideTrackMaterial = Map::getBlock(coordinates.first, coordinates.second).getType();
+		TrackMaterial = Map::getBlock(coordinates.first, coordinates.second).getType();
 		leftsideTrack.push_back(coordinates);	// First block of track is one tile up from first finish line block in vector
 
 		coordinates = Map::checkNextLeftBlockStartR(coordinates);
@@ -65,28 +65,28 @@ void Map::createLeftsideTrack()
 
 std::pair<std::size_t, std::size_t> Map::checkNextLeftBlockStartU(std::pair<std::size_t, std::size_t> coordinates)
 {
-	if (Map::getBlock(coordinates.first - 1, coordinates.second).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first - 1, coordinates.second).getType() == Config::BlockType::Checkerboard)				// x-1
+	if (Map::getBlock(coordinates.first - 1, coordinates.second).getType() == TrackMaterial || Map::getBlock(coordinates.first - 1, coordinates.second).getType() == Config::BlockType::Checkerboard)				// x-1
 		coordinates.first = coordinates.first - 1;
 
-	else if (Map::getBlock(coordinates.first - 1, coordinates.second - 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first - 1, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)		// y+1 x-1
+	else if (Map::getBlock(coordinates.first - 1, coordinates.second - 1).getType() == TrackMaterial || Map::getBlock(coordinates.first - 1, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)		// y+1 x-1
 	{
 		coordinates.first = coordinates.first - 1;
 		coordinates.second = coordinates.second + 1;
 	}
 
-	else if (Map::getBlock(coordinates.first, coordinates.second - 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)			// y+1
+	else if (Map::getBlock(coordinates.first, coordinates.second - 1).getType() == TrackMaterial || Map::getBlock(coordinates.first, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)			// y+1
 		coordinates.first = coordinates.second + 1;
 
-	else if (Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)		//x+1 y+1
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType() == TrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)		//x+1 y+1
 	{
 		coordinates.first = coordinates.first + 1;
 		coordinates.second = coordinates.second + 1;
 	}
 
-	else if (Map::getBlock(coordinates.first + 1, coordinates.second).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second).getType() == Config::BlockType::Checkerboard)			//x+1
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second).getType() == TrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second).getType() == Config::BlockType::Checkerboard)			//x+1
 		coordinates.first = coordinates.first + 1;
 
-	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)		//x+1 y-1
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == TrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)		//x+1 y-1
 	{
 		coordinates.first = coordinates.first + 1;
 		coordinates.second = coordinates.second - 1;
@@ -100,27 +100,27 @@ std::pair<std::size_t, std::size_t> Map::checkNextLeftBlockStartU(std::pair<std:
 
 std::pair<std::size_t, std::size_t> Map::checkNextLeftBlockStartR(std::pair<std::size_t, std::size_t> coordinates)
 {
-	if (Map::getBlock(coordinates.first, coordinates.second - 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)				// y+1
+	if (Map::getBlock(coordinates.first, coordinates.second - 1).getType() == TrackMaterial || Map::getBlock(coordinates.first, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)				// y+1
 		coordinates.second = coordinates.second + 1;
 
-	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)		// y+1 x+1
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == TrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second - 1).getType() == Config::BlockType::Checkerboard)		// y+1 x+1
 	{
 		coordinates.first = coordinates.first + 1;
 		coordinates.second = coordinates.second + 1;
 	}
-	else if (Map::getBlock(coordinates.first + 1, coordinates.second).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second).getType() == Config::BlockType::Checkerboard)			// x+1
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second).getType() == TrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second).getType() == Config::BlockType::Checkerboard)			// x+1
 		coordinates.first = coordinates.first + 1;
 
-	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)		//y-1 x+1
+	else if (Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == TrackMaterial || Map::getBlock(coordinates.first + 1, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)		//y-1 x+1
 	{
 		coordinates.first = coordinates.first + 1;
 		coordinates.second = coordinates.second - 1;
 	}
 
-	else if (Map::getBlock(coordinates.first, coordinates.second + 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)			//y-1
+	else if (Map::getBlock(coordinates.first, coordinates.second + 1).getType() == TrackMaterial || Map::getBlock(coordinates.first, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)			//y-1
 		coordinates.second = coordinates.second - 1;
 
-	else if (Map::getBlock(coordinates.first - 1, coordinates.second + 1).getType() == leftsideTrackMaterial || Map::getBlock(coordinates.first - 1, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)		//y-1 x-1
+	else if (Map::getBlock(coordinates.first - 1, coordinates.second + 1).getType() == TrackMaterial || Map::getBlock(coordinates.first - 1, coordinates.second + 1).getType() == Config::BlockType::Checkerboard)		//y-1 x-1
 	{
 		coordinates.first = coordinates.first - 1;
 		coordinates.second = coordinates.second - 1;
@@ -201,6 +201,11 @@ Block Map::getBlock(const int x, const int y) const
 sf::Sprite * Map::getDrawable()
 {
 	return &(drawable);
+}
+
+Config::BlockType Map::getTrackMaterial()
+{
+	return TrackMaterial;
 }
 
 std::vector<std::pair<std::size_t, std::size_t>> Map::getLeftsideBlocks()

@@ -282,7 +282,7 @@ std::string Menu::checkMap(button it_button) {
 }
 
 
-bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::string, Config::ObjectType>> &playerdata, std::string &mapdata, sf::Music &music)
+bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> &playerdata, std::string &mapdata, sf::Music &music)
 {   
     Menu::loadContent();
     Menu::createButtons();
@@ -374,9 +374,17 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 									if (name == "Off") {
 										continue;
 									}
+									else if (name == "AI1")
+									{
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car1);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
+										playerdata.push_back(player1);
+										continue;
+									}
 									else
 									{
-										std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car1);
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car1);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
 										playerdata.push_back(player1);
 										continue;
 									}
@@ -386,9 +394,17 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 									if (name == "Off") {
 										continue;
 									}
+									else if (name == "AI2")
+									{
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car2);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
+										playerdata.push_back(player1);
+										continue;
+									}
 									else
 									{
-										std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car2);
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car2);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
 										playerdata.push_back(player1);
 										continue;
 									}
@@ -398,9 +414,17 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 									if (name == "Off") {
 										continue;
 									}
+									else if (name == "AI3")
+									{
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car3);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
+										playerdata.push_back(player1);
+										continue;
+									}
 									else
 									{
-										std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car3);
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car3);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
 										playerdata.push_back(player1);
 										continue;
 									}
@@ -410,9 +434,17 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 									if (name == "Off") {
 										continue;
 									}
+									else if (name == "AI4")
+									{
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car4);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
+										playerdata.push_back(player1);
+										continue;
+									}
 									else
 									{
-										std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car4);
+										std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car4);
+										std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
 										playerdata.push_back(player1);
 										continue;
 									}
@@ -473,33 +505,57 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 						if (name == "Off") {
 							continue;
 						}
-						else
+						else if (name == "AI1")
 						{
-							std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car1);
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car1);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
 							playerdata.push_back(player1);
 							continue;
 						}
-                    }
-                    if (it_button4->state == 1)
-                    {
+						else
+						{
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car1);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
+							playerdata.push_back(player1);
+							continue;
+						}
+					}
+					if (it_button4->state == 1)
+					{
 						if (name == "Off") {
 							continue;
 						}
-						else
+						else if (name == "AI2")
 						{
-							std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car2);
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car2);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
 							playerdata.push_back(player1);
 							continue;
 						}
-                    }
+						else
+						{
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car2);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
+							playerdata.push_back(player1);
+							continue;
+						}
+					}
 					if (it_button4->state == 2)
 					{
 						if (name == "Off") {
 							continue;
 						}
+						else if (name == "AI3")
+						{
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car3);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
+							playerdata.push_back(player1);
+							continue;
+						}
 						else
 						{
-							std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car3);
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car3);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
 							playerdata.push_back(player1);
 							continue;
 						}
@@ -509,9 +565,17 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<const std::st
 						if (name == "Off") {
 							continue;
 						}
+						else if (name == "AI4")
+						{
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car4);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, false);
+							playerdata.push_back(player1);
+							continue;
+						}
 						else
 						{
-							std::pair<const std::string, Config::ObjectType> player1(name, Config::ObjectType::Car4);
+							std::pair<const std::string, Config::ObjectType> data(name, Config::ObjectType::Car4);
+							std::pair<std::pair<const std::string, Config::ObjectType>, bool> player1(data, true);
 							playerdata.push_back(player1);
 							continue;
 						}

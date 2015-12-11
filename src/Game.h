@@ -28,7 +28,7 @@ public:
 	- playerdata: list of player names and their vehicle choices (vehicle type)
 	- mapdata: filepath to the map data
 	*/
-	Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata);
+	Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata, std::string mapdata);
 
 	/* run()
 	The game loop. Runs the event loop, gathers user input and passes it to the Engine.
@@ -56,7 +56,7 @@ private:
 	Parameters:
 	- playerdata: list of player names and their vehicle choices (vehicle type)
 	*/
-	void initPlayers(std::vector<std::pair<const std::string, Config::ObjectType>> playerdata);
+	void initPlayers(std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata);
 
 	/* initProjectiles()
 	Initializes the list of projectiles by randomizing some oil spills for example.

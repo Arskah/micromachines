@@ -1,7 +1,7 @@
 #include "Game.h"
 
 
-Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata) : 
+Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
 {
 	initPlayers(playerdata);
@@ -65,17 +65,17 @@ Projectile Game::createProjectile(Config::ObjectType type)
 	}
 }
 
-void Game::initPlayers(std::vector<std::pair<const std::string, Config::ObjectType>> playerdata)
+void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata)
 {
 	vehicles.clear();
 	for (auto it = playerdata.begin(); it != playerdata.end(); it++)
 	{
-		const std::string name = it->first;
-		initVehicle(it->second);
+		const std::string name = it->first.first;
+		initVehicle(it->first.second);
 	}
 	for (size_t i = 0; i < vehicles.size(); i++)
 	{
-		players.emplace_back(playerdata[i].first, &vehicles[i]);
+		players.emplace_back(playerdata[i].first.first, &vehicles[i]);
 	}
 }
 

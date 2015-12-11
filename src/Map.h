@@ -29,6 +29,8 @@ public:
 	//Returns sprite of the Map that is drawable
 	sf::Sprite * getDrawable();
 
+	Config::BlockType getTrackMaterial();
+
 	//Returns vector of pointers to Blocks that are on leftside of track
 	std::vector<std::pair<std::size_t, std::size_t>> getLeftsideBlocks();
 
@@ -59,5 +61,5 @@ private:
 
 	// Blocks on the left side of the track. Used for standings and AI
 	std::vector<std::pair<std::size_t, std::size_t>> leftsideTrack;
-	Config::BlockType leftsideTrackMaterial;
+	Config::BlockType TrackMaterial;
 };

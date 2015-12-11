@@ -5,6 +5,7 @@
 #include "Editor.h"
 #include "Game.h"
 #include "Menu.h"
+#include <tuple>
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
 	std::string name2 = "Kalle";
 	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
 	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
-	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
+	std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata;			// ((normal playerdata) isHumanPlayer?)
 	//playerdata.push_back(pair);
 	//playerdata.push_back(pair2);
 	std::string mapdata; // = "src/resources/mapsavetest.png";
