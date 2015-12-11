@@ -9,10 +9,10 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Player* player = it.first;
 
 		/* Call AI calculations. */
-		/*
+		
 		if (!(player->getHuman()))
 			it.second = AI::calculateAIinput(player, vehicles, projectiles, map);
-		*/
+		
 		/* AI and player movement handling */
 		Engine::handleInput(player, it.second, dt, projectiles, resourcemanager);
 	}

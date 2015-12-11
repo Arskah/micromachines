@@ -89,16 +89,18 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 
 	// Go through the beams
 	std::vector<std::pair<int, float>> beams;
-	int maxdistance = 500;								// Max distance AI "sees" the turn and starts to do playing moves
-	int minFov = aiVehicle->getRotation() - 30;			// 60 deg field of view
-	int maxFov = aiVehicle->getRotation() + 30;
+	int maxdistance = 50;								// Max distance AI "sees" the turn and starts to do playing moves
+	float minFov = aiVehicle->getRotation() - 30;			// 60 deg field of view
+	float maxFov = aiVehicle->getRotation() + 30;
+	float aiPosX = aiVehicle->getLocation().x;
+	float aiPosY = aiVehicle->getLocation().y;
 
-	for (int angle = minFov; angle < maxFov + 30; angle++)
+	for (int angle = minFov; angle < maxFov; angle++)
 	{
 		for (int distance = 0; distance < maxdistance; distance++)
 		{
-			int x = distance * sin(angle);
-			int y = distance * cos(angle);
+			int x = aiPosX + distance * sin(angle);
+			int y = aiPosY + distance * cos(angle);
 			Block block = map.getBlock(x, y);
 			if (block.getType() != map.getTrackMaterial())
 			{
