@@ -5,6 +5,7 @@
 #include "Player.h"
 //#include "Object.h"
 #include "Vehicle.h"
+#include <math.h>
 
 namespace AI
 {

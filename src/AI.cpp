@@ -99,8 +99,8 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	{
 		for (int distance = 0; distance < maxdistance; distance++)
 		{
-			int x = aiPosX + distance * sin(angle);
-			int y = aiPosY + distance * cos(angle);
+			int x = aiPosX + distance * sin(angle * 3.14159265/180);		// Deg to rad
+			int y = aiPosY + distance * cos(angle * 3.14159265/180);
 			Block block = map.getBlock(x, y);
 			if (block.getType() != map.getTrackMaterial())
 			{
@@ -115,7 +115,9 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	if (!beams.empty())
 	{
 		// Find maximum distance and corresponding angle
-		std::pair<int, float> maxpair;
+		std::pair<float, float> maxpair;
+		maxpair.first = 0;
+		maxpair.second = 0;
 		for (auto it = beams.begin(); it != beams.end(); it++)
 		{
 			if (it->second > maxpair.second)
