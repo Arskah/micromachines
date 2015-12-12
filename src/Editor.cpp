@@ -36,7 +36,7 @@ Editor::Editor(sf::RenderWindow & window, const std::map<Config::BlockType, sf::
 		{
 			for (int y = 0; y < i; y++)
 			{
-				if (std::sqrt(std::pow((i - 1) / 2 - x, 2) + std::pow((i - 1) / 2 - y, 2)) > ((i - 1) / 2))
+				if (std::sqrt(std::pow((i - 1) / 2 - x, 2) + std::pow((i - 1) / 2 - y, 2)) >((i - 1) / 2))
 				{
 					circle_mask.setPixel(x, y, sf::Color::Red);
 				}
@@ -57,7 +57,7 @@ void Editor::runEditor()
 	window.create(sf::VideoMode(unsigned int(resolution.x - 40), unsigned int(resolution.y - 40 * 16.f / 9.f)), "Level Editor");
 	window.setPosition(sf::Vector2i(0, 0));
 
-	initEditor();	
+	initEditor();
 
 	//Set editor_view to scale the whole map at once
 	editor_view = window.getDefaultView();
@@ -100,7 +100,7 @@ void Editor::runEditor()
 	sf::Sprite file_ui;
 	file_ui.setTexture(file_ui_tex);
 
-	const std::string help_string = 
+	const std::string help_string =
 		"F1 to open this Help menu\n"
 		"F2 / N to create new Map\n"
 		"F3 / S to save current Map\n"
@@ -304,6 +304,9 @@ void Editor::runEditor()
 				//Capture current mouse spot and convert to coords in world
 				(this->*updateImageFunc)(sf::Vector2i(location_i), block_to_draw, brush_size);
 			}
+
+			//Place finish line if drawn over
+			placeFinishLine();
 		}
 
 		//Load new image to map for displaying
@@ -330,7 +333,7 @@ void Editor::runEditor()
 		//Selection box for blocks_ui
 		createBlockUISelection(&selected_image, static_cast<int>(block_to_draw), blocktextures->size());
 		selected_tex.loadFromImage(selected_image);
-		selected_sprite.setTexture(selected_tex);		
+		selected_sprite.setTexture(selected_tex);
 		selected_sprite.setScale(window.getView().getSize().x / 6000.f, window.getView().getSize().y / 3525.f);
 		selected_sprite.setPosition(5.f + window.getView().getCenter().x - window.getView().getSize().x / 2,
 			window.getView().getCenter().y + window.getView().getSize().y / 2 - blocks_ui_tex.getSize().y * window.getView().getSize().y / 3525.f - 5.f);
@@ -340,7 +343,7 @@ void Editor::runEditor()
 		file_ui.setPosition(5.f + window.getView().getCenter().x - window.getView().getSize().x / 2,
 			window.getView().getCenter().y - window.getView().getSize().y / 2 + 5.f);
 		window.draw(file_ui);
-		
+
 		//Minimap
 		//Draw minimap last because the view changes!
 		//Grey Border around minimap
@@ -349,7 +352,7 @@ void Editor::runEditor()
 		minimap_border.setPosition(window.getView().getCenter().x + window.getView().getSize().x / 2 - window.getView().getSize().x * 0.15f - 7,
 			window.getView().getCenter().y - window.getView().getSize().y / 2);
 		window.draw(minimap_border);
-		
+
 		//Minimap in itself
 		sf::VertexArray boxerino = createMinimapViewBorder();
 		window.setView(minimap_view);
@@ -402,15 +405,42 @@ void Editor::initEditor()
 void Editor::initMap()
 {
 	sf::Vector2u size;
-	
+	size.x = 0;
+	size.y = 0;
+
 	std::string size_x = "", size_y = "";
+	while (size.x < 3000 || size.y < 3000)
+	{
+		size_x = "";
+		size_y = "";
+		while (size_x == "")
+			size_x = openTextbox("Please enter map size X", BoxTypes::Number);
+		while (size_y == "")
+			size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
+		size.x = std::stoi(size_x);
+		size.y = std::stoi(size_y);
+	}
+	/*
 	while (size_x == "")
-		size_x = openTextbox("Please enter map size X", BoxTypes::Number);
+	size_x = openTextbox("Please enter map size X", BoxTypes::Number);
 	while (size_y == "")
-		size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
+	size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
 
 	size.x = std::stoi(size_x);
 	size.y = std::stoi(size_y);
+	*/
+	/*
+	while (std::stoi(size_x) < 3000)
+	{
+	while (size_x == "")
+	size_x = openTextbox("Please enter map size X", BoxTypes::Number);
+	}
+	while (std::stoi(size_y) < 3000)
+	{
+	while (size_y == "")
+	size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
+	}
+	*/
 
 	//size.x = 4000;
 	//size.y = 4000;
@@ -422,11 +452,11 @@ void Editor::initMap()
 
 	//Change inputted string to lowercase
 	std::transform(base.begin(), base.end(), base.begin(), ::tolower);
-	
+
 	//Specify base block type
 	Config::BlockType base_block_type = Config::BlockType::None;
 
-	//If we received a desired BlockType
+	//If we received a desired BlockTypelai
 	if (Config::StringToBlockTypeMap.find(base) != Config::StringToBlockTypeMap.end())
 	{
 		base_block_type = Config::StringToBlockTypeMap.find(base)->second;
@@ -444,6 +474,9 @@ void Editor::initMap()
 
 	//Load drawable image from Block Image
 	map.createImageFromBlockImage(*blocktextures);
+
+	//Place initial finish line
+	placeFinishLine();
 }
 
 std::string Editor::openTextbox(const std::string &box_name, const BoxTypes box_type, const std::string &text_to_display)
@@ -562,7 +595,7 @@ void Editor::createBlockUI(const std::vector<const sf::Image*> images, sf::Image
 	//Don't take empty vectors
 	if (images.empty())
 		return;
-	
+
 	//Create ui_image to be big enough
 	ui_image->create(images[0]->getSize().x * images.size() + 5 * (images.size() + 1), images[0]->getSize().y + 10, sf::Color(sf::Uint8(63), sf::Uint8(63), sf::Uint8(63)));
 	sf::Image temp;
@@ -648,7 +681,7 @@ sf::VertexArray Editor::createMinimapViewBorder()
 		float(window.getView().getCenter().y - window.getView().getSize().y / 2 + 12)),
 		sf::Color::Red));
 
-	
+
 	//UP RIGHT - DOWN RIGHT
 	box.append(sf::Vertex(sf::Vector2f(
 		float(window.getView().getCenter().x + window.getView().getSize().x / 2 - 12),
@@ -666,8 +699,8 @@ sf::VertexArray Editor::createMinimapViewBorder()
 		float(window.getView().getCenter().x + window.getView().getSize().x / 2 + 12),
 		float(window.getView().getCenter().y + window.getView().getSize().y / 2 + 12)),
 		sf::Color::Red));
-	
-	
+
+
 	//DOWN RIGHT - LEFT
 	box.append(sf::Vertex(sf::Vector2f(
 		float(window.getView().getCenter().x - window.getView().getSize().x / 2 - 12),
@@ -703,10 +736,18 @@ sf::VertexArray Editor::createMinimapViewBorder()
 		float(window.getView().getCenter().x - window.getView().getSize().x / 2 + 12),
 		float(window.getView().getCenter().y + window.getView().getSize().y / 2 + 12)),
 		sf::Color::Red));
-	
+
 	return box;
 }
 
+void Editor::placeFinishLine()
+{
+	sf::Vector2i location;
+	location.x = map.block_image.getSize().x / 2;
+	location.y = map.block_image.getSize().y / 2;
+	updateImageBox(location - sf::Vector2i(0, 255) + sf::Vector2i(0, 127), Config::BlockType::Checkerboard, 255);
+	updateImageBox(location + sf::Vector2i(0, 127), Config::BlockType::Checkerboard, 255);
+}
 
 void Editor::updateImageBox(const sf::Vector2i location, const Config::BlockType type, const int brush_size)
 {

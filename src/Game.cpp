@@ -4,8 +4,8 @@
 Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<const std::string, Config::ObjectType>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
 {
-	initPlayers(playerdata);
 	initMap(mapdata);
+	initPlayers(playerdata);
 	initProjectiles();
 }
 
@@ -76,6 +76,10 @@ void Game::initPlayers(std::vector<std::pair<const std::string, Config::ObjectTy
 	for (size_t i = 0; i < vehicles.size(); i++)
 	{
 		players.emplace_back(playerdata[i].first, &vehicles[i]);
+		//Set to correct starting position on the map
+		vehicles[i].setPosition(map.getStartPosition(i));
+		//Rotate to face East / Right aka racing direction -- Can be subject to change if wanted
+		vehicles[i].setRotation(270);
 	}
 }
 
