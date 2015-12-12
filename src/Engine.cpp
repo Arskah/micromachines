@@ -234,15 +234,15 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 		}
 
 		// x > bounds
-		if (vehicle->getPosition().x > map_size.x)
+		if (vehicle->getPosition().x > map_size.x - 1)
 		{
-			vehicle->setPosition(float(map_size.x), vehicle->getPosition().y);
+			vehicle->setPosition(float(map_size.x - 1), vehicle->getPosition().y);
 		}
 
 		// y > bounds
-		if (vehicle->getPosition().y > map_size.y)
+		if (vehicle->getPosition().y > map_size.y - 1)
 		{
-			vehicle->setPosition(vehicle->getPosition().x, float(map_size.y));
+			vehicle->setPosition(vehicle->getPosition().x, float(map_size.y - 1));
 		}
 	}
 }
@@ -293,7 +293,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
 		}
 		window.setView(view);
-		window.draw(*map.getDrawable());
+		map.drawMap(window);
 		Engine::draw_projectiles(window, projectiles);		// Projectiles don't overwrite on vehicles
 		Engine::draw_vehicles(window, vehicles);   // On top of everything
 		

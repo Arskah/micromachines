@@ -38,6 +38,8 @@ public:
 
 	//Returns vector of pointers to Blocks that are on leftside of track
 	//std::vector<std::pair<std::size_t, std::size_t>> getLeftsideBlocks();
+	//Draws map to window
+	void drawMap(sf::RenderWindow &window);
 
 private:
 	//Create map image after loading from image
@@ -51,9 +53,14 @@ private:
 	/* Functions that look for the next track block on left side of track. StartU for when start is up and StartR for right */
 	//std::pair<std::size_t, std::size_t> checkNextLeftBlockStartU(std::pair<std::size_t, std::size_t> coordinates);
 	//std::pair<std::size_t, std::size_t> checkNextLeftBlockStartR(std::pair<std::size_t, std::size_t> coordinates);
+	//Splits map image to smaller pieces 256 x 256px (same as textures).
+	void splitImages(const std::map<Config::BlockType, sf::Image>& blocktextures);
 
 	//Map Blocks
 	std::vector<Config::BlockType> blockrow;
+
+	//Base block
+	Config::BlockType base_block;
 
 	//Block image, build blocks after editing from this
 	sf::Image block_image;
@@ -70,4 +77,11 @@ private:
 	// Blocks on the left side of the track. Used for standings and AI
 	//std::vector<std::pair<std::size_t, std::size_t>> leftsideTrack;
 	Config::BlockType TrackMaterial;
+	//Map image split into smaller textures
+	std::vector<sf::Texture> textures;
+	std::vector<sf::Sprite> drawables;
+
+	//Background block
+	sf::Texture background_texture;
+	std::vector<sf::Sprite> background_sprites;
 };
