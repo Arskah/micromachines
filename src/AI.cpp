@@ -93,23 +93,26 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	/* Check if circuit is turning */
 
 	// Go through the beams
-	std::vector<std::pair<int, float>> beams;
-	int maxdistance = 50;								// Max distance AI "sees" the turn and starts to do playing moves
+	std::vector<std::pair<float, int>> beams;
+	int maxdistance = 2560;								// Max distance AI "sees" the turn and starts to do playing moves
+	int maxOffsetDeg = 5;									// AI starts to correct heading if more than 5 degree offset
 	float minFov = aiVehicle->getRotation() - 30;			// 60 deg field of view
 	float maxFov = aiVehicle->getRotation() + 30;
 	float aiPosX = aiVehicle->getLocation().x;
 	float aiPosY = aiVehicle->getLocation().y;
 
-	for (int angle = minFov; angle <= maxFov; angle++)
+	for (float angle = minFov; angle <= maxFov; angle++)
 	{
-		for (int distance = 1; distance < maxdistance; distance++)
+		for (int distance = 0; distance <= maxdistance; distance = distance + 256)
 		{
-			int x = aiPosX + distance * sin(angle * 3.14159265/180);		// Deg to rad
-			int y = aiPosY + distance * cos(angle * 3.14159265/180);
-			Block block = map.getBlock(x, y);
-			if (block.getType() != map.getTrackMaterial())
+			double x = std::round(aiPosX + distance * sin(angle * 3.14159265/180));		// Deg to rad
+			double y = std::round(aiPosY + distance * cos(angle * 3.14159265/180));
+			int x_int = (int) x;
+			int y_int = (int) y;
+			Block block = map.getBlock(x_int, y_int);
+			if (((block.getType() != map.getTrackMaterial()) && (block.getType() != Config::BlockType::Checkerboard)) || (distance == maxdistance && block.getType() == map.getTrackMaterial()))
 			{
-				std::pair<int, float> pair;
+				std::pair<float, int> pair;
 				pair.first = angle;
 				pair.second = distance;
 				beams.push_back(pair);
@@ -120,18 +123,20 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	if (!beams.empty())
 	{
 		// Find maximum distance and corresponding angle
-		std::pair<float, float> maxpair;
+		std::pair<float, int> maxpair;
 		maxpair.first = 0;
 		maxpair.second = 0;
 		for (auto it = beams.begin(); it != beams.end(); it++)
 		{
 			if (it->second > maxpair.second)
+			{
 				maxpair.first = it->first;
-			maxpair.second = it->second;
+				maxpair.second = it->second;
+			}
 		}
-		if (maxpair.first > aiVehicle->getRotation())
+		if (maxpair.first - maxOffsetDeg > aiVehicle->getRotation())
 			return Config::InputType::TurnRight;
-		if (maxpair.first < aiVehicle->getRotation())
+		if (maxpair.first + maxOffsetDeg < aiVehicle->getRotation())
 			return Config::InputType::TurnLeft;
 	}
 
