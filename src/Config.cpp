@@ -18,7 +18,8 @@ namespace Config
 		{ ObjectType::Car1, ObjectType::Mine },
 		{ ObjectType::Car2, ObjectType::Mine },
 		{ ObjectType::Car3, ObjectType::Mine },
-		{ ObjectType::Car4, ObjectType::Mine }
+		{ ObjectType::Car4, ObjectType::Mine },
+		{ ObjectType::Oilspill, ObjectType::Oilspill }
 	};
 
 	extern const std::map<BlockType, float> BlockToFrictionMap = {

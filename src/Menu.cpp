@@ -277,7 +277,7 @@ std::string Menu::checkName(button &it_button)
 std::string Menu::checkMap(button it_button) {
 	std::string mapTemp;
 	if(it_button.state == 0)
-		mapTemp = "src/resources/map1.png";
+		mapTemp = "src/resources/map2.png";
 	return mapTemp;
 }
 
