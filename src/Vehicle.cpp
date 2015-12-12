@@ -42,7 +42,7 @@ void Vehicle::brake(float dt)
 	// Normal braking situation (decreasing speed)
 	if (this->getSpeed() > 0.f)
 	{
-		this->setSpeed(this->getSpeed() - 2.f * acceleration * dt);
+		this->setSpeed(this->getSpeed() - 3.f * acceleration * dt);
 		if (this->getSpeed() < 0.f)
 			this->setSpeed(0.f);
 	}

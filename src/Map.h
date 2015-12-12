@@ -23,6 +23,9 @@ public:
 	//Create thumbnail of map efficiently and fast
 	void createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures);
 
+	//Get start position by number, player 1 = 0
+	sf::Vector2f getStartPosition(const int player_number);
+
 	//Returns block from position x,y
 	Block getBlock(const int x, const int y) const;
 

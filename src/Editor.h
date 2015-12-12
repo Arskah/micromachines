@@ -39,6 +39,8 @@ private:
 	void createFileUI(sf::Image * file_ui_image);
 	//Creates a red border to be shown in minimap if off-center
 	sf::VertexArray createMinimapViewBorder();
+	//Places finish line to the Map, currently hardcoded to be at map center
+	void placeFinishLine();
 	//Box brush function to update Map Image
 	void updateImageBox(const sf::Vector2i location, const Config::BlockType type, const int brush_size);
 	//Circle brush function to update Map Image

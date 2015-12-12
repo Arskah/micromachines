@@ -96,14 +96,32 @@ void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config
 	}
 	for (size_t i = 0; i < vehicles.size(); i++)
 	{
-		players.emplace_back(playerdata[i].first.first, &vehicles[i], playerdata[i].second);
+		players.emplace_back(playerdata[i].first, &vehicles[i]);
+		//Set to correct starting position on the map
+		vehicles[i].setPosition(map.getStartPosition(i));
+		//Rotate to face East / Right aka racing direction -- Can be subject to change if wanted
+		vehicles[i].setRotation(270);
 	}
 }
 
 void Game::initProjectiles()
 {
-	// generate objects randomly here
-	return;
+	int amount = rand() % 20 + 5; //The amount of objects to be generated
+	int count = 0; //The counter
+
+	while (count < amount)
+	{
+		int x = rand() % int(map.getDrawable()->getGlobalBounds().width);
+		int y = rand() % int(map.getDrawable()->getGlobalBounds().height);
+		if (map.getBlock(x, y).getType() == Config::BlockType::Ground)
+		{
+			Projectile oilspill = createProjectile(Config::ObjectType::Oilspill);
+			oilspill.setPosition(x, y);
+			oilspill.setScale(1.5f, 1.5f);
+			this->projectiles.emplace_back(oilspill);
+			count++;
+		}
+	}
 }
 
 void Game::initMap(std::string mapdata)

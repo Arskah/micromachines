@@ -285,6 +285,14 @@ void Map::createThumbnail(const std::string &filename, const std::map<Config::Bl
 	drawable.setTexture(texture);
 }
 
+sf::Vector2f Map::getStartPosition(const int player_number)
+{
+	sf::Vector2f location;
+	location.x = float(block_image.getSize().x / 2);
+	location.y = float(block_image.getSize().y / 2 - 255 + (player_number + 1) * 102);
+	return location;
+}
+
 void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>& blocktextures)
 {
 	//Build map sized textures, we are going to apply a mask on these

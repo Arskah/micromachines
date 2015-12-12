@@ -75,7 +75,7 @@ float Engine::getFriction(Vehicle * vehicle, Map& map)
 {
 	// change the getPosition() to getLocation() once it's properly implemented.
 	sf::Vector2f location = vehicle->getPosition();
-	return map.getBlock(location.x, location.y).getFriction();
+	return map.getBlock(int(location.x), int(location.y)).getFriction();
 }
 
 
@@ -198,7 +198,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 		for (size_t i = 0; i < hitbox.getVertexCount(); i++)
 		{	
 			sf::Vector2f position = hitbox[i].position;
-			if (map.getBlock(position.x, position.y).getType() == Config::BlockType::RockWall)
+			if (map.getBlock(int(position.x), int(position.y)).getType() == Config::BlockType::RockWall)
 			{
 				sf::Vector2f heading(0.f, 1.f);
 				sf::Transform t;
@@ -216,6 +216,35 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 		}
 	}
 
+	//Checks if Vehicle out of bounds
+	for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
+	{
+		sf::Vector2u map_size = map.getDrawable()->getTexture()->getSize();
+
+		// x < 0
+		if (vehicle->getPosition().x < 0)
+		{
+			vehicle->setPosition(0, vehicle->getPosition().y);
+		}
+
+		// y < 0
+		if (vehicle->getPosition().y < 0)
+		{
+			vehicle->setPosition(vehicle->getPosition().x, 0);
+		}
+
+		// x > bounds
+		if (vehicle->getPosition().x > map_size.x)
+		{
+			vehicle->setPosition(float(map_size.x), vehicle->getPosition().y);
+		}
+
+		// y > bounds
+		if (vehicle->getPosition().y > map_size.y)
+		{
+			vehicle->setPosition(vehicle->getPosition().x, float(map_size.y));
+		}
+	}
 }
 
 void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehicles)
