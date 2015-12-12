@@ -31,6 +31,9 @@ public:
 	//Returns sprite of the Map that is drawable
 	sf::Sprite * getDrawable();
 
+	//Draws map to window
+	void drawMap(sf::RenderWindow &window);
+
 private:
 	//Create map image after loading from image
 	void createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>& blocktextures);
@@ -38,8 +41,14 @@ private:
 	//Saves map to a image file
 	bool saveToImage(const std::string &filename);
 
+	//Splits map image to smaller pieces 256 x 256px (same as textures).
+	void splitImages(const std::map<Config::BlockType, sf::Image>& blocktextures);
+
 	//Map Blocks
 	std::vector<Config::BlockType> blockrow;
+
+	//Base block
+	Config::BlockType base_block;
 
 	//Block image, build blocks after editing from this
 	sf::Image block_image;
@@ -49,4 +58,12 @@ private:
 	sf::Texture texture;
 	//Texture loaded to this sprite
 	sf::Sprite drawable;
+
+	//Map image split into smaller textures
+	std::vector<sf::Texture> textures;
+	std::vector<sf::Sprite> drawables;
+
+	//Background block
+	sf::Texture background_texture;
+	std::vector<sf::Sprite> background_sprites;
 };

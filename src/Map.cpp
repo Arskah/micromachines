@@ -2,18 +2,98 @@
 
 Map::Map()
 {
+	base_block = Config::BlockType::Ground;
 }
 
 bool Map::saveToImage(const std::string & filename)
 {
+	//Change first pixel to include data about base block
+	sf::Color temp = block_image.getPixel(0, 0);
+	sf::Uint32 temp_num = temp.toInteger();
+	temp_num = temp_num % (1 << 24);
+	temp_num = temp_num + (static_cast<int>(base_block) << 24);
+	sf::Color new_color = sf::Color(temp_num);
+	block_image.setPixel(0, 0, new_color);
+
+	//Save image to filename.png
 	return block_image.saveToFile(filename);
+}
+
+void Map::splitImages(const std::map<Config::BlockType, sf::Image>& blocktextures)
+{
+	//Make textures
+	for (std::size_t x = 0; x < std::size_t(image.getSize().x / 256); x++)
+	{
+		for (std::size_t y = 0; y < std::size_t(image.getSize().y / 256); y++)
+		{
+			sf::Image temp_image;
+			temp_image.create(256, 256, sf::Color::Cyan);
+			temp_image.copy(image, 0, 0, sf::IntRect(x * 256, y * 256, 256, 256));
+
+			sf::Texture temp_texture;
+			textures.push_back(temp_texture);
+			textures.back().loadFromImage(temp_image);
+		}
+	}
+
+	//Apply textures to sprites
+	for (std::size_t x = 0; x < std::size_t(image.getSize().x / 256); x++)
+	{
+		for (std::size_t y = 0; y < std::size_t(image.getSize().y / 256); y++)
+		{
+			drawables.emplace_back(textures[x * std::size_t(image.getSize().y / 256) + y]);
+			drawables.back().setPosition(x * 256, y * 256);
+		}
+	}
+
+	//Background
+	background_texture.loadFromImage(blocktextures.find(base_block)->second);
+	
+	//Top
+	for (int x = -4; x < int(image.getSize().x / 256) + 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			background_sprites.emplace_back(background_texture);
+			background_sprites.back().setPosition((256 * x), (256 * (y + 1)) * -1);
+		}
+	}
+
+	//Bot
+	for (int x = -4; x < int(image.getSize().x / 256) + 4; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			background_sprites.emplace_back(background_texture);
+			background_sprites.back().setPosition((256 * x), 256 * y + image.getSize().y);
+		}
+	}
+
+	//Left
+	for (int y = 0; y < int(image.getSize().y / 256); y++)
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			background_sprites.emplace_back(background_texture);
+			background_sprites.back().setPosition((256 * (x + 1)) * -1, y * 256);
+		}
+	}
+
+	//Right
+	for (int y = 0; y < int(image.getSize().y / 256); y++)
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			background_sprites.emplace_back(background_texture);
+			background_sprites.back().setPosition((256 * x) + image.getSize().x, y * 256);
+		}
+	}
 }
 
 static Block buildBlock(const int type_int)
 {
 	return Block(static_cast<Config::BlockType>(type_int), Config::BlockToFrictionMap.find(static_cast<Config::BlockType>(type_int))->second);
 }
-
 
 bool Map::loadFromImage(const std::string & filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
 {
@@ -23,6 +103,9 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 
 	//Clear old
 	blockrow.clear();
+
+	//Read base block
+	base_block = static_cast<Config::BlockType>(block_image.getPixel(0, 0).toInteger() >> 24);
 
 	//Raw pointer to block types, will need a conversion
 	const sf::Uint8 * block_info = block_image.getPixelsPtr();
@@ -60,6 +143,8 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	//Create new drawable image
 	createImageFromBlockImage(blocktextures);
 
+	splitImages(blocktextures);
+
 	//Went successfully
 	return true;
 }
@@ -75,6 +160,21 @@ Block Map::getBlock(const int x, const int y) const
 sf::Sprite * Map::getDrawable()
 {
 	return &(drawable);
+}
+
+void Map::drawMap(sf::RenderWindow & window)
+{
+	//Draw map
+	for (int i = 0; i < drawables.size(); i++)
+	{
+		window.draw(drawables[i]);
+	}
+
+	//Draw outside of map with block background
+	for (int i = 0; i < background_sprites.size(); i++)
+	{
+		window.draw(background_sprites[i]);
+	}
 }
 
 void Map::createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
@@ -136,15 +236,14 @@ sf::Vector2f Map::getStartPosition(const int player_number)
 
 void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>& blocktextures)
 {
-	//Build map sized textures, we are going to apply a mask on these
-	//make map rendering a lot faster than pixel-by-pixel
-	std::vector<sf::Image> map_sized_textures;
+	//Empty old image
+	image.create(block_image.getSize().x, block_image.getSize().y, sf::Color::Red);
 
+	//Build new image
 	for (std::size_t i = 0; i < blocktextures.size(); i++)
 	{
 		sf::Image temp;
-		//Create image to correct size
-		//temp.create(blocks.size(), blocks[0].size(), sf::Color::Red);
+		//Create image of each blockType to the size of the Map for usage later
 		temp.create(block_image.getSize().x, block_image.getSize().y, sf::Color::Red);
 		//Sizes
 		sf::Vector2u block_texture_size = blocktextures.find(static_cast<Config::BlockType>(i))->second.getSize();
@@ -157,24 +256,17 @@ void Map::createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>
 					(y + block_texture_size.y < block_image.getSize().y) ? (block_texture_size.y) : (y % block_texture_size.y)));
 			}
 		}
-		map_sized_textures.push_back(temp);
-	}
 
-	//Empty old image
-	image.create(block_image.getSize().x, block_image.getSize().y, sf::Color::Red);
-
-	//Copy map_sized_textures with masks to map image
-	for (std::size_t i = 0; i < map_sized_textures.size(); i++)
-	{
-		sf::Image temp = block_image;
-		temp.createMaskFromColor(sf::Color(sf::Uint8(255), sf::Uint8(255), sf::Uint8(i), sf::Uint8(255)));
-		map_sized_textures[i].copy(temp, 0, 0, sf::IntRect(0, 0, temp.getSize().x, temp.getSize().y), true);
+		//Use map sized base image as a mask
+		sf::Image block_temp = block_image;
+		block_temp.createMaskFromColor(sf::Color(sf::Uint8(255), sf::Uint8(255), sf::Uint8(i), sf::Uint8(255)));
+		temp.copy(block_temp, 0, 0, sf::IntRect(0, 0, block_temp.getSize().x, block_temp.getSize().y), true);
 		//Filter every block color away.
-		for (std::size_t j = 0; j < map_sized_textures.size(); j++)
-			map_sized_textures[i].createMaskFromColor(sf::Color(sf::Uint8(255), sf::Uint8(255), sf::Uint8(j), sf::Uint8(255)));
+		for (std::size_t j = 0; j < blocktextures.size(); j++)
+			temp.createMaskFromColor(sf::Color(sf::Uint8(255), sf::Uint8(255), sf::Uint8(j), sf::Uint8(255)));
 
 		//Copy temp to Map image
-		image.copy(map_sized_textures[i], 0, 0, sf::IntRect(0, 0, block_image.getSize().x, block_image.getSize().y), true);
+		image.copy(temp, 0, 0, sf::IntRect(0, 0, block_image.getSize().x, block_image.getSize().y), true);
 	}
 
 	//Load image to texture

@@ -409,17 +409,20 @@ void Editor::initMap()
 	size.y = 0;
 
 	std::string size_x = "", size_y = "";
-	while (size.x < 3000 || size.y < 3000)
+	while (size.x < 12 || size.y < 12)
 	{
 		size_x = "";
 		size_y = "";
 		while (size_x == "")
-			size_x = openTextbox("Please enter map size X", BoxTypes::Number);
+			size_x = openTextbox("Please enter map size X (as 256px blocks, min 12)", BoxTypes::Number);
 		while (size_y == "")
-			size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
+			size_y = openTextbox("Please enter map size Y (as 256px blocks, min 12)", BoxTypes::Number);
 		size.x = std::stoi(size_x);
 		size.y = std::stoi(size_y);
 	}
+
+	size.x *= 256;
+	size.y *= 256;
 
 	//Ask for base block
 	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
@@ -428,13 +431,15 @@ void Editor::initMap()
 	std::transform(base.begin(), base.end(), base.begin(), ::tolower);
 
 	//Specify base block type
-	Config::BlockType base_block_type = Config::BlockType::None;
+	Config::BlockType base_block_type = Config::BlockType::Ground;
 
 	//If we received a desired BlockTypelai
 	if (Config::StringToBlockTypeMap.find(base) != Config::StringToBlockTypeMap.end())
 	{
 		base_block_type = Config::StringToBlockTypeMap.find(base)->second;
 	}
+
+	map.base_block = base_block_type;
 
 	//Create an image of the map
 	//Insert base blocks to fill map
