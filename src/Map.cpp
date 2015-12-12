@@ -129,8 +129,8 @@ void Map::createThumbnail(const std::string &filename, const std::map<Config::Bl
 sf::Vector2f Map::getStartPosition(const int player_number)
 {
 	sf::Vector2f location;
-	location.x = block_image.getSize().x / 2;
-	location.y = block_image.getSize().y / 2 - 255 + (player_number + 1) * 102;
+	location.x = float(block_image.getSize().x / 2);
+	location.y = float(block_image.getSize().y / 2 - 255 + (player_number + 1) * 102);
 	return location;
 }
 

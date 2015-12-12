@@ -243,7 +243,7 @@ void Editor::runEditor()
 				case sf::Keyboard::Num7:
 				case sf::Keyboard::Num8:
 				case sf::Keyboard::Num9:
-					if ((event.key.code - 26) < int(blocktextures->size()))
+					if ((event.key.code - 26) < int(blocktextures->size() - 1))
 					{
 						block_to_draw = static_cast<Config::BlockType>(event.key.code - 26);
 					}
@@ -266,7 +266,7 @@ void Editor::runEditor()
 					if (event.mouseWheelScroll.delta > 0)
 					{
 						//Go first
-						if ((static_cast<int>(block_to_draw) + 1) == (blocktextures->size()))
+						if ((static_cast<int>(block_to_draw) + 1) == (blocktextures->size() - 1))
 						{
 							block_to_draw = static_cast<Config::BlockType>(1);
 						}
@@ -280,7 +280,7 @@ void Editor::runEditor()
 						//Go last
 						if ((static_cast<int>(block_to_draw) - 1) == 0)
 						{
-							block_to_draw = static_cast<Config::BlockType>(blocktextures->size() - 1);
+							block_to_draw = static_cast<Config::BlockType>(blocktextures->size() - 2);
 						}
 						else
 							//Go down one
@@ -420,35 +420,9 @@ void Editor::initMap()
 		size.x = std::stoi(size_x);
 		size.y = std::stoi(size_y);
 	}
-	/*
-	while (size_x == "")
-	size_x = openTextbox("Please enter map size X", BoxTypes::Number);
-	while (size_y == "")
-	size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
 
-	size.x = std::stoi(size_x);
-	size.y = std::stoi(size_y);
-	*/
-	/*
-	while (std::stoi(size_x) < 3000)
-	{
-	while (size_x == "")
-	size_x = openTextbox("Please enter map size X", BoxTypes::Number);
-	}
-	while (std::stoi(size_y) < 3000)
-	{
-	while (size_y == "")
-	size_y = openTextbox("Please enter map size Y", BoxTypes::Number);
-	}
-	*/
-
-	//size.x = 4000;
-	//size.y = 4000;
-
+	//Ask for ground block
 	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
-
-	//DEBUG BASE
-	//std::string base = "sand";
 
 	//Change inputted string to lowercase
 	std::transform(base.begin(), base.end(), base.begin(), ::tolower);
@@ -596,16 +570,18 @@ void Editor::createBlockUI(const std::vector<const sf::Image*> images, sf::Image
 	if (images.empty())
 		return;
 
+	int imageSize = images.size() - 1;
+
 	//Create ui_image to be big enough
-	ui_image->create(images[0]->getSize().x * images.size() + 5 * (images.size() + 1), images[0]->getSize().y + 10, sf::Color(sf::Uint8(63), sf::Uint8(63), sf::Uint8(63)));
+	ui_image->create(images[0]->getSize().x * imageSize + 5 * (imageSize + 1), images[0]->getSize().y + 10, sf::Color(sf::Uint8(63), sf::Uint8(63), sf::Uint8(63)));
 	sf::Image temp;
-	temp.create(images[0]->getSize().x * images.size() + 5 * (images.size() + 1), images[0]->getSize().y + 10, sf::Color(sf::Uint8(128), sf::Uint8(128), sf::Uint8(128)));
+	temp.create(images[0]->getSize().x * imageSize + 5 * (imageSize + 1), images[0]->getSize().y + 10, sf::Color(sf::Uint8(128), sf::Uint8(128), sf::Uint8(128)));
 	ui_image->copy(temp, 2, 2, sf::IntRect(0, 0,
-		images[0]->getSize().x * images.size() + 5 * (images.size() + 1) - 4,
+		images[0]->getSize().x * imageSize + 5 * (imageSize + 1) - 4,
 		images[0]->getSize().y + 6));
 
 	//Copy images to ui
-	for (std::size_t i = 0; i < images.size(); i++)
+	for (int i = 0; i < imageSize; i++)
 	{
 		ui_image->copy(*images[i], 5 * (i + 1) + i * images[0]->getSize().x, 5, sf::IntRect(0, 0, images[0]->getSize().x, images[0]->getSize().y));
 	}
