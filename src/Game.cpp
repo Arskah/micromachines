@@ -96,7 +96,7 @@ void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config
 	}
 	for (size_t i = 0; i < vehicles.size(); i++)
 	{
-		players.emplace_back(playerdata[i].first, &vehicles[i]);
+		players.emplace_back(playerdata[i].first.first, &vehicles[i], playerdata[i].second);
 		//Set to correct starting position on the map
 		vehicles[i].setPosition(map.getStartPosition(i));
 		//Rotate to face East / Right aka racing direction -- Can be subject to change if wanted
