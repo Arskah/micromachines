@@ -421,7 +421,7 @@ void Editor::initMap()
 		size.y = std::stoi(size_y);
 	}
 
-	//Ask for ground block
+	//Ask for base block
 	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
 
 	//Change inputted string to lowercase
