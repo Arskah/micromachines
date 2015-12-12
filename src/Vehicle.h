@@ -28,6 +28,12 @@ public:
 	Projectile * getWeapon();
 	float getWeapontimer();
 	void setWeapontimer(float dt);
+	
+	bool getPenalty();
+	void setPenalty(bool penalty);
+	float getPenaltytimer();
+	void setPenaltytimer(float dt);
+	void resetPenaltytimer();
 
 private:
 	float acceleration;
@@ -35,6 +41,7 @@ private:
 	float turnrate;
 	float weapontimer;
 	float braketimer = 0.f;
+	bool penalty = false;
 	float penaltytimer = 0.f;
 	Projectile weapon;
 };

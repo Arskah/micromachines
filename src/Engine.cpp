@@ -12,10 +12,14 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 	{
 		it->slow(Engine::getFriction(&(*it), map), dt);
 		it->setWeapontimer(dt);
+		if (it->getPenalty())
+			it->setPenaltytimer(dt);
+		if (it->getPenaltytimer() >= 0.5f)
+			it->resetPenaltytimer();
 		Engine::moveVehicle(&(*it));
 	}
 
-	Engine::checkCollisions(vehicles, projectiles, map, resourcemanager);
+	Engine::checkCollisions(vehicles, projectiles, map, resourcemanager, dt);
 
 	//TODO: projectiles
 	/*
@@ -95,7 +99,7 @@ void Engine::moveProjectile(Vehicle& projectile)
 }
 */
 
-void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, ResourceManager * resourcemanager)
+void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, ResourceManager * resourcemanager, float dt)
 {
 	//Checks Vehicle - Vehicle collisions and moves them apart
 	//Loop all vehicles through
@@ -169,6 +173,8 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 						vehicle->accelerate(-(vehicle->getSpeed()/abs(vehicle->getSpeed()))*3.f);
 						resourcemanager->playSound("mine");
 						break;
+					case Config::ObjectType::Oilspill:
+						vehicle->setPenalty(true); //This penalty setting will prevent turning for a set time
 					default:
 						break;
 					}
