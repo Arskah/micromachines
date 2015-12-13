@@ -88,7 +88,7 @@ void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config
 void Game::initProjectiles()
 {
 	srand((unsigned int) time(NULL));
-	int amount = rand() % 20 + 5; //The amount of objects to be generated
+	int amount = rand() % 10 + 5; //The amount of objects to be generated
 	int count = 0; //The counter
 
 	while (count < amount)
