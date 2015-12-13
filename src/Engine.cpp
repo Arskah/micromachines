@@ -243,12 +243,17 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				sf::Vector2f movement = t.transformPoint(heading); // This vector now points opposite to the car's heading.
 
 				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall).
-				if (vehicle->getSpeed() >= 1.f)
+				if (abs(vehicle->getSpeed()) >= 1.f)
 					resourcemanager->playSound("collision");
 
-				// Bumping the vehicle away from the rockwall and reversing it's speed.
-				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 20.f);
-				vehicle->accelerate(- vehicle->getSpeed() / 3.5f);
+				if (vehicle->getSpeed() == 0.f)
+				{
+					break;
+				}
+
+				// Bumping the vehicle away from the rockwall.
+				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 30.f);
+				vehicle->setSpeed(vehicle->getSpeed() * 0.3f);
 			}
 		}
 	}
