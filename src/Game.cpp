@@ -145,6 +145,8 @@ void Game::run(bool &loading)
 			case sf::Event::Closed:
 				window.close();
 				break;
+			default:
+				break;
 			}
 		}
 

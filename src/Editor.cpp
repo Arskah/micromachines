@@ -264,6 +264,8 @@ void Editor::runEditor()
 						block_to_draw = static_cast<Config::BlockType>(event.key.code - 26);
 					}
 					break;
+				default:
+					break;
 				}
 				break;
 				//Move view center to current mouse position by releasing scroll wheel on wanted position
@@ -305,6 +307,8 @@ void Editor::runEditor()
 					//Restart timer
 					scroll_timer.restart();
 				}
+				break;
+			default:
 				break;
 			}
 		}
@@ -575,6 +579,8 @@ std::string Editor::openTextbox(const std::string &box_name, const BoxTypes box_
 						user_string.append(std::string(1, static_cast<char>(event.text.unicode)));
 					break;
 				}
+			default:
+				break;
 			}
 		}
 
