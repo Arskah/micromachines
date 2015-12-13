@@ -196,7 +196,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 						// The mine will launch the vehicle backwards with a slight random variation in the angle.
 						srand((unsigned int) time(NULL));
 						vehicle->rotate((float) (rand() % 60 - 30));
-						vehicle->accelerate(-(vehicle->getSpeed() / abs(vehicle->getSpeed()))*5.f);
+						vehicle->accelerate(-(vehicle->getSpeed() / std::abs(vehicle->getSpeed()))*5.f);
 						resourcemanager->playSound("mine");
 
 						// Creating the explosion object to be displayed briefly.
@@ -244,7 +244,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				sf::Vector2f movement = t.transformPoint(heading); // This vector now points opposite to the car's heading.
 
 				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall).
-				if (abs(vehicle->getSpeed()) >= 1.f)
+				if (std::abs(vehicle->getSpeed()) >= 1.f)
 					resourcemanager->playSound("collision");
 
 				if (vehicle->getSpeed() == 0.f)
@@ -253,7 +253,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				}
 
 				// Bumping the vehicle away from the rockwall.
-				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 30.f);
+				vehicle->move(movement * vehicle->getSpeed()/std::abs(vehicle->getSpeed()) * 30.f);
 				vehicle->setSpeed(vehicle->getSpeed() * 0.3f);
 			}
 		}
