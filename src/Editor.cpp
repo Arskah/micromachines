@@ -420,27 +420,27 @@ void Editor::initEditor()
 
 void Editor::initMap()
 {
+	//Init map
 	map = Map();
 
+	//Init sizes to ask
 	sf::Vector2u size;
 	size.x = 0;
 	size.y = 0;
 
-	std::string size_x = "", size_y = "";
-	while (size.x < 12 || size.y < 12)
+	//Ask map size from user
+	std::string size_x = "";
+	while (size.x < 12)
 	{
 		size_x = "";
-		size_y = "";
 		while (size_x == "")
-			size_x = openTextbox("Please enter map size X (as 256px blocks, min 12)", BoxTypes::Number);
-		while (size_y == "")
-			size_y = openTextbox("Please enter map size Y (as 256px blocks, min 12)", BoxTypes::Number);
+			size_x = openTextbox("Please enter map size (min 12, max 30)", BoxTypes::Number);
 		size.x = std::stoi(size_x);
-		size.y = std::stoi(size_y);
 	}
 
+	//Maps are square, so copy y-value from x
 	size.x *= 256;
-	size.y *= 256;
+	size.y = size.x;
 
 	//Give map size
 	map.size = size;
@@ -448,6 +448,8 @@ void Editor::initMap()
 	//Ask for base block
 	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
 
+	//Show loading screen while building map
+	//Editor will refresh screen when running
 	loadingScreen(window);
 
 	//Change inputted string to lowercase

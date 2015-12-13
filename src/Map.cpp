@@ -201,6 +201,7 @@ sf::Sprite * Map::getDrawable()
 
 void Map::drawMap(sf::RenderWindow & window)
 {
+	//Draw all pieces of map and background 1-by-1
 	//Draw map
 	for (std::size_t i = 0; i < drawables.size(); i++)
 	{
@@ -220,9 +221,6 @@ void Map::createThumbnail(const std::string &filename, const std::map<Config::Bl
 	if (!block_image.loadFromFile(filename))
 		return;
 
-	//Get map size from block_image
-	size = block_image.getSize();
-
 	//Make temp smaller image
 	sf::Image thumbnail_block_image;
 	thumbnail_block_image.create(100, 100, sf::Color::Red);
@@ -230,9 +228,9 @@ void Map::createThumbnail(const std::string &filename, const std::map<Config::Bl
 	//Copy certain spots with scaling to 100x100 to the temp image
 	std::size_t count_x = 0, count_y = 0;
 
-	for (float x = 0; x < size.x; x += (size.x / 100.f))
+	for (float x = 0; x < block_image.getSize().x; x += (block_image.getSize().x / 100.f))
 	{
-		for (float y = 0; y < size.y; y += (size.y / 100.f))
+		for (float y = 0; y < block_image.getSize().y; y += (block_image.getSize().y / 100.f))
 		{
 			thumbnail_block_image.copy(block_image, count_x, count_y, sf::IntRect(int(x), int(y), 1, 1));
 			count_y++;
@@ -247,15 +245,14 @@ void Map::createThumbnail(const std::string &filename, const std::map<Config::Bl
 	//Create drawable image from current small block image
 
 	//Empty old image
-	image.create(size.x, size.y);
+	image.create(block_image.getSize().x, block_image.getSize().y);
 	//Copy new one
 	//Loop over positions and copy pixel-by-pixel the image
-	for (std::size_t x = 0; x < size.x; x++)
+	for (std::size_t x = 0; x < block_image.getSize().x; x++)
 	{
-		for (std::size_t y = 0; y < size.y; y++)
+		for (std::size_t y = 0; y < block_image.getSize().y; y++)
 		{
-			image.copy(blocktextures.find(static_cast<Config::BlockType>(block_image.getPixel(x, y).toInteger() >> 8))->second, x, y,
-				sf::IntRect(x % blocktextures.find(Config::BlockType::None)->second.getSize().x, y % blocktextures.find(Config::BlockType::None)->second.getSize().y, 1, 1));
+			image.setPixel(x, y, Config::BlockToColorMap.find(static_cast<Config::BlockType>((block_image.getPixel(x, y).toInteger() >> 8) & 255))->second);
 		}
 	}
 
