@@ -7,6 +7,7 @@ Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vec
 	initMap(mapdata);
 	initPlayers(playerdata);
 	initProjectiles();
+	this->MaxLaps = 5;
 }
 
 void Game::initVehicle(Config::ObjectType type)
@@ -127,6 +128,11 @@ void Game::run(bool &loading)
 	gametime.setFont(font);
 	gametime.setStyle(sf::Text::Bold);
 	gametime.setScale(0.7f, 0.7f);
+
+	sf::Text lapText;
+	lapText.setFont(font);
+	lapText.setStyle(sf::Text::Bold);
+	lapText.setScale(0.7f, 0.7f);
 
 	// Save human players in a vector for input handling
 	std::vector<Player*> humanPlayers;
@@ -300,13 +306,23 @@ void Game::run(bool &loading)
 				}
 			}
 
+			// Draw lap count
+			int lapCount = 0;
+			for (auto it : vehicles)
+			{
+				if (lapCount < it.getLaps())
+					lapCount = it.getLaps();
+			}
+			std::string lap = "LAPS:" + std::to_string(lapCount) + "/" + std::to_string(MaxLaps);
+			lapText.setString(lap);
+
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);
 			gametime.setString(time.substr(0, time.size()-4));
 
 			//Exit the loading creen
 			loading = false;
 			// The engine draws the game state here
-			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, &humanPlayers);
+			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
 			userinput.clear();
 		}
 	}

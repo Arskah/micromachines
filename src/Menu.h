@@ -40,7 +40,7 @@ public:
 	void loadContent();
 	void createButtons();
 	std::string checkName(button &it_button);
-	std::string Menu::checkMap(button it_button);
+	std::string checkMap(button it_button);
 
 	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> &playerdata, std::string &mapdata, sf::Music &music, bool& start_editor);
 	void draw(sf::RenderWindow& window);

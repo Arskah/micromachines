@@ -2,7 +2,7 @@
 #include "Engine.h"
 
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
-	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime, std::vector<Player*>* humanPlayers)
+	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime, sf::Text lapCount, std::vector<Player*>* humanPlayers)
 {
 	for (auto it : userinput)
 	{
@@ -12,8 +12,9 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		
 		if (!(player->getHuman()))
 		{
-			std::pair<Config::InputType, Config::InputType> AI_input_pair;
-			AI_input_pair = AI::calculateAIinput(player, vehicles, projectiles, map);
+			// AI bypassed
+			std::pair<Config::InputType, Config::InputType> AI_input_pair(Config::InputType::None, Config::InputType::None);
+			//AI_input_pair = AI::calculateAIinput(player, vehicles, projectiles, map);
 			Engine::handleInput(player, AI_input_pair.first, dt, projectiles, resourcemanager);
 			it.second = AI_input_pair.second;
 		}
@@ -54,9 +55,10 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Engine::calculatePosProjectile(it);
 	}
 	*/
-
+	Engine::updateLap(vehicles, map);
 	/* Call function to handle all drawing */
-	Engine::draw(window, vehicles, projectiles, map, gametime, humanPlayers);
+	Engine::draw(window, vehicles, projectiles, map, gametime, lapCount, humanPlayers);
+
 }
 
 /* Handles userinput before moving the vehicle*/
@@ -195,7 +197,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 						// The mine will launch the vehicle backwards with a slight random variation in the angle.
 						srand((unsigned int) time(NULL));
 						vehicle->rotate((float) (rand() % 60 - 30));
-						vehicle->accelerate(-(vehicle->getSpeed() / abs(vehicle->getSpeed()))*5.f);
+						vehicle->accelerate(-(vehicle->getSpeed() / std::abs(vehicle->getSpeed()))*5.f);
 						resourcemanager->playSound("mine");
 
 						// Creating the explosion object to be displayed briefly.
@@ -243,7 +245,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				sf::Vector2f movement = t.transformPoint(heading); // This vector now points opposite to the car's heading.
 
 				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall).
-				if (abs(vehicle->getSpeed()) >= 1.f)
+				if (std::abs(vehicle->getSpeed()) >= 1.f)
 					resourcemanager->playSound("collision");
 
 				if (vehicle->getSpeed() == 0.f)
@@ -252,7 +254,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				}
 
 				// Bumping the vehicle away from the rockwall.
-				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 30.f);
+				vehicle->move(movement * vehicle->getSpeed()/std::abs(vehicle->getSpeed()) * 30.f);
 				vehicle->setSpeed(vehicle->getSpeed() * 0.3f);
 			}
 		}
@@ -312,7 +314,7 @@ void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime, std::vector<Player*>* humanPlayers)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime, sf::Text lapCount, std::vector<Player*>* humanPlayers)
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
@@ -365,9 +367,39 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 			sf::Vector2f worldpos = window.mapPixelToCoords(pixelpos);
 			gametime.setPosition(worldpos);
 			window.draw(gametime);
+
+			lapCount.setRotation(humanPlayers->at(0)->getVehicle()->getRotation() - 180.f);
+			pixelpos = sf::Vector2i(0, 20);
+			worldpos = window.mapPixelToCoords(pixelpos);
+			lapCount.setPosition(worldpos);
+			window.draw(lapCount);
 		}
+
 	}
 
 
 	window.display();							// Update drawings
+}
+
+void Engine::updateLap(std::vector<Vehicle>* vehicles, Map & map)
+{
+	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
+	{
+		sf::Vector2f pos = it->getPosition();
+		sf::Vector2f lastTickPos = it->getLastTickPos();
+		std::pair<std::size_t, std::pair<std::size_t, std::size_t>> finishline = map.getFinishline();
+		if ( finishline.second.first < lastTickPos.y && lastTickPos.y < finishline.second.second && finishline.second.first < pos.y && pos.y < finishline.second.second)
+		{
+
+			if ((lastTickPos.x > finishline.first && pos.x < finishline.first))
+			{
+				it->decreaselaps();
+			}
+			else if (lastTickPos.x < finishline.first && pos.x > finishline.first)
+			{
+				it->increaselaps();
+			}
+		}
+		it->updateLastTickPos(pos);
+	}
 }

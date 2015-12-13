@@ -43,6 +43,11 @@ public:
 	void setPenaltytimer(float dt);
 	//Sets the penaltytimer to 0 and the state to false.
 	void resetPenaltytimer();
+	void increaselaps();
+	void decreaselaps();
+	int getLaps() const;
+	void updateLastTickPos(sf::Vector2f);
+	sf::Vector2f getLastTickPos() const;
 
 private:
 	float acceleration;
@@ -53,4 +58,6 @@ private:
 	bool penalty = false;
 	float penaltytimer = 0.f;
 	Projectile weapon;
+	int laps = 0;
+	sf::Vector2f lastTickPos;
 };
