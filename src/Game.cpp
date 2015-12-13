@@ -7,7 +7,7 @@ Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vec
 	initMap(mapdata);
 	initPlayers(playerdata);
 	initProjectiles();
-	this->MaxLaps = 5;
+	this->MaxLaps = 1;
 }
 
 void Game::initVehicle(Config::ObjectType type)
@@ -308,11 +308,35 @@ void Game::run(bool &loading)
 
 			// Draw lap count
 			int lapCount = 0;
-			for (auto it : vehicles)
+			for (auto it : players)
 			{
-				if (lapCount < it.getLaps())
-					lapCount = it.getLaps();
+
+				if (lapCount < it.getVehicle()->getLaps())
+					lapCount = it.getVehicle()->getLaps();
+				if (lapCount == MaxLaps)
+				{
+					window.setView(window.getDefaultView());
+					sf::Text winner;
+					std::string name = it.getName() + " won!";
+					winner.setFont(font);
+					winner.setString(name);
+					winner.setScale(3, 3);
+					winner.setStyle(sf::Text::Bold);
+					winner.setPosition(window.getSize().x/2 - winner.getGlobalBounds().width/2, window.getSize().y/4);
+					resourcemanager->playSound("win");
+					while (window.isOpen())
+					{
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+						{
+							window.close();
+						}
+						window.clear();
+						window.draw(winner);
+						window.display();
+					}
+				}
 			}
+
 			std::string lap = "LAPS:" + std::to_string(lapCount) + "/" + std::to_string(MaxLaps);
 			lapText.setString(lap);
 
