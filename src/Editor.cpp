@@ -66,11 +66,6 @@ static void loadingScreen(sf::RenderWindow & window)
 
 void Editor::runEditor()
 {
-	//Go 1080p
-	resolution.x = 1920;
-	resolution.y = 1080;
-	window.create(sf::VideoMode(unsigned int(resolution.x), unsigned int(resolution.y)), "Level Editor");
-
 	initEditor();
 
 	//Set editor_view to scale the whole map at once
@@ -168,7 +163,6 @@ void Editor::runEditor()
 				case sf::Keyboard::Escape:
 					//Return window back to original
 					window.setView(window.getDefaultView());
-					window.create(sf::VideoMode(1280, 720), "Micro Machines");
 					return;
 					break;
 					//Show help
@@ -385,7 +379,6 @@ void Editor::runEditor()
 	}
 	//If we somehow get exited here, return window to normal
 	window.setView(window.getDefaultView());
-	window.create(sf::VideoMode(1280, 720), "Micro Machines");
 }
 
 void Editor::initEditor()
