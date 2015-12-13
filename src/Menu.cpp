@@ -7,15 +7,9 @@
 /* BASE CLASS MAIN MENU*/
 Menu::Menu(sf::RenderWindow& window, ResourceManager* resourcemanager) : window(window), resourcemanager(resourcemanager)
 {
-	//if (!font.loadFromFile("arial.ttf"))
-	//{
-	//	// handle error
-	//}
+	// Get window size
 	width = window.getSize().x;
 	height = window.getSize().y;
-//	this->draw(window);
-//	this->runMenu(window);
-
 }
 void Menu::loadContent() {
 	//Background
