@@ -321,6 +321,7 @@ void Game::run(sf::Music &music)
 				if (lapCount == MaxLaps)
 				{
 					window.setView(window.getDefaultView());
+
 					sf::Text winner;
 					std::string name = it.getName() + " won!";
 					winner.setFont(font);
@@ -328,15 +329,23 @@ void Game::run(sf::Music &music)
 					winner.setScale(3, 3);
 					winner.setStyle(sf::Text::Bold);
 					winner.setPosition(window.getSize().x/2 - winner.getGlobalBounds().width/2, window.getSize().y/4);
+
+					sf::Text exit;
+					exit.setFont(font);
+					exit.setString("Press escape to return to menu.\n        Thank you for playing!");
+					exit.setScale(2, 2);
+					exit.setPosition(window.getSize().x / 2 - exit.getGlobalBounds().width / 2, window.getSize().y / 2);
+
 					resourcemanager->playSound("win");
 					while (window.isOpen())
 					{
 						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 						{
-							window.close();
+							return;
 						}
 						window.clear();
 						window.draw(winner);
+						window.draw(exit);
 						window.display();
 					}
 				}
