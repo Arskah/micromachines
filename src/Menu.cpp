@@ -51,13 +51,21 @@ void Menu::loadContent() {
 	spri_start.setTexture(tex_start_N);
 
 	//load exit 
-	tex_exit_N.loadFromFile("src/resources/menu/N_exit.png");
-	tex_exit_O.loadFromFile("src/resources/menu/O_exit.png");
-	tex_exit_P.loadFromFile("src/resources/menu/P_exit.png");
+	tex_exit_N.loadFromFile("src/resources/menu/N_quit.png");
+	tex_exit_O.loadFromFile("src/resources/menu/O_quit.png");
+	tex_exit_P.loadFromFile("src/resources/menu/P_quit.png");
 
 	spri_exit.setTexture(tex_exit_N);
 
 	//load maps for develop use
+	//Map mapperino;
+	//mapperino.createThumbnail("src/resources/map1_render");
+	//sf::Sprite * map_temp = mapperino.getDrawable();
+	//sf::Image img_temp;
+	//img_temp.
+	//	= map_temp->getTexture;
+	//tex_map1.update(img_temp);
+
     tex_map1.loadFromFile("src/resources/menu/map1.png");
 	tex_map2.loadFromFile("src/resources/menu/map2.png");
 	tex_map3.loadFromFile("src/resources/menu/map3.png");
