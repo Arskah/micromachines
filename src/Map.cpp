@@ -4,6 +4,10 @@ Map::Map()
 {
 	size = sf::Vector2u(0, 0);
 	base_block = Config::BlockType::Ground;
+	finishLine.first.first = 128;
+	finishLine.first.second = 255;
+	finishLine.second.first = 128;
+	finishLine.second.second = -255;
 }
 
 bool Map::saveToImage(const std::string & filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
@@ -180,6 +184,7 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	//Split created image into 256 x 256px pieces for rendering in Engine
 	splitImages(blocktextures);
 
+
 	//Went successfully
 	return true;
 }
@@ -199,6 +204,20 @@ sf::Sprite * Map::getDrawable()
 	return &(drawable);
 }
 
+
+std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_t>> Map::getFinishline() const
+{
+	 return finishLine;
+}
+
+Config::BlockType Map::getTrackMaterial()
+{
+	sf::Vector2i center(getDrawable()->getLocalBounds().width / 2, getDrawable()->getLocalBounds().height / 2);
+	Block block_at_center = getBlock(center.x, center.y);
+	Block track_block = getBlock(center.x + 128, center.y);
+	return track_block.getType();
+}
+
 void Map::drawMap(sf::RenderWindow & window)
 {
 	//Draw all pieces of map and background 1-by-1
@@ -214,6 +233,7 @@ void Map::drawMap(sf::RenderWindow & window)
 		window.draw(background_sprites[i]);
 	}
 }
+
 
 void Map::createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
 {

@@ -5,6 +5,7 @@
 #include "Editor.h"
 #include "Game.h"
 #include "Menu.h"
+#include <tuple>
 
 int main()
 {
@@ -12,11 +13,11 @@ int main()
 
 	bool menudata;
 	bool loading;
-	std::string name = "Playah";
-	std::string name2 = "Kalle";
+	//std::string name = "Playah";
+	//std::string name2 = "Kalle";
 	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
 	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
-	std::vector<std::pair<const std::string, Config::ObjectType>> playerdata;
+	std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata;			// ((normal playerdata) isHumanPlayer?)
 	//playerdata.push_back(pair);
 	//playerdata.push_back(pair2);
 	std::string mapdata; // = "src/resources/mapsavetest.png";
@@ -50,7 +51,7 @@ int main()
 	sf::Sprite sprite;
 	sf::Texture tex_1;
 	tex_1.loadFromFile("src/resources/menu/loading3.png");
-	sprite.setPosition((window.getSize().x / 2 - 50), window.getSize().y / 2);
+	sprite.setPosition(((float) window.getSize().x / 2 - 50), (float) window.getSize().y / 2);
 	//draw loading screen
 	sprite.setTexture(tex_1, true);
 	window.draw(sprite);

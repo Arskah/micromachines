@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include "Block.h"
 #include "Config.h"
 
@@ -30,6 +31,10 @@ public:
 
 	//Returns sprite of the Map that is drawable
 	sf::Sprite * getDrawable();
+
+	std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_t>> getFinishline() const;
+
+	Config::BlockType getTrackMaterial();
 
 	//Draws map to window
 	void drawMap(sf::RenderWindow &window);
@@ -61,6 +66,9 @@ private:
 	sf::Texture texture;
 	//Texture loaded to this sprite
 	sf::Sprite drawable;
+
+	//Finish line blocks for start and laps
+	std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_t>> finishLine;
 
 	//Map image split into smaller textures
 	std::vector<sf::Texture> textures;

@@ -2,10 +2,25 @@
 #include "Engine.h"
 
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
-	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime)
+	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime, std::vector<Player*>* humanPlayers)
 {
-	/* AI and player movement handling */
-	Engine::handleInput(userinput, dt, projectiles, resourcemanager);
+	for (auto it : userinput)
+	{
+		Player* player = it.first;
+
+		/* Call AI calculations. */
+		
+		if (!(player->getHuman()))
+		{
+			std::pair<Config::InputType, Config::InputType> AI_input_pair;
+			AI_input_pair = AI::calculateAIinput(player, vehicles, projectiles, map);
+			Engine::handleInput(player, AI_input_pair.first, dt, projectiles, resourcemanager);
+			it.second = AI_input_pair.second;
+		}
+		
+		/* AI and player movement handling */
+		Engine::handleInput(player, it.second, dt, projectiles, resourcemanager);
+	}
 
 	/* Move vehicles. Players and AI move depends on input handling */
 	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
@@ -30,40 +45,38 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 	*/
 
 	/* Call function to handle all drawing */
-	Engine::draw(window, vehicles, projectiles, map, gametime);
+	Engine::draw(window, vehicles, projectiles, map, gametime, humanPlayers);
 }
 
 /* Handles userinput before moving the vehicle*/
-void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, std::vector<Projectile> * projectiles, ResourceManager * resourcemanager)
+void Engine::handleInput(Player* player, Config::InputType input, float dt, std::vector<Projectile> * projectiles, ResourceManager * resourcemanager)
 {
-	for (auto it : userinput)
+	/* This switch handles refreshing of movement for vehicle class attributes. Draw handles drawing on screen based on new position of vehicles */
+	switch (input)
 	{
-		Player* player = it.first;
-		Config::InputType input = it.second;
-		switch (input)
+	case Config::InputType::TurnLeft:
+		player->getVehicle()->turn(true, dt);
+		break;
+	case Config::InputType::TurnRight:
+		player->getVehicle()->turn(false, dt);
+		break;
+	case Config::InputType::Accelerate:
+		player->getVehicle()->accelerate(dt);
+		break;
+	case Config::InputType::Brake:
+		player->getVehicle()->brake(dt);
+		break;
+	case Config::InputType::Shoot:
+		if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
 		{
-		case Config::InputType::TurnLeft:
-			player->getVehicle()->turn(true, dt);
-			break;
-		case Config::InputType::TurnRight:
-			player->getVehicle()->turn(false, dt);
-			break;
-		case Config::InputType::Accelerate:
-			player->getVehicle()->accelerate(dt);
-			break;
-		case Config::InputType::Brake:
-			player->getVehicle()->brake(dt);
-			break;
-		case Config::InputType::Shoot:
-			if (player->getVehicle()->getWeapontimer() >= player->getVehicle()->getWeapon()->getCooldown())
-			{
-				projectiles->emplace_back(player->getVehicle()->shoot());
-				resourcemanager->playSound("shoot");
-			}
-			break;
-		default:
-			break;
+			projectiles->emplace_back(player->getVehicle()->shoot());
+			resourcemanager->playSound("shoot");
 		}
+		break;
+	case Config::InputType::None:
+		break;
+	default:
+		break;
 	}
 }
 //TODO
@@ -284,27 +297,45 @@ void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime, std::vector<Player*>* humanPlayers)
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
 
 
-	// This is a ghetto version of the centered view. TODO: implement check for AI vs Human player.
-	for (size_t i = 0; i < vehicles->size(); i++)
+	// This is a ghetto version of the centered view.
+	for (int i = 0; i < humanPlayers->size(); i++)
 	{
 		sf::View view;
-		view.setCenter(sf::Vector2f(vehicles->at(i).getPosition().x, vehicles->at(i).getPosition().y));
-		if (vehicles->size() == 1)
+		view.setCenter(sf::Vector2f(humanPlayers->at(i)->getVehicle()->getPosition().x, humanPlayers->at(i)->getVehicle()->getPosition().y));
+		if (humanPlayers->size() == 1)			// I think modifiable for 4 players now
 		{
-			view.setSize(float(window.getSize().x), float(window.getSize().y));
-			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+			view.setSize(window.getSize().x, window.getSize().y);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 		}
-		else
+		if (humanPlayers->size() == 2)
 		{
-			view.setSize(float(window.getSize().x / 2), float(window.getSize().y));
-			view.setRotation(vehicles->at(i).getRotation() - 180.f);
+			view.setSize(window.getSize().x /2, window.getSize().y);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		}
+		if (humanPlayers->size() == 3)
+		{
+			view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
+			if (i == 0 || i == 1)
+				view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 0.5f)); // player 1 is on the left, 2 is on the right.
+			else
+				view.setViewport(sf::FloatRect(0.5f * (i-2), 0.5f, 0.5f, 0.5f)); // player 3 is on left down
+		}
+		if (humanPlayers->size() == 4)
+		{
+			view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
+			if (i == 0 || i == 1)
+				view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 0.5f)); // player 1 is on the left, 2 is on the right.
+			else
+				view.setViewport(sf::FloatRect(0.5f * (i - 2), 0.5f, 0.5f, 0.5f)); // player 3 is on left down, player 4 is on the right down
 		}
 		window.setView(view);
 		map.drawMap(window);
@@ -314,7 +345,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 		// Drawing the gametimer to the top-left corner TODO: add standings etc.
 		if (i == 0)
 		{
-			gametime.setRotation(vehicles->at(0).getRotation() - 180.f);
+			gametime.setRotation(humanPlayers->at(0)->getVehicle()->getRotation() - 180.f);
 			sf::Vector2i pixelpos = sf::Vector2i(0,0);
 			sf::Vector2f worldpos = window.mapPixelToCoords(pixelpos);
 			gametime.setPosition(worldpos);
