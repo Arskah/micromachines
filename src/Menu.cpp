@@ -629,11 +629,6 @@ void Menu::draw(sf::RenderWindow& window)
 			window.draw(text);
 		}
 	}
-
-	//window.draw(start.spri);
-	//window.draw(exit.spri);
-
+	//display everything
 	window.display();
-
-
 }

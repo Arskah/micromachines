@@ -14,7 +14,6 @@ int main()
 	bool menudata = false;
 	bool start_game = false;
 	bool start_editor = false;
-	bool pausemenu;
 	bool game_running = true;
 	//std::string name = "Playah";
 	//std::string name2 = "Kalle";
@@ -79,7 +78,7 @@ int main()
 			window.display();
 
 			Game game(window, &resourcemanager, playerdata, mapdata);
-			game.run(start_game);
+			game.run(music);
 		}
 	}
 	return 0;

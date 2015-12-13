@@ -55,11 +55,11 @@ public:
 
 
 private:
-	int player;
-	int state;
-	int max_states;
-	float loc_y;
-	float loc_x;
+	int player = 0;
+	int state = 0;
+	int max_states = 0;
+	float loc_y = 0;
+	float loc_x = 0;
 	int pressed = 0;
 	buttonType type;
 	sf::Sprite sprite;
