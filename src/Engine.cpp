@@ -188,6 +188,9 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					// In case of a Mine, the mine needs to be deleted.
 					if (projectile->getType() == Config::ObjectType::Mine)
 					{
+						if (vehicle->getSpeed() == 0.f)
+							break;
+
 						// The mine will launch the vehicle backwards with a slight random variation in the angle.
 						srand((unsigned int) time(NULL));
 						vehicle->rotate((float) (rand() % 60 - 30));
@@ -203,6 +206,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 						// Removing the mine from projectiles vector and adding the explosion.
 						// The explosion is removed after it has been drawn.
 						projectile = projectiles->erase(projectile);
+						projectiles->shrink_to_fit();
 						projectiles->push_back(explosion);
 						break;
 					}
