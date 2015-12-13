@@ -259,16 +259,16 @@ std::string Menu::checkName(button &it_button)
 		switch (it_button.player)
 		{
 		case 1:
-			name = "Akke";
+			name = "Player1";
 			return name;
 		case 2:
-			name = "Okko";
+			name = "Player2";
 			return name;
 		case 3:
-			name = "Aarni";
+			name = "Player3";
 			return name;
 		case 4:
-			name = "Jan";
+			name = "Player4";
 			return name;
 		}
 	case 1:

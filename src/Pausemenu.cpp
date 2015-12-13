@@ -69,6 +69,7 @@ void PauseMenu::createButtons()
 	continue_game.textures.push_back(tex_continue3);
 	continue_game.spri = spri_exit;
 	continue_game.spri.setPosition(continue_game.loc_x, continue_game.loc_y);
+	continue_game.spri.setTexture(tex_continue1);
 	continue_game.type = buttonType::conti;
 	continue_game.player = 50;
 	buttons.push_back(continue_game);
@@ -86,6 +87,7 @@ void PauseMenu::createButtons()
 	exit_game.textures.push_back(tex_exit3);
 	exit_game.spri = spri_exit;
 	exit_game.spri.setPosition(exit_game.loc_x, exit_game.loc_y);
+	exit_game.spri.setTexture(tex_exit1);
 	exit_game.type = buttonType::exit_pause;
 	exit_game.player = 51;
 	buttons.push_back(exit_game);
@@ -196,7 +198,6 @@ bool PauseMenu::runMenu(sf::RenderWindow& window, sf::Music &music)
 					it_button3->pressed = 0;
 					it_button3->spri.setTexture(it_button3->textures.at(it_button3->state * 3 + 1), true);
 				}
-
 			}
 		}
 		PauseMenu::draw(window);
