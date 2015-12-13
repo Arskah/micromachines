@@ -14,27 +14,26 @@ public:
 	PauseMenu(sf::RenderWindow& window);
 	~PauseMenu() {};
 
-	void loadContent();
 	void createButtons();
 
-	bool runMenu(sf::RenderWindow& window);
+	bool runMenu(sf::RenderWindow& window, bool &pausemenu);
 	void draw(sf::RenderWindow& window);
 
 	int width;
 	int height;
 
 private:
+	int heightDivider = 7;
+
 	sf::Image backgroundImage;
+	sf::Font font;
 
-	//Button continue_game;
-	//Button exit_game;
-	//Button music;
+	Button continue_game;
+	Button exit_game;
+	Button music;
 
-	//std::vector<class Button> buttons;
+	std::vector<class Button> buttons;
 
 	sf::RenderWindow& window;
-
-	//lol
-
 };
 	

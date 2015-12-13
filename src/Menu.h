@@ -54,9 +54,6 @@ public:
 	int height;
 
 private:
-    
-	float offset_x = 100;
-	float offset_y = 100;
 	int amount_players = 4;
 	int heightDivider = 7;
 

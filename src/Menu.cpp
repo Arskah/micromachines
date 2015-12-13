@@ -595,7 +595,6 @@ void Menu::draw(sf::RenderWindow& window)
 {
 	window.clear(sf::Color::Black);
 	sf::Text text;
-	// Can't draw image, need to attch it to a texture of sf::drawable
 	sf::Texture texture;
 	texture.loadFromImage(this->backgroundImage);
 	sf::Sprite sprite;
@@ -631,8 +630,8 @@ void Menu::draw(sf::RenderWindow& window)
 		}
 	}
 
-	window.draw(start.spri);
-	window.draw(exit.spri);
+	//window.draw(start.spri);
+	//window.draw(exit.spri);
 
 	window.display();
 

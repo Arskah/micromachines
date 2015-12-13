@@ -3,12 +3,13 @@
 #include "Button.h"
 #include <stdlib.h>
 
-Button::Button(std::string name, int state, float loc_x, float loc_y)
+Button::Button(){}
+void Button::createButton(std::string name1, int state1, float loc_x1, float loc_y1)
 {
-	name = name;
-	state = state;
-	loc_x = loc_x;
-	loc_y = loc_y;
+	name = name1;
+	state = state1;
+	loc_x = loc_x1;
+	loc_y = loc_y1;
 }
 void Button::addState(sf::Texture texture1, sf::Texture texture2, sf::Texture texture3)
 {
@@ -21,29 +22,49 @@ void Button::addState(sf::Texture texture1, sf::Texture texture2, sf::Texture te
 	textures_temp.pop_back();
 	max_states++;
 }
-bool Button::raiseState() 
+void Button::raiseState() 
 {
 	if (state < max_states-1)
 	{
 		state++;
-		return true;
+		textures_temp = textures.at(state);
+		sprite.setTexture(textures_temp.at(0));
 	}
 	else
-		return false;
+	{
+		state = 0;
+		textures_temp = textures.at(state);
+		sprite.setTexture(textures_temp.at(0));
+	}
 }
-bool Button::lowerState()
+void Button::lowerState()
 {
 	if (state != 0)
 	{
 		state--;
-		return true;
+		textures_temp = textures.at(state);
+		sprite.setTexture(textures_temp.at(0));
 	}
 	else
-		return false;
+	{
+		state = max_states - 1;
+		textures_temp = textures.at(state);
+		sprite.setTexture(textures_temp.at(0));
+	}
 }
 void Button::movePosition(int loc_x, int loc_y)
 {
 	sprite.setPosition((float) loc_x, (float) loc_y);
+}
+void Button::mouseOver()
+{
+	textures_temp = textures.at(state);
+	sprite.setTexture(textures_temp.at(1));
+}
+void Button::mouseOut()
+{
+	textures_temp = textures.at(state);
+	sprite.setTexture(textures_temp.at(0));
 }
 int Button::getState()
 {
@@ -54,17 +75,20 @@ sf::Texture Button::getTexture(int mousestate)
 	textures_temp = textures.at(state);
 	return textures_temp.at(mousestate);
 }
-sf::Sprite Button::getSprite(int mousestate)
+sf::Sprite Button::getSprite()
 {
-	textures_temp = textures.at(state);
-	sprite.setTexture(textures_temp.at(mousestate), true);
 	return sprite;
 }
-std::vector<int> Button::getPosition()
+int Button::getPosition_x()
 {
-	std::vector<int> temp;
-	temp.push_back((int) loc_x);
-	temp.push_back((int) loc_y);
-	return temp;
+	return loc_x;
+}
+int Button::getPosition_y()
+{
+	return loc_y;
+}
+std::string Button::getName()
+{
+	return name;
 }
 
