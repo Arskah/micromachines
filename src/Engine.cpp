@@ -12,7 +12,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 	{
 		it->slow(Engine::getFriction(&(*it), map), dt);
 		it->setWeapontimer(dt);
-		if (it->getPenalty())
+		if (it->getPenalty() == true)
 			it->setPenaltytimer(dt);
 		if (it->getPenaltytimer() >= 1.0f)
 			it->resetPenaltytimer();
@@ -71,7 +71,6 @@ void Engine::handleInput(std::vector<std::pair<Player*, Config::InputType>> user
 */
 float Engine::getFriction(Vehicle * vehicle, Map& map)
 {
-	// change the getPosition() to getLocation() once it's properly implemented.
 	sf::Vector2f location = vehicle->getPosition();
 	return map.getBlock(int(location.x), int(location.y)).getFriction();
 }
@@ -155,37 +154,34 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 	//Checks Vehicle - Projectile collisions
 	if (projectiles->size() > 0)
 	{
-		bool found = false;
-		std::vector<Projectile>::iterator projectileiterator;
-		for (auto vehicle = vehicles->begin(); vehicle != vehicles->end(); vehicle++)
+		// Checking all vehicle - projectile combinations.
+		for (auto vehicle = vehicles->begin(); vehicle != vehicles->end();)
 		{
-			for (auto projectile = projectiles->begin(); projectile != projectiles->end(); projectile++)
+			for (auto projectile = projectiles->begin(); projectile != projectiles->end();)
 			{
 				if (Hitbox::checkCollision(&(*vehicle), &(*projectile)))
 				{
-					// This is for later deleting the projectile (if it's Mine at least)
-					projectileiterator = projectile;
-					found = true;
-
-					switch (projectile->getType())
+					// In case of a Mine, the mine needs to be deleted.
+					if (projectile->getType() == Config::ObjectType::Mine)
 					{
-					case Config::ObjectType::Mine:
-						vehicle->accelerate(-(vehicle->getSpeed()/abs(vehicle->getSpeed()))*3.f);
+						// The vehicle is launched backwards.
+						vehicle->accelerate(-(vehicle->getSpeed() / abs(vehicle->getSpeed()))*5.f);
 						resourcemanager->playSound("mine");
+						projectile = projectiles->erase(projectile);
 						break;
-					case Config::ObjectType::Oilspill:
-						vehicle->setPenalty(true); //This penalty setting will prevent turning for a set time
-					default:
+					}
+					if (projectile->getType() == Config::ObjectType::Oilspill)
+					{
+						vehicle->setPenalty(true); // This penalty setting will prevent all controll of the car for a second.
+						++projectile;
 						break;
 					}
 				}
+				else
+					++projectile;
 			}
+			++vehicle;
 		}
-		if (found == true && projectileiterator->getType() == Config::ObjectType::Mine)
-		{
-			projectiles->erase(projectileiterator);
-		}
-			
 	}
 
 
@@ -194,7 +190,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 	{
 		sf::VertexArray hitbox = Hitbox::createHitboxRect(&(*vehicle));
 
-		// Going through the corner points of the hitbox
+		// Going through the corner points of the hitbox.
 		for (size_t i = 0; i < hitbox.getVertexCount(); i++)
 		{	
 			sf::Vector2f position = hitbox[i].position;
@@ -203,14 +199,14 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 				sf::Vector2f heading(0.f, 1.f);
 				sf::Transform t;
 				t.rotate(vehicle->getRotation() - 180);
-				sf::Vector2f movement = t.transformPoint(heading);
+				sf::Vector2f movement = t.transformPoint(heading); // This vector now points opposite to the car's heading.
 
-				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall)
+				// Playing the collision sound (the magic number stops the "machine gun" sound when pressed against a wall).
 				if (vehicle->getSpeed() >= 1.f)
 					resourcemanager->playSound("collision");
 
-				// Bumping the vehicle away from the rockwall and reversing it's speed
-				vehicle->move(movement * vehicle->getSpeed() * 5.f);
+				// Bumping the vehicle away from the rockwall and reversing it's speed.
+				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 5.f);
 				vehicle->accelerate(- vehicle->getSpeed() / 3.5f);
 			}
 		}

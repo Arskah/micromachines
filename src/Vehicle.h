@@ -25,14 +25,23 @@ public:
 	//Decreases the speed based on the friction of the underlying block.
 	void slow(float friction, float dt);
 
+	//Returns the projectile of the vehicle.
 	Projectile * getWeapon();
+	//Returns the time that has passed since the projectile was last launched.
 	float getWeapontimer();
+	//Increments the timer by adding dt to it.
 	void setWeapontimer(float dt);
 	
+	//Returns true/false depending on if the vehicle has driven into an oilspill.
+	//This will prevent turning, accelerating and braking for 1 second.
 	bool getPenalty();
+	//Change the state of the penalty.
 	void setPenalty(bool penalty);
+	//Returns the time the vehicle has been in the penalty state.
 	float getPenaltytimer();
+	//Increments the penalty timer by adding dt to it.
 	void setPenaltytimer(float dt);
+	//Sets the penaltytimer to 0 and the state to false.
 	void resetPenaltytimer();
 
 private:
