@@ -21,6 +21,9 @@ Vehicle::Vehicle(sf::Texture * const texture, const Config::ObjectType type, con
  */
 void Vehicle::accelerate(float dt)
 {
+	if (this->getPenalty())
+		return;
+
 	if (this->getSpeed() < maxspeed)
 	{
 		this->setSpeed(this->getSpeed() + acceleration * dt);
@@ -39,6 +42,10 @@ void Vehicle::accelerate(float dt)
 */
 void Vehicle::brake(float dt)
 {
+	// If the car drove through oil breaking is not allowed
+	if (this->getPenalty())
+		return;
+
 	// Normal braking situation (decreasing speed)
 	if (this->getSpeed() > 0.f)
 	{
@@ -75,7 +82,7 @@ void Vehicle::turn(bool left, float dt)
 	(1.5f - abs(this->getSpeed()) / this->maxspeed) makes it more dificult to steer when the speed gets high
 	turnrate * dt is simply the rate of turning
 	*/
-	if (this->getSpeed() != 0.f)
+	if (this->getSpeed() != 0.f && !this->getPenalty())
 	{
 		if (left)
 		{
@@ -91,6 +98,10 @@ void Vehicle::turn(bool left, float dt)
 
 void Vehicle::slow(float friction, float dt)
 {
+	// Friction is not applied when the car runs over oil
+	if (this->getPenalty())
+		return;
+
 	// Slowing friction while going forward
 	if (this->getSpeed() > 0)
 	{
@@ -140,10 +151,36 @@ Projectile * Vehicle::getWeapon()
 
 float Vehicle::getWeapontimer()
 {
-	return weapontimer;
+	return this->weapontimer;
 }
 
 void Vehicle::setWeapontimer(float dt)
 {
 	this->weapontimer += dt;
+}
+
+bool Vehicle::getPenalty()
+{
+	return this->penalty;
+}
+
+void Vehicle::setPenalty(bool penalty)
+{
+	this->penalty = penalty;
+}
+
+float Vehicle::getPenaltytimer()
+{
+	return this->penaltytimer;
+}
+
+void Vehicle::setPenaltytimer(float dt)
+{
+	this->penaltytimer += dt;
+}
+
+void Vehicle::resetPenaltytimer()
+{
+	this->penaltytimer = 0.f;
+	this->penalty = false;
 }

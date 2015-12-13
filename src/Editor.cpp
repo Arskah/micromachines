@@ -49,13 +49,27 @@ Editor::Editor(sf::RenderWindow & window, const std::map<Config::BlockType, sf::
 	}
 }
 
+static void loadingScreen(sf::RenderWindow & window)
+{
+	sf::Font font;
+	font.loadFromFile("src/resources/arial.ttf");
+	sf::Text text("Loading, please wait.", font, 42);
+	text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
+	sf::View temp = window.getView();
+	window.setView(window.getDefaultView());
+	text.setPosition(window.getView().getCenter());
+	window.clear();
+	window.draw(text);
+	window.display();
+	window.setView(temp);
+}
+
 void Editor::runEditor()
 {
-	//Go nearly fullscreen, pesky window in itself taking some extra space, that's why the - 40px...
-	resolution.x = GetSystemMetrics(SM_CXSCREEN);
-	resolution.y = GetSystemMetrics(SM_CYSCREEN);
-	window.create(sf::VideoMode(unsigned int(resolution.x - 40), unsigned int(resolution.y - 40 * 16.f / 9.f)), "Level Editor");
-	window.setPosition(sf::Vector2i(0, 0));
+	//Go 1080p
+	resolution.x = 1920;
+	resolution.y = 1080;
+	window.create(sf::VideoMode(unsigned int(resolution.x), unsigned int(resolution.y)), "Level Editor");
 
 	initEditor();
 
@@ -181,9 +195,10 @@ void Editor::runEditor()
 					filename = openTextbox("Enter filename to save to");
 					if (filename.size() != 0)
 					{
+						loadingScreen(window);
 						filename.insert(0, "src/resources/");
 						filename.append(".png");
-						map.saveToImage(filename);
+						map.saveToImage(filename, *blocktextures);
 					}
 					break;
 					//Load file
@@ -192,6 +207,7 @@ void Editor::runEditor()
 					filename = openTextbox("Enter filename to load from");
 					if (filename.size() != 0)
 					{
+						loadingScreen(window);
 						filename.insert(0, "src/resources/");
 						filename.append(".png");
 						map.loadFromImage(filename, *blocktextures);
@@ -404,28 +420,37 @@ void Editor::initEditor()
 
 void Editor::initMap()
 {
+	//Init map
+	map = Map();
+
+	//Init sizes to ask
 	sf::Vector2u size;
 	size.x = 0;
 	size.y = 0;
 
-	std::string size_x = "", size_y = "";
-	while (size.x < 12 || size.y < 12)
+	//Ask map size from user
+	std::string size_x = "";
+	while (size.x < 12)
 	{
 		size_x = "";
-		size_y = "";
 		while (size_x == "")
-			size_x = openTextbox("Please enter map size X (as 256px blocks, min 12)", BoxTypes::Number);
-		while (size_y == "")
-			size_y = openTextbox("Please enter map size Y (as 256px blocks, min 12)", BoxTypes::Number);
+			size_x = openTextbox("Please enter map size (min 12, max 30)", BoxTypes::Number);
 		size.x = std::stoi(size_x);
-		size.y = std::stoi(size_y);
 	}
 
+	//Maps are square, so copy y-value from x
 	size.x *= 256;
-	size.y *= 256;
+	size.y = size.x;
+
+	//Give map size
+	map.size = size;
 
 	//Ask for base block
 	std::string base = openTextbox("Do you want a base block for the map? Write block type or leave empty.", BoxTypes::Text);
+
+	//Show loading screen while building map
+	//Editor will refresh screen when running
+	loadingScreen(window);
 
 	//Change inputted string to lowercase
 	std::transform(base.begin(), base.end(), base.begin(), ::tolower);
@@ -724,8 +749,8 @@ sf::VertexArray Editor::createMinimapViewBorder()
 void Editor::placeFinishLine()
 {
 	sf::Vector2i location;
-	location.x = map.block_image.getSize().x / 2;
-	location.y = map.block_image.getSize().y / 2;
+	location.x = map.size.x / 2;
+	location.y = map.size.y / 2;
 	updateImageBox(location - sf::Vector2i(0, 255) + sf::Vector2i(0, 127), Config::BlockType::Checkerboard, 255);
 	updateImageBox(location + sf::Vector2i(0, 127), Config::BlockType::Checkerboard, 255);
 }

@@ -31,5 +31,15 @@ namespace Config
 		{ BlockType::RockWall, 100.f },
 		{ BlockType::Checkerboard, 1.f } };
 
+	extern const std::map<BlockType, sf::Color> BlockToColorMap = {
+		{ BlockType::None, sf::Color::White },
+		{ BlockType::Ground, sf::Color(46, 46, 46) },
+		{ BlockType::Grass, sf::Color(0, 111, 0) },
+		{ BlockType::Sand, sf::Color(223, 217, 149) },
+		{ BlockType::Water, sf::Color(26, 178, 210) },
+		{ BlockType::RockWall, sf::Color(62, 62, 62) },
+		{ BlockType::Checkerboard, sf::Color::White }
+	};
+
 	extern const float FrameCap = 60.0f;
 }
