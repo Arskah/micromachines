@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "Config.h"
+#include "Map.h"
 #include <stdlib.h>
 #include <vector>
 #include <list>
@@ -12,7 +13,8 @@ enum class buttonType {
     start,
     exit,
 	map,
-	music
+	music,
+	editor
 };
 
 struct button {
@@ -40,7 +42,7 @@ public:
 	std::string checkName(button &it_button);
 	std::string Menu::checkMap(button it_button);
 
-	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> &playerdata, std::string &mapdata, sf::Music &music);
+	bool runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> &playerdata, std::string &mapdata, sf::Music &music, bool& start_editor);
 	void draw(sf::RenderWindow& window);
 
 
@@ -64,6 +66,7 @@ private:
 	button start;
     button exit;
 	button music;
+	button editor;
         
 	ResourceManager* resourcemanager;
     sf::RenderWindow& window;
@@ -101,19 +104,17 @@ private:
 
 	sf::Sprite spri_player;
 
-	// start/exit
+	// start textures
 	sf::Texture tex_start_N;
 	sf::Texture tex_start_O;
 	sf::Texture tex_start_P;
-
 	sf::Sprite spri_start;
 
+	//exit textures
 	sf::Texture tex_exit_N;
 	sf::Texture tex_exit_O;
 	sf::Texture tex_exit_P;
 	sf::Sprite spri_exit;
-
-
 
 	//Load map texture for develop use
 	sf::Texture tex_map1;
@@ -128,7 +129,7 @@ private:
 	sf::Texture tex_car4;
     sf::Sprite spri_car;
 
-	//Load music texture for develop use
+	//Load music texture
 	sf::Texture tex_music1;
 	sf::Texture tex_music2;
 	sf::Texture tex_music3;
@@ -136,4 +137,10 @@ private:
 	sf::Texture tex_music5;
 	sf::Texture tex_music6;
 	sf::Sprite spri_music;
+
+	//Load editor textures 
+	sf::Texture tex_editor1;
+	sf::Texture tex_editor2;
+	sf::Texture tex_editor3;
+	sf::Sprite spri_editor;
 };

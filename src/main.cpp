@@ -11,8 +11,11 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Micro Machines");
 
-	bool menudata;
-	bool loading;
+	bool menudata = false;
+	bool start_game = false;
+	bool start_editor = false;
+	bool pausemenu;
+	bool game_running = true;
 	//std::string name = "Playah";
 	//std::string name2 = "Kalle";
 	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
@@ -32,33 +35,52 @@ int main()
 	editor.runEditor();
 	*/
 
-	sf::Music music;
-	music.setLoop(true);
-	music.setVolume(30);
-	if (music.openFromFile("src/resources/sounds/themesong.wav"))
-		music.play();
-
-	Menu menu(window, &resourcemanager);
-	menudata = menu.runMenu(window, playerdata, mapdata, music);
-	if (menudata == false)
-	{
-		exit(0);
-	}
-	else
-		loading = true;
-
 	//Integers for loading screen
 	sf::Sprite sprite;
 	sf::Texture tex_1;
 	tex_1.loadFromFile("src/resources/menu/loading3.png");
-	sprite.setPosition(((float) window.getSize().x / 2 - 50), (float) window.getSize().y / 2);
-	//draw loading screen
+	sprite.setPosition(((float)window.getSize().x / 2 - 50), (float)window.getSize().y / 2);
 	sprite.setTexture(tex_1, true);
-	window.draw(sprite);
-	window.display();
 
-	Game game(window, &resourcemanager, playerdata, mapdata);
-	game.run(loading);
+	//create music 
+	sf::Music music;
+	music.setLoop(true);
+	music.setVolume(30);
+	if (music.openFromFile("src/resources/sounds/themesong.wav"))
+	music.play();
 
+	//screenhandler loop
+	while (game_running = true) 
+	{
+		
+		Menu menu(window, &resourcemanager);
+		menudata = menu.runMenu(window, playerdata, mapdata, music, start_editor);
+		if (menudata == false)
+		{
+			game_running = false;
+			exit(0);
+		}
+		else
+			if (start_editor == false)
+				start_game = true;
+		
+		//start editor
+		if(start_editor == true)
+		{
+			window.draw(sprite);
+			window.display();
+			Editor editor(window, *resourcemanager.getBlockTextures());
+			editor.runEditor();
+		}
+		//start game
+		if (start_game == true)
+		{
+			window.draw(sprite);
+			window.display();
+
+			Game game(window, &resourcemanager, playerdata, mapdata);
+			game.run(start_game);
+		}
+	}
 	return 0;
 }
