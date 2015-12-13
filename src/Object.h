@@ -12,6 +12,8 @@ public:
 	Config::ObjectType getType() const;
 	//Return m_vertices from Object
 	sf::VertexArray getVertices() const;
+	//Set new speed for the Object. Inherited by Vehicle and Projectile. Meant for Vehicle to be able to accelerate.
+	void setSpeed(const float speed);
 
 private:
 	float speed;
@@ -29,7 +31,4 @@ private:
 protected:
 	//Default constructor.
 	Object(sf::Texture * const texture, const float speed, const Config::ObjectType type);
-
-	//Set new speed for the Object. Inherited by Vehicle and Projectile. Meant for Vehicle to be able to accelerate.
-	void setSpeed(const float speed);
 };
