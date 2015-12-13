@@ -19,9 +19,9 @@ void PauseMenu::createButtons()
 	sf::Texture tex_continue2;
 	sf::Texture tex_continue3;
 
-	tex_continue1.loadFromFile("src/resources/menu/N_continue.png");
-	tex_continue2.loadFromFile("src/resources/menu/O_continue.png");
-	tex_continue3.loadFromFile("src/resources/menu/P_continue.png");
+	tex_continue1.loadFromFile("resources/menu/N_continue.png");
+	tex_continue2.loadFromFile("resources/menu/O_continue.png");
+	tex_continue3.loadFromFile("resources/menu/P_continue.png");
 	//float temp_loc_x = (float) width / 2;
 	//float temp_loc_y = (float) height / 3 * 2;
 	//continue_game.createButton("continue", 1, 0, temp_loc_x, temp_loc_y);
@@ -36,9 +36,9 @@ void PauseMenu::createButtons()
 	sf::Texture tex_exit2;
 	sf::Texture tex_exit3;
 
-	tex_exit1.loadFromFile("src/resources/menu/N_exit.png");
-	tex_exit2.loadFromFile("src/resources/menu/O_exit.png");
-	tex_exit3.loadFromFile("src/resources/menu/P_exit.png");
+	tex_exit1.loadFromFile("resources/menu/N_exit.png");
+	tex_exit2.loadFromFile("resources/menu/O_exit.png");
+	tex_exit3.loadFromFile("resources/menu/P_exit.png");
 	//float temp_loc_x2 = (float) width / 2;
 	//float temp_loc_y2 = (float) height / 3 * 3;
 	//exit_game.createButton("exit", 2, 0, temp_loc_x2, temp_loc_y2);
@@ -48,12 +48,12 @@ void PauseMenu::createButtons()
 	//buttons.push_back(exit_game);
 
 	//load music textures
-	tex_music12.loadFromFile("src/resources/menu/N_music.png");
-	tex_music22.loadFromFile("src/resources/menu/O_music.png");
-	tex_music32.loadFromFile("src/resources/menu/P_music.png");
-	tex_music42.loadFromFile("src/resources/menu/N_muted.png");
-	tex_music52.loadFromFile("src/resources/menu/O_muted.png");
-	tex_music62.loadFromFile("src/resources/menu/P_muted.png");
+	tex_music12.loadFromFile("resources/menu/N_music.png");
+	tex_music22.loadFromFile("resources/menu/O_music.png");
+	tex_music32.loadFromFile("resources/menu/P_music.png");
+	tex_music42.loadFromFile("resources/menu/N_muted.png");
+	tex_music52.loadFromFile("resources/menu/O_muted.png");
+	tex_music62.loadFromFile("resources/menu/P_muted.png");
 	spri_music.setTexture(tex_music12);
 
 	//Create continue game button   
