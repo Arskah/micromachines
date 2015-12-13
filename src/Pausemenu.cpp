@@ -93,6 +93,7 @@ bool PauseMenu::runMenu(sf::RenderWindow& window, bool &pausemenu)
 				}
 			}
 		}
+		PauseMenu::draw(window);
 	}
 
 	return false;
