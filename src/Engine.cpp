@@ -14,7 +14,7 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		it->setWeapontimer(dt);
 		if (it->getPenalty())
 			it->setPenaltytimer(dt);
-		if (it->getPenaltytimer() >= 0.5f)
+		if (it->getPenaltytimer() >= 1.0f)
 			it->resetPenaltytimer();
 		Engine::moveVehicle(&(*it));
 	}
