@@ -505,7 +505,7 @@ std::string Editor::openTextbox(const std::string &box_name, const BoxTypes box_
 
 	//Text
 	sf::Font font;
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("resources/arial.ttf");
 
 	sf::Text user_text;
 	user_text.setFont(font);

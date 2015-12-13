@@ -328,13 +328,13 @@ void Game::run(sf::Music &music)
 					winner.setString(name);
 					winner.setCharacterSize(50);
 					winner.setStyle(sf::Text::Bold);
-					winner.setPosition(window.getSize().x/2 - winner.getGlobalBounds().width/2, window.getSize().y/4);
+					winner.setPosition(float(window.getSize().x/2 - winner.getGlobalBounds().width / 2), float(window.getSize().y / 4));
 
 					sf::Text exit;
 					exit.setFont(font);
 					exit.setString("Press escape to return to menu.\n        Thank you for playing!");
 					exit.setCharacterSize(40);
-					exit.setPosition(window.getSize().x / 2 - exit.getGlobalBounds().width / 2, window.getSize().y / 2);
+					exit.setPosition(float(window.getSize().x / 2 - exit.getGlobalBounds().width / 2), float(window.getSize().y / 2));
 
 					resourcemanager->playSound("win");
 					while (window.isOpen())
