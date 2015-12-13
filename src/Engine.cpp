@@ -164,7 +164,9 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					// In case of a Mine, the mine needs to be deleted.
 					if (projectile->getType() == Config::ObjectType::Mine)
 					{
-						// The vehicle is launched backwards.
+						// The mine will launch the vehicle backwards with a slight random variation in the angle.
+						srand(time(NULL));
+						vehicle->rotate(rand() % 40 - 20);
 						vehicle->accelerate(-(vehicle->getSpeed() / abs(vehicle->getSpeed()))*5.f);
 						resourcemanager->playSound("mine");
 						projectile = projectiles->erase(projectile);
@@ -206,7 +208,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					resourcemanager->playSound("collision");
 
 				// Bumping the vehicle away from the rockwall and reversing it's speed.
-				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 5.f);
+				vehicle->move(movement * vehicle->getSpeed()/abs(vehicle->getSpeed()) * 20.f);
 				vehicle->accelerate(- vehicle->getSpeed() / 3.5f);
 			}
 		}
