@@ -1,0 +1,12 @@
+# Block texture file
+#
+# This file associates BlockTypes to their textures.
+# On each line there's BlockType and the texture filepath
+# separated by space.
+0 resources/none_hres.png
+1 resources/ground_hres.png
+2 resources/grass_hres.png
+3 resources/sand_hres.png
+4 resources/water_hres.png
+5 resources/rockwall_hres.png
+6 resources/checkerboard.png

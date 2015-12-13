@@ -1,0 +1,14 @@
+# Object texture file
+#
+# This file associates ObjectTypes to their textures.
+# On each line there's ObjectType and the texture filepath
+# separated by space.
+#0 
+1 resources/car1.png
+2 resources/car2.png
+3 resources/car3.png
+4 resources/car4.png
+#5
+6 resources/oilspill.png
+7 resources/mine.png
+8 resources/explosion.png

@@ -52,7 +52,7 @@ Editor::Editor(sf::RenderWindow & window, const std::map<Config::BlockType, sf::
 static void loadingScreen(sf::RenderWindow & window)
 {
 	sf::Font font;
-	font.loadFromFile("src/resources/arial.ttf");
+	font.loadFromFile("resources/arial.ttf");
 	sf::Text text("Loading, please wait.", font, 42);
 	text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
 	sf::View temp = window.getView();
@@ -190,7 +190,7 @@ void Editor::runEditor()
 					if (filename.size() != 0)
 					{
 						loadingScreen(window);
-						filename.insert(0, "src/resources/");
+						filename.insert(0, "resources/");
 						filename.append(".png");
 						map.saveToImage(filename, *blocktextures);
 					}
@@ -202,7 +202,7 @@ void Editor::runEditor()
 					if (filename.size() != 0)
 					{
 						loadingScreen(window);
-						filename.insert(0, "src/resources/");
+						filename.insert(0, "resources/");
 						filename.append(".png");
 						map.loadFromImage(filename, *blocktextures);
 						//Fix views
@@ -394,7 +394,7 @@ void Editor::initEditor()
 			std::string filename = openTextbox("Enter filename to load from");
 			if (filename.size() != 0)
 			{
-				filename.insert(0, "src/resources/");
+				filename.insert(0, "resources/");
 				filename.append(".png");
 				//Check if load successfull
 				if (!map.loadFromImage(filename, *blocktextures))
@@ -639,19 +639,19 @@ void Editor::createFileUI(sf::Image * file_ui_image)
 {
 	file_ui_image->create(7 * (100 + 5) + 5, 100 + 10, sf::Color(sf::Uint8(63), sf::Uint8(63), sf::Uint8(63)));
 	sf::Image new_icon;
-	new_icon.loadFromFile("src/resources/editor/new_icon.png");
+	new_icon.loadFromFile("resources/editor/new_icon.png");
 	sf::Image close_icon;
-	close_icon.loadFromFile("src/resources/editor/close_icon.png");
+	close_icon.loadFromFile("resources/editor/close_icon.png");
 	sf::Image save_icon;
-	save_icon.loadFromFile("src/resources/editor/save_icon.png");
+	save_icon.loadFromFile("resources/editor/save_icon.png");
 	sf::Image open_icon;
-	open_icon.loadFromFile("src/resources/editor/open_icon.png");
+	open_icon.loadFromFile("resources/editor/open_icon.png");
 	sf::Image help_icon;
-	help_icon.loadFromFile("src/resources/editor/help_icon.png");
+	help_icon.loadFromFile("resources/editor/help_icon.png");
 	sf::Image box_icon;
-	box_icon.loadFromFile("src/resources/editor/box_icon.png");
+	box_icon.loadFromFile("resources/editor/box_icon.png");
 	sf::Image circle_icon;
-	circle_icon.loadFromFile("src/resources/editor/circle_icon.png");
+	circle_icon.loadFromFile("resources/editor/circle_icon.png");
 
 	file_ui_image->copy(help_icon, 5, 5, sf::IntRect(0, 0, 100, 100));
 	file_ui_image->copy(new_icon, 110, 5, sf::IntRect(0, 0, 100, 100));

@@ -33,7 +33,7 @@ int main()
 	//Integers for loading screen
 	sf::Sprite sprite;
 	sf::Texture tex_1;
-	tex_1.loadFromFile("src/resources/menu/loading3.png");
+	tex_1.loadFromFile("resources/menu/loading3.png");
 	sprite.setPosition(((float)window.getSize().x / 2 - 50), (float)window.getSize().y / 2);
 	sprite.setTexture(tex_1, true);
 
@@ -41,7 +41,7 @@ int main()
 	sf::Music music;
 	music.setLoop(true);
 	music.setVolume(30);
-	if (music.openFromFile("src/resources/sounds/themesong.wav"))
+	if (music.openFromFile("resources/sounds/themesong.wav"))
 	music.play();
 
 	//screenhandler loop

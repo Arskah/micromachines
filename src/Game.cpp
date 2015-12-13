@@ -7,14 +7,14 @@ Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vec
 	initMap(mapdata);
 	initPlayers(playerdata);
 	initProjectiles();
-	this->MaxLaps = 1;
+	this->MaxLaps = 3;
 }
 
 void Game::initVehicle(Config::ObjectType type)
 {
 	std::string line;
 	std::ifstream objectfile;
-	objectfile.open("src/resources/objects.txt", std::ifstream::in);
+	objectfile.open("resources/objects.txt", std::ifstream::in);
 	if (objectfile.is_open())
 	{
 		while (std::getline(objectfile, line))
@@ -43,7 +43,7 @@ Projectile Game::createProjectile(Config::ObjectType type)
 	Config::ObjectType weapontype = Config::VehicleToProjectileMap.find(type)->second;
 	std::string line;
 	std::ifstream objectfile;
-	objectfile.open("src/resources/objects.txt", std::ifstream::in);
+	objectfile.open("resources/objects.txt", std::ifstream::in);
 	if (objectfile.is_open())
 	{
 		while (std::getline(objectfile, line))
@@ -128,7 +128,7 @@ void Game::run(sf::Music &music)
 	float time = 0.f;
 
 	sf::Font font;
-	font.loadFromFile("src/resources/arial.ttf");
+	font.loadFromFile("resources/arial.ttf");
 	sf::Text gametime;
 	gametime.setFont(font);
 	gametime.setStyle(sf::Text::Bold);
@@ -321,28 +321,37 @@ void Game::run(sf::Music &music)
 				if (lapCount == MaxLaps)
 				{
 					window.setView(window.getDefaultView());
+
 					sf::Text winner;
 					std::string name = it.getName() + " won!";
 					winner.setFont(font);
 					winner.setString(name);
-					winner.setScale(3, 3);
+					winner.setCharacterSize(50);
 					winner.setStyle(sf::Text::Bold);
 					winner.setPosition(window.getSize().x/2 - winner.getGlobalBounds().width/2, window.getSize().y/4);
+
+					sf::Text exit;
+					exit.setFont(font);
+					exit.setString("Press escape to return to menu.\n        Thank you for playing!");
+					exit.setCharacterSize(40);
+					exit.setPosition(window.getSize().x / 2 - exit.getGlobalBounds().width / 2, window.getSize().y / 2);
+
 					resourcemanager->playSound("win");
 					while (window.isOpen())
 					{
 						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 						{
-							window.close();
+							return;
 						}
 						window.clear();
 						window.draw(winner);
+						window.draw(exit);
 						window.display();
 					}
 				}
 			}
 
-			std::string lap = "LAPS:" + std::to_string(lapCount) + "/" + std::to_string(MaxLaps);
+			std::string lap = "LAPS:" + std::to_string(lapCount+1) + "/" + std::to_string(MaxLaps);
 			lapText.setString(lap);
 
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);

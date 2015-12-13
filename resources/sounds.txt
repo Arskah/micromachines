@@ -1,0 +1,4 @@
+collision resources/sounds/collision.wav
+shoot resources/sounds/shoot.wav
+mine resources/sounds/mine.wav
+win resources/sounds/win.wav

@@ -9,15 +9,16 @@ PauseMenu::PauseMenu(sf::RenderWindow& window) : window(window)
 void PauseMenu::createButtons()
 {
 	//Background
-	backgroundImage.loadFromFile("src/resources/menu/background.png");
+	backgroundImage.loadFromFile("resources/menu/background.png");
 
 	//font 
-	font.loadFromFile("src/resources/arial.ttf");
+	font.loadFromFile("resources/arial.ttf");
 
 	//create continue button
 	sf::Texture tex_continue1;
 	sf::Texture tex_continue2;
 	sf::Texture tex_continue3;
+
 	tex_continue1.loadFromFile("src/resources/menu/N_continue.png");
 	tex_continue2.loadFromFile("src/resources/menu/O_continue.png");
 	tex_continue3.loadFromFile("src/resources/menu/P_continue.png");
@@ -29,10 +30,12 @@ void PauseMenu::createButtons()
 	//continue_game.setSpriteTexture();
 	//buttons.push_back(continue_game);
 
+
 	//create exit button
 	sf::Texture tex_exit1;
 	sf::Texture tex_exit2;
 	sf::Texture tex_exit3;
+
 	tex_exit1.loadFromFile("src/resources/menu/N_exit.png");
 	tex_exit2.loadFromFile("src/resources/menu/O_exit.png");
 	tex_exit3.loadFromFile("src/resources/menu/P_exit.png");
