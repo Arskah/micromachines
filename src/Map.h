@@ -21,7 +21,7 @@ public:
 	bool loadFromImage(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures);
 
 	//Create thumbnail of map efficiently and fast
-	void createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures);
+	void createThumbnail(const std::string &filename);
 
 	//Get start position by number, player 1 = 0
 	sf::Vector2f getStartPosition(const int player_number);

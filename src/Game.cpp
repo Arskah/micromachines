@@ -63,6 +63,7 @@ Projectile Game::createProjectile(Config::ObjectType type)
 			}
 		}
 	}
+	throw std::runtime_error("Projectile not found from file! Please check game data integrity or reinstall.");
 }
 
 void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata)

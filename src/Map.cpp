@@ -227,7 +227,7 @@ void Map::drawMap(sf::RenderWindow & window)
 }
 
 
-void Map::createThumbnail(const std::string &filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
+void Map::createThumbnail(const std::string &filename)
 {
 	//Load image
 	if (!block_image.loadFromFile(filename))
