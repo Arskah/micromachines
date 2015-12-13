@@ -4,10 +4,6 @@ Map::Map()
 {
 	size = sf::Vector2u(0, 0);
 	base_block = Config::BlockType::Ground;
-	finishLine.first.first = 128;
-	finishLine.first.second = 255;
-	finishLine.second.first = 128;
-	finishLine.second.second = -255;
 }
 
 bool Map::saveToImage(const std::string & filename, const std::map<Config::BlockType, sf::Image>& blocktextures)
@@ -179,6 +175,10 @@ bool Map::loadFromImage(const std::string & filename, const std::map<Config::Blo
 	//Split created image into 256 x 256px pieces for rendering in Engine
 	splitImages(blocktextures);
 
+	// Create finishline
+	finishLine.first = size.x / 2;
+	finishLine.second.first = size.y / 2 - 255;
+	finishLine.second.second = size.y / 2 + 255;
 
 	//Went successfully
 	return true;
@@ -200,9 +200,9 @@ sf::Sprite * Map::getDrawable()
 }
 
 
-std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_t>> Map::getFinishline() const
+std::pair<std::size_t, std::pair<std::size_t, std::size_t>> Map::getFinishline() const
 {
-	 return finishLine;
+	return finishLine;
 }
 
 Config::BlockType Map::getTrackMaterial()

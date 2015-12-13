@@ -2,7 +2,7 @@
 #include "Engine.h"
 
 void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, 
-	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime, std::vector<Player*>* humanPlayers)
+	std::vector<std::pair<Player*, Config::InputType>> userinput, float dt, sf::Text gametime, sf::Text lapCount, std::vector<Player*>* humanPlayers)
 {
 	for (auto it : userinput)
 	{
@@ -54,9 +54,10 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		Engine::calculatePosProjectile(it);
 	}
 	*/
-
+	Engine::updateLap(vehicles, map);
 	/* Call function to handle all drawing */
-	Engine::draw(window, vehicles, projectiles, map, gametime, humanPlayers);
+	Engine::draw(window, vehicles, projectiles, map, gametime, lapCount, humanPlayers);
+
 }
 
 /* Handles userinput before moving the vehicle*/
@@ -306,7 +307,7 @@ void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> 
 /* Draw main function. NOTE: excpects that draw function for any object is defined in the respected class. 
 TODO: view individual for players and moving view: not all should be drawn on every frame
 */
-void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime, std::vector<Player*>* humanPlayers)
+void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std::vector<Projectile> * projectiles, Map& map, sf::Text gametime, sf::Text lapCount, std::vector<Player*>* humanPlayers)
 {
 	(void) projectiles;
 	window.clear(sf::Color::Black);				// Clear previous frame
@@ -359,9 +360,39 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 			sf::Vector2f worldpos = window.mapPixelToCoords(pixelpos);
 			gametime.setPosition(worldpos);
 			window.draw(gametime);
+
+			lapCount.setRotation(humanPlayers->at(0)->getVehicle()->getRotation() - 180.f);
+			pixelpos = sf::Vector2i(0, 20);
+			worldpos = window.mapPixelToCoords(pixelpos);
+			lapCount.setPosition(worldpos);
+			window.draw(lapCount);
 		}
+
 	}
 
 
 	window.display();							// Update drawings
+}
+
+void Engine::updateLap(std::vector<Vehicle>* vehicles, Map & map)
+{
+	for (auto it = vehicles->begin(); it != vehicles->end(); it++)
+	{
+		sf::Vector2f pos = it->getPosition();
+		sf::Vector2f lastTickPos = it->getLastTickPos();
+		std::pair<std::size_t, std::pair<std::size_t, std::size_t>> finishline = map.getFinishline();
+		if ( finishline.second.first < lastTickPos.y && lastTickPos.y < finishline.second.second && finishline.second.first < pos.y && pos.y < finishline.second.second)
+		{
+
+			if ((lastTickPos.x > finishline.first && pos.x < finishline.first))
+			{
+				it->decreaselaps();
+			}
+			else if (lastTickPos.x < finishline.first && pos.x > finishline.first)
+			{
+				it->increaselaps();
+			}
+		}
+		it->updateLastTickPos(pos);
+	}
 }

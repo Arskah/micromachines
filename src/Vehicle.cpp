@@ -173,3 +173,28 @@ void Vehicle::resetPenaltytimer()
 	this->penaltytimer = 0.f;
 	this->penalty = false;
 }
+
+void Vehicle::increaselaps()
+{
+	laps++;
+}
+
+void Vehicle::decreaselaps()
+{
+	laps--;
+}
+
+int Vehicle::getLaps() const
+{
+	return laps;
+}
+
+void Vehicle::updateLastTickPos(sf::Vector2f lastTick)
+{
+	lastTickPos = lastTick;
+}
+
+sf::Vector2f Vehicle::getLastTickPos() const
+{
+	return lastTickPos;
+}

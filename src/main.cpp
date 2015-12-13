@@ -9,7 +9,7 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "Micro Machines");
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Micro Machines");
 
 	bool menudata;
 	bool loading;

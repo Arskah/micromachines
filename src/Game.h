@@ -89,5 +89,5 @@ private:
 	sf::RenderWindow& window;
 	ResourceManager * resourcemanager;
 	std::vector<std::pair<Player *, Config::InputType>> userinput;
-
+	int MaxLaps;
 };
