@@ -20,6 +20,17 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		
 		/* AI and player movement handling */
 		Engine::handleInput(player, it.second, dt, projectiles, resourcemanager);
+
+		/* Removing all explosions */
+		for (auto projectile = projectiles->begin(); projectile != projectiles->end();)
+		{
+			if (projectile->getType() == Config::ObjectType::Explosion)
+			{
+				projectile = projectiles->erase(projectile);
+			}
+			else
+				projectile++;
+		}
 	}
 
 	/* Move vehicles. Players and AI move depends on input handling */
@@ -282,15 +293,9 @@ void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehi
 
 void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> * projectiles)
 {
-	for (auto it = projectiles->begin(); it != projectiles->end();)
+	for (auto it = projectiles->begin(); it != projectiles->end(); it++)
 	{
 		window.draw(*it);
-
-		// Removing the explosion object
-		if (it->getType() == Config::ObjectType::Explosion)
-			it = projectiles->erase(it);
-		else
-			it++;
 	}
 }
 
