@@ -7,7 +7,7 @@ Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vec
 	initMap(mapdata);
 	initPlayers(playerdata);
 	initProjectiles();
-	this->MaxLaps = 1;
+	this->MaxLaps = 3;
 }
 
 void Game::initVehicle(Config::ObjectType type)
@@ -351,7 +351,7 @@ void Game::run(sf::Music &music)
 				}
 			}
 
-			std::string lap = "LAPS:" + std::to_string(lapCount) + "/" + std::to_string(MaxLaps);
+			std::string lap = "LAPS:" + std::to_string(lapCount+1) + "/" + std::to_string(MaxLaps);
 			lapText.setString(lap);
 
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);
