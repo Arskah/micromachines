@@ -12,8 +12,9 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		
 		if (!(player->getHuman()))
 		{
-			std::pair<Config::InputType, Config::InputType> AI_input_pair;
-			AI_input_pair = AI::calculateAIinput(player, vehicles, projectiles, map);
+			// AI bypassed
+			std::pair<Config::InputType, Config::InputType> AI_input_pair(Config::InputType::None, Config::InputType::None);
+			//AI_input_pair = AI::calculateAIinput(player, vehicles, projectiles, map);
 			Engine::handleInput(player, AI_input_pair.first, dt, projectiles, resourcemanager);
 			it.second = AI_input_pair.second;
 		}
