@@ -179,7 +179,7 @@ void Game::run(bool &loading)
 				pair.second = Config::InputType::Brake;
 				userinput.push_back(pair);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
 			{
 				pair.first = humanPlayers[0];
 				pair.second = Config::InputType::Shoot;
@@ -217,6 +217,72 @@ void Game::run(bool &loading)
 					pair.first = humanPlayers[1];
 					pair.second = Config::InputType::Shoot;
 					userinput.push_back(pair);
+				}
+				if (humanPlayers.size() > 2)
+				{
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad8))
+					{
+						pair.first = humanPlayers[2];
+						pair.second = Config::InputType::Accelerate;
+						userinput.push_back(pair);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad4))
+					{
+						pair.first = humanPlayers[2];
+						pair.second = Config::InputType::TurnLeft;
+						userinput.push_back(pair);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad6))
+					{
+						pair.first = humanPlayers[2];
+						pair.second = Config::InputType::TurnRight;
+						userinput.push_back(pair);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad5))
+					{
+						pair.first = humanPlayers[2];
+						pair.second = Config::InputType::Brake;
+						userinput.push_back(pair);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad0))
+					{
+						pair.first = humanPlayers[2];
+						pair.second = Config::InputType::Shoot;
+						userinput.push_back(pair);
+					}
+					if (humanPlayers.size() > 3)
+					{
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+						{
+							pair.first = humanPlayers[3];
+							pair.second = Config::InputType::Accelerate;
+							userinput.push_back(pair);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
+						{
+							pair.first = humanPlayers[3];
+							pair.second = Config::InputType::TurnLeft;
+							userinput.push_back(pair);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+						{
+							pair.first = humanPlayers[3];
+							pair.second = Config::InputType::TurnRight;
+							userinput.push_back(pair);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+						{
+							pair.first = humanPlayers[3];
+							pair.second = Config::InputType::Brake;
+							userinput.push_back(pair);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+						{
+							pair.first = humanPlayers[3];
+							pair.second = Config::InputType::Shoot;
+							userinput.push_back(pair);
+						}
+					}
 				}
 			}
 

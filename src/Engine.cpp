@@ -283,7 +283,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 	window.clear(sf::Color::Black);				// Clear previous frame
 
 
-	// This is a ghetto version of the centered view. TODO: implement check for AI vs Human player.
+	// This is a ghetto version of the centered view.
 	for (int i = 0; i < humanPlayers->size(); i++)
 	{
 		sf::View view;
@@ -298,6 +298,24 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 			view.setSize(window.getSize().x /2, window.getSize().y);
 			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
+		}
+		if (humanPlayers->size() == 3)
+		{
+			view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
+			if (i == 0 || i == 1)
+				view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 0.5f)); // player 1 is on the left, 2 is on the right.
+			else
+				view.setViewport(sf::FloatRect(0.5f * (i-2), 0.5f, 0.5f, 0.5f)); // player 3 is on left down
+		}
+		if (humanPlayers->size() == 4)
+		{
+			view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
+			if (i == 0 || i == 1)
+				view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 0.5f)); // player 1 is on the left, 2 is on the right.
+			else
+				view.setViewport(sf::FloatRect(0.5f * (i - 2), 0.5f, 0.5f, 0.5f)); // player 3 is on left down, player 4 is on the right down
 		}
 		window.setView(view);
 		map.drawMap(window);
