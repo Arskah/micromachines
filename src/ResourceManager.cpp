@@ -11,7 +11,7 @@ void ResourceManager::loadObjectTextures()
 {
 	std::string line;
 	std::ifstream texturefile;
-	texturefile.open("src/resources/objecttextures.txt", std::ifstream::in);
+	texturefile.open("resources/objecttextures.txt", std::ifstream::in);
 	if (texturefile.is_open())
 	{
 		while (std::getline(texturefile, line))
@@ -41,7 +41,7 @@ void ResourceManager::loadBlockTextures()
 {
 	std::string line;
 	std::ifstream texturefile;
-	texturefile.open("src/resources/blocktextures.txt", std::ifstream::in);
+	texturefile.open("resources/blocktextures.txt", std::ifstream::in);
 	if (texturefile.is_open())
 	{
 		while (std::getline(texturefile, line))
@@ -70,7 +70,7 @@ void ResourceManager::loadSoundBuffers()
 {
 	std::string line;
 	std::ifstream soundfile;
-	soundfile.open("src/resources/sounds.txt", std::ifstream::in);
+	soundfile.open("resources/sounds.txt", std::ifstream::in);
 	if (soundfile.is_open())
 	{
 		while (std::getline(soundfile, line))

@@ -14,7 +14,7 @@ void Game::initVehicle(Config::ObjectType type)
 {
 	std::string line;
 	std::ifstream objectfile;
-	objectfile.open("src/resources/objects.txt", std::ifstream::in);
+	objectfile.open("resources/objects.txt", std::ifstream::in);
 	if (objectfile.is_open())
 	{
 		while (std::getline(objectfile, line))
@@ -43,7 +43,7 @@ Projectile Game::createProjectile(Config::ObjectType type)
 	Config::ObjectType weapontype = Config::VehicleToProjectileMap.find(type)->second;
 	std::string line;
 	std::ifstream objectfile;
-	objectfile.open("src/resources/objects.txt", std::ifstream::in);
+	objectfile.open("resources/objects.txt", std::ifstream::in);
 	if (objectfile.is_open())
 	{
 		while (std::getline(objectfile, line))
@@ -128,7 +128,7 @@ void Game::run(sf::Music &music)
 	float time = 0.f;
 
 	sf::Font font;
-	font.loadFromFile("src/resources/arial.ttf");
+	font.loadFromFile("resources/arial.ttf");
 	sf::Text gametime;
 	gametime.setFont(font);
 	gametime.setStyle(sf::Text::Bold);

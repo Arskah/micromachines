@@ -11,82 +11,82 @@ Menu::Menu(sf::RenderWindow& window, ResourceManager* resourcemanager) : window(
 }
 void Menu::loadContent() {
 	//Background
-	backgroundImage.loadFromFile("src/resources/menu/background.png");
+	backgroundImage.loadFromFile("resources/menu/background.png");
 
 	// create num1
-	tex_num1.loadFromFile("src/resources/menu/num1.png");
+	tex_num1.loadFromFile("resources/menu/num1.png");
 	spri_num1.setTexture(tex_num1);
 	// create num2
-	tex_num2.loadFromFile("src/resources/menu/num2.png");
+	tex_num2.loadFromFile("resources/menu/num2.png");
 	spri_num2.setTexture(tex_num2);
 	// create num3
-	tex_num3.loadFromFile("src/resources/menu/num3.png");
+	tex_num3.loadFromFile("resources/menu/num3.png");
 	spri_num3.setTexture(tex_num3);
 	// create num4
-	tex_num4.loadFromFile("src/resources/menu/num4.png");
+	tex_num4.loadFromFile("resources/menu/num4.png");
 	spri_num4.setTexture(tex_num4);
         
 	//load player/AI/off content
-	tex_player_N.loadFromFile("src/resources/menu/N_player.png");
-	tex_player_O.loadFromFile("src/resources/menu/O_player.png");
-	tex_player_P.loadFromFile("src/resources/menu/P_player.png");
+	tex_player_N.loadFromFile("resources/menu/N_player.png");
+	tex_player_O.loadFromFile("resources/menu/O_player.png");
+	tex_player_P.loadFromFile("resources/menu/P_player.png");
 
-	tex_ai_N.loadFromFile("src/resources/menu/N_ai.png");
-	tex_ai_O.loadFromFile("src/resources/menu/O_ai.png");
-	tex_ai_P.loadFromFile("src/resources/menu/P_ai.png");
+	tex_ai_N.loadFromFile("resources/menu/N_ai.png");
+	tex_ai_O.loadFromFile("resources/menu/O_ai.png");
+	tex_ai_P.loadFromFile("resources/menu/P_ai.png");
 
-	tex_off_N.loadFromFile("src/resources/menu/N_off.png");
-	tex_off_O.loadFromFile("src/resources/menu/O_off.png");
-	tex_off_P.loadFromFile("src/resources/menu/P_off.png");
+	tex_off_N.loadFromFile("resources/menu/N_off.png");
+	tex_off_O.loadFromFile("resources/menu/O_off.png");
+	tex_off_P.loadFromFile("resources/menu/P_off.png");
 
 	spri_player.setTexture(tex_player_N);
 
 	//load start
-	tex_start_N.loadFromFile("src/resources/menu/N_start.png");
-	tex_start_O.loadFromFile("src/resources/menu/O_start.png");
-	tex_start_P.loadFromFile("src/resources/menu/P_start.png");
+	tex_start_N.loadFromFile("resources/menu/N_start.png");
+	tex_start_O.loadFromFile("resources/menu/O_start.png");
+	tex_start_P.loadFromFile("resources/menu/P_start.png");
 
 	spri_start.setTexture(tex_start_N);
 
 	//load exit 
-	tex_exit_N.loadFromFile("src/resources/menu/N_quit.png");
-	tex_exit_O.loadFromFile("src/resources/menu/O_quit.png");
-	tex_exit_P.loadFromFile("src/resources/menu/P_quit.png");
+	tex_exit_N.loadFromFile("resources/menu/N_quit.png");
+	tex_exit_O.loadFromFile("resources/menu/O_quit.png");
+	tex_exit_P.loadFromFile("resources/menu/P_quit.png");
 
 	spri_exit.setTexture(tex_exit_N);
 
 	//load map textures
 	Map mapperino;
-	mapperino.createThumbnail("src/resources/map1.png");
+	mapperino.createThumbnail("resources/map1.png");
 	tex_map1 = *mapperino.getDrawable()->getTexture();
-	mapperino.createThumbnail("src/resources/map2.png");
+	mapperino.createThumbnail("resources/map2.png");
 	tex_map2 = *mapperino.getDrawable()->getTexture();
 	spri_map1.setTexture(tex_map1);
        
 	//Load car textures
-	tex_car1.loadFromFile("src/resources/car1.png");
-	tex_car2.loadFromFile("src/resources/car2.png");
-	tex_car3.loadFromFile("src/resources/car3.png");
-	tex_car4.loadFromFile("src/resources/car4.png");
+	tex_car1.loadFromFile("resources/car1.png");
+	tex_car2.loadFromFile("resources/car2.png");
+	tex_car3.loadFromFile("resources/car3.png");
+	tex_car4.loadFromFile("resources/car4.png");
 	spri_car.setTexture(tex_car1);
 
 	//load music textures
-	tex_music1.loadFromFile("src/resources/menu/N_music.png");
-	tex_music2.loadFromFile("src/resources/menu/O_music.png");
-	tex_music3.loadFromFile("src/resources/menu/P_music.png");
-	tex_music4.loadFromFile("src/resources/menu/N_muted.png");
-	tex_music5.loadFromFile("src/resources/menu/O_muted.png");
-	tex_music6.loadFromFile("src/resources/menu/P_muted.png");
+	tex_music1.loadFromFile("resources/menu/N_music.png");
+	tex_music2.loadFromFile("resources/menu/O_music.png");
+	tex_music3.loadFromFile("resources/menu/P_music.png");
+	tex_music4.loadFromFile("resources/menu/N_muted.png");
+	tex_music5.loadFromFile("resources/menu/O_muted.png");
+	tex_music6.loadFromFile("resources/menu/P_muted.png");
 	spri_music.setTexture(tex_music1);
 
 	//load editor textures
-	tex_editor1.loadFromFile("src/resources/menu/N_editor.png");
-	tex_editor2.loadFromFile("src/resources/menu/O_editor.png");
-	tex_editor3.loadFromFile("src/resources/menu/P_editor.png");
+	tex_editor1.loadFromFile("resources/menu/N_editor.png");
+	tex_editor2.loadFromFile("resources/menu/O_editor.png");
+	tex_editor3.loadFromFile("resources/menu/P_editor.png");
 	spri_editor.setTexture(tex_editor1);
 
     //font 
-    font.loadFromFile("src/resources/arial.ttf");
+    font.loadFromFile("resources/arial.ttf");
 }
 
 void Menu::createButtons()
@@ -298,9 +298,9 @@ std::string Menu::checkName(button &it_button)
 std::string Menu::checkMap(button it_button) {
 	std::string mapTemp;
 	if (it_button.state == 0)
-		mapTemp = "src/resources/map1.png";
+		mapTemp = "resources/map1.png";
 	if (it_button.state == 1)
-		mapTemp = "src/resources/map2.png";
+		mapTemp = "resources/map2.png";
 	return mapTemp;
 }
 
@@ -313,7 +313,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<con
 	sf::Music music;
 	music.setLoop(true);
 	music.setVolume(30);
-	if (music.openFromFile("src/resources/sounds/themesong.wav"))
+	if (music.openFromFile("resources/sounds/themesong.wav"))
 		music.play();
 	*/
     while (window.isOpen())

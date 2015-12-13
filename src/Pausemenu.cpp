@@ -10,18 +10,18 @@ PauseMenu::PauseMenu(sf::RenderWindow& window) : window(window)
 void PauseMenu::createButtons()
 {
 	//Background
-	backgroundImage.loadFromFile("src/resources/menu/background.png");
+	backgroundImage.loadFromFile("resources/menu/background.png");
 
 	//font 
-	font.loadFromFile("src/resources/arial.ttf");
+	font.loadFromFile("resources/arial.ttf");
 
 	//create continue button
 	sf::Texture tex_continue1;
 	sf::Texture tex_continue2;
 	sf::Texture tex_continue3;
-	tex_continue1.loadFromFile("src/resources/menu/N_continue.png");
-	tex_continue2.loadFromFile("src/resources/menu/O_continue.png");
-	tex_continue3.loadFromFile("src/resources/menu/P_continue.png");
+	tex_continue1.loadFromFile("resources/menu/N_continue.png");
+	tex_continue2.loadFromFile("resources/menu/O_continue.png");
+	tex_continue3.loadFromFile("resources/menu/P_continue.png");
 	float temp_loc_x = width / 2;
 	float temp_loc_y = height / 3 * 2;
 	continue_game.createButton("continue", 1, 0, temp_loc_x, temp_loc_y);
@@ -34,9 +34,9 @@ void PauseMenu::createButtons()
 	sf::Texture tex_exit1;
 	sf::Texture tex_exit2;
 	sf::Texture tex_exit3;
-	tex_exit1.loadFromFile("src/resources/menu/N_exit.png");
-	tex_exit2.loadFromFile("src/resources/menu/O_exit.png");
-	tex_exit3.loadFromFile("src/resources/menu/P_exit.png");
+	tex_exit1.loadFromFile("resources/menu/N_exit.png");
+	tex_exit2.loadFromFile("resources/menu/O_exit.png");
+	tex_exit3.loadFromFile("resources/menu/P_exit.png");
 	temp_loc_x = width / 2;
 	temp_loc_y = height / 3 * 3;
 	exit_game.createButton("exit", 2, 0, temp_loc_x, temp_loc_y);
