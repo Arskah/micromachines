@@ -14,14 +14,6 @@ static float degToRad(const float degree)
 }
 
 /*
-* Converts radians to degrees
-*/
-static float radToDeg(const float rad)
-{
-	return rad * 180.f / PI;
-}
-
-/*
 Calculate which side a point is compared to a line
 */
 static float calculate(sf::Vector2f point, sf::Vector2f lineStart, sf::Vector2f lineEnd);

@@ -284,7 +284,7 @@ void Editor::runEditor()
 					if (event.mouseWheelScroll.delta > 0)
 					{
 						//Go first
-						if ((static_cast<int>(block_to_draw) + 1) == (blocktextures->size() - 1))
+						if ((static_cast<int>(block_to_draw) + 1) == int((blocktextures->size() - 1)))
 						{
 							block_to_draw = static_cast<Config::BlockType>(1);
 						}
@@ -577,6 +577,8 @@ std::string Editor::openTextbox(const std::string &box_name, const BoxTypes box_
 				case BoxTypes::Alphanumeric:
 					if ((event.text.unicode >= 48 && event.text.unicode <= 57) || (event.text.unicode >= 65 && event.text.unicode <= 90) || (event.text.unicode >= 97 && event.text.unicode <= 122))
 						user_string.append(std::string(1, static_cast<char>(event.text.unicode)));
+					break;
+				default:
 					break;
 				}
 			default:
