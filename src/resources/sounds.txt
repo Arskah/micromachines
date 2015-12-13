@@ -1,3 +1,4 @@
 collision src/resources/sounds/collision.wav
 shoot src/resources/sounds/shoot.wav
 mine src/resources/sounds/mine.wav
+win src/resources/sounds/win.wav
