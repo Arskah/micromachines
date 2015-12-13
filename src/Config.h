@@ -17,7 +17,8 @@ namespace Config
 		Car4,
 		Boat,
 		Oilspill,
-		Mine
+		Mine,
+		Explosion
 	};
 
 	enum class BlockType
