@@ -97,8 +97,8 @@ void Menu::createButtons()
 			else
 				plaioff.state = 1;
 			plaioff.max_states = 3;
-			plaioff.loc_x = width / 2 - 100;
-			plaioff.loc_y = height / heightDivider * (i+2);
+			plaioff.loc_x = (float) (width / 2 - 100);
+			plaioff.loc_y = (float) (height / heightDivider * (i+2));
 			plaioff.textures.push_back(tex_player_N);
 			plaioff.textures.push_back(tex_player_O);
 			plaioff.textures.push_back(tex_player_P);
@@ -118,12 +118,12 @@ void Menu::createButtons()
 			button cars;
 			cars.state = i;
 			cars.max_states = 4;
-			cars.loc_x = width / 2;
-			cars.loc_y = height / heightDivider * (i+2);
+			cars.loc_x = (float) (width / 2);
+			cars.loc_y = (float) (height / heightDivider * (i+2));
 			cars.player = i+1;
 			cars.spri = spri_car;
 			cars.spri.setPosition(cars.loc_x, cars.loc_y);
-			cars.spri.setScale(0.14, 0.14);
+			cars.spri.setScale(0.14f, 0.14f);
 			cars.type = buttonType::car;	
 			//Now static over ride version
 			cars.textures.push_back(tex_car1);
@@ -159,8 +159,8 @@ void Menu::createButtons()
 	//Create Map button
 	map.state = 0;
 	map.max_states = 1;
-	map.loc_x = (width / 2 - 40);
-	map.loc_y = (height / heightDivider * 1 - 10);
+	map.loc_x = (float) (width / 2 - 40);
+	map.loc_y = (float) (height / heightDivider * 1 - 10);
 	map.textures.push_back(tex_map1);
 	map.textures.push_back(tex_map2);
 	map.textures.push_back(tex_map3);
@@ -174,8 +174,8 @@ void Menu::createButtons()
     //Create start game button
     start.state = 0;
 	start.max_states = 2;
-	start.loc_x = (width / 2 + 75);
-	start.loc_y = (height / heightDivider * 6);
+	start.loc_x = (float) (width / 2 + 75);
+	start.loc_y = (float) (height / heightDivider * 6);
 	start.textures.push_back(tex_start_N);
     start.textures.push_back(tex_start_O);
     start.textures.push_back(tex_start_P);
@@ -191,8 +191,8 @@ void Menu::createButtons()
     //Create exit game button   
     exit.state = 0;
 	exit.max_states = 2;
-	exit.loc_x = width / 2 - 225;
-	exit.loc_y = height / heightDivider * 6;
+	exit.loc_x = (float) (width / 2 - 225);
+	exit.loc_y = (float) (height / heightDivider * 6);
 	exit.textures.push_back(tex_exit_N);
     exit.textures.push_back(tex_exit_O);
     exit.textures.push_back(tex_exit_P);
@@ -207,8 +207,8 @@ void Menu::createButtons()
 
 	music.state = 0;
 	music.max_states = 2;
-	music.loc_x = (width / 2 - 50);
-	music.loc_y = (height / heightDivider * 6);
+	music.loc_x = (float) (width / 2 - 50);
+	music.loc_y = (float) (height / heightDivider * 6);
 	music.textures.push_back(tex_music1);
 	music.textures.push_back(tex_music2);
 	music.textures.push_back(tex_music3);
@@ -304,7 +304,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<con
         {
 			for (auto it_button = buttons.begin(); it_button != buttons.end(); it_button++)
             {
-                sf::IntRect rect(it_button->spri.getPosition().x, it_button->spri.getPosition().y, it_button->spri.getGlobalBounds().width, it_button->spri.getGlobalBounds().height);
+                sf::IntRect rect((int) it_button->spri.getPosition().x, (int) it_button->spri.getPosition().y, (int) it_button->spri.getGlobalBounds().width, (int) it_button->spri.getGlobalBounds().height);
 				//If mouse is over some button
 				if(rect.contains(sf::Mouse::getPosition(window)))
 				{
@@ -324,7 +324,7 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<con
 			for (auto it_button2 = buttons.begin(); it_button2 != buttons.end(); it_button2++)
             {
 
-                sf::IntRect rect(it_button2->spri.getPosition().x, it_button2->spri.getPosition().y, it_button2->spri.getGlobalBounds().width, it_button2->spri.getGlobalBounds().height);
+                sf::IntRect rect((int) it_button2->spri.getPosition().x, (int) it_button2->spri.getPosition().y, (int) it_button2->spri.getGlobalBounds().width, (int) it_button2->spri.getGlobalBounds().height);
 				if(rect.contains(sf::Mouse::getPosition(window)))
                 {
 					it_button2->spri.setTexture(it_button2->textures.at(it_button2->state * 3 + 2), true);
@@ -568,10 +568,10 @@ void Menu::draw(sf::RenderWindow& window)
 
 	int y_place = 1;
 
-	spri_num1.setPosition(width / 2 - 200, height / heightDivider * 2);
-	spri_num2.setPosition(width / 2 - 200, height / heightDivider * 3);
-	spri_num3.setPosition(width / 2 - 200, height / heightDivider * 4);
-	spri_num4.setPosition(width / 2 - 200, height / heightDivider * 5);
+	spri_num1.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 2));
+	spri_num2.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 3));
+	spri_num3.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 4));
+	spri_num4.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 5));
 	window.draw(spri_num1);
 	window.draw(spri_num2);
 	window.draw(spri_num3);

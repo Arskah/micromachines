@@ -212,7 +212,7 @@ std::pair<std::pair<std::size_t, std::size_t>, std::pair<std::size_t, std::size_
 
 Config::BlockType Map::getTrackMaterial()
 {
-	sf::Vector2i center(getDrawable()->getLocalBounds().width / 2, getDrawable()->getLocalBounds().height / 2);
+	sf::Vector2i center((int) (getDrawable()->getLocalBounds().width / 2), (int) (getDrawable()->getLocalBounds().height / 2));
 	Block block_at_center = getBlock(center.x, center.y);
 	Block track_block = getBlock(center.x + 128, center.y);
 	return track_block.getType();

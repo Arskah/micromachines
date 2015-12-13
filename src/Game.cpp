@@ -85,7 +85,7 @@ void Game::initPlayers(std::vector<std::pair<std::pair<const std::string, Config
 
 void Game::initProjectiles()
 {
-	srand(time(NULL));
+	srand((unsigned int) time(NULL));
 	int amount = rand() % 20 + 5; //The amount of objects to be generated
 	int count = 0; //The counter
 
@@ -96,7 +96,7 @@ void Game::initProjectiles()
 		if (map.getBlock(x, y).getType() == Config::BlockType::Ground)
 		{
 			Projectile oilspill = createProjectile(Config::ObjectType::Oilspill);
-			oilspill.setPosition(x, y);
+			oilspill.setPosition((float) x, (float) y);
 			oilspill.setScale(1.5f, 1.5f);
 			this->projectiles.emplace_back(oilspill);
 			count++;
