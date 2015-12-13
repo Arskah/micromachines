@@ -121,13 +121,10 @@ void PauseMenu::draw(sf::RenderWindow& window)
 	text.setPosition((float) width / 2, (float) height / 3 * 1);
 	window.draw(text);
 
+	//Iterate all sprites and draw them
 	for (auto it_button = buttons.begin(); it_button != buttons.end(); it_button++)
 	{
 		window.draw(it_button->getSprite());
 	}
-
 	window.display();
-
-
-
 }
