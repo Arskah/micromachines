@@ -57,18 +57,12 @@ void Menu::loadContent() {
 
 	spri_exit.setTexture(tex_exit_N);
 
-	//load maps for develop use
-	//Map mapperino;
-	//mapperino.createThumbnail("src/resources/map1_render");
-	//sf::Sprite * map_temp = mapperino.getDrawable();
-	//sf::Image img_temp;
-	//img_temp.
-	//	= map_temp->getTexture;
-	//tex_map1.update(img_temp);
-
-    tex_map1.loadFromFile("src/resources/menu/map1.png");
-	tex_map2.loadFromFile("src/resources/menu/map2.png");
-	tex_map3.loadFromFile("src/resources/menu/map3.png");
+	//load map textures
+	Map mapperino;
+	mapperino.createThumbnail("src/resources/map1.png");
+	tex_map1 = *mapperino.getDrawable()->getTexture();
+	mapperino.createThumbnail("src/resources/map2.png");
+	tex_map2 = *mapperino.getDrawable()->getTexture();
 	spri_map1.setTexture(tex_map1);
        
 	//Load car textures
@@ -172,12 +166,16 @@ void Menu::createButtons()
 		
 	//Create Map button
 	map.state = 0;
-	map.max_states = 1;
+	map.max_states = 2;
 	map.loc_x = (float) (width / 2 - 40);
 	map.loc_y = (float) (height / heightDivider * 1 - 10);
 	map.textures.push_back(tex_map1);
+	map.textures.push_back(tex_map1);
+	map.textures.push_back(tex_map1);
 	map.textures.push_back(tex_map2);
-	map.textures.push_back(tex_map3);
+	map.textures.push_back(tex_map2);
+	map.textures.push_back(tex_map2);
+
 	map.spri = spri_map1;
 	map.spri.setPosition(map.loc_x, map.loc_y);
 	//map.spri.setScale(0.1, 0.1);
@@ -301,7 +299,9 @@ std::string Menu::checkName(button &it_button)
 
 std::string Menu::checkMap(button it_button) {
 	std::string mapTemp;
-	if(it_button.state == 0)
+	if (it_button.state == 0)
+		mapTemp = "src/resources/map1.png";
+	if (it_button.state == 1)
 		mapTemp = "src/resources/map2.png";
 	return mapTemp;
 }
