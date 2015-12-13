@@ -43,7 +43,7 @@ bool Button::lowerState()
 }
 void Button::movePosition(int loc_x, int loc_y)
 {
-	sprite.setPosition(loc_x, loc_y);
+	sprite.setPosition((float) loc_x, (float) loc_y);
 }
 int Button::getState()
 {
@@ -63,8 +63,8 @@ sf::Sprite Button::getSprite(int mousestate)
 std::vector<int> Button::getPosition()
 {
 	std::vector<int> temp;
-	temp.push_back(loc_x);
-	temp.push_back(loc_y);
+	temp.push_back((int) loc_x);
+	temp.push_back((int) loc_y);
 	return temp;
 }
 

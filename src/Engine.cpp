@@ -178,8 +178,8 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					if (projectile->getType() == Config::ObjectType::Mine)
 					{
 						// The mine will launch the vehicle backwards with a slight random variation in the angle.
-						srand(time(NULL));
-						vehicle->rotate(rand() % 60 - 30);
+						srand((unsigned int) time(NULL));
+						vehicle->rotate((float) (rand() % 60 - 30));
 						vehicle->accelerate(-(vehicle->getSpeed() / abs(vehicle->getSpeed()))*5.f);
 						resourcemanager->playSound("mine");
 
@@ -304,24 +304,24 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 
 
 	// This is a ghetto version of the centered view.
-	for (int i = 0; i < humanPlayers->size(); i++)
+	for (unsigned int i = 0; i < humanPlayers->size(); i++)
 	{
 		sf::View view;
 		view.setCenter(sf::Vector2f(humanPlayers->at(i)->getVehicle()->getPosition().x, humanPlayers->at(i)->getVehicle()->getPosition().y));
 		if (humanPlayers->size() == 1)			// I think modifiable for 4 players now
 		{
-			view.setSize(window.getSize().x, window.getSize().y);
+			view.setSize((float) window.getSize().x, (float) window.getSize().y);
 			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 		}
 		if (humanPlayers->size() == 2)
 		{
-			view.setSize(window.getSize().x /2, window.getSize().y);
+			view.setSize((float) window.getSize().x /2, (float) window.getSize().y);
 			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 			view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 1)); // player 1 is on the left, 2 is on the right.
 		}
 		if (humanPlayers->size() == 3)
 		{
-			view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+			view.setSize((float) window.getSize().x / 2, (float) window.getSize().y / 2);
 			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 			if (i == 0 || i == 1)
 				view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 0.5f)); // player 1 is on the left, 2 is on the right.
@@ -330,7 +330,7 @@ void Engine::draw(sf::RenderWindow& window, std::vector<Vehicle> * vehicles, std
 		}
 		if (humanPlayers->size() == 4)
 		{
-			view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+			view.setSize((float) window.getSize().x / 2, (float) window.getSize().y / 2);
 			view.setRotation(humanPlayers->at(i)->getVehicle()->getRotation() - 180.f);
 			if (i == 0 || i == 1)
 				view.setViewport(sf::FloatRect(0.5f * i, 0, 0.5f, 0.5f)); // player 1 is on the left, 2 is on the right.
