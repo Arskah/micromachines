@@ -100,9 +100,13 @@ sf::Texture Button::getTexture()
 	textures_temp = textures.at(state);
 	return textures_temp.at(mouse_state);
 }
-sf::Sprite& Button::getSprite()
+sf::Sprite  Button::getSprite()
 {
 	return sprite;
+}
+sf::Sprite * Button::getDrawable()
+{
+	return &(sprite);
 }
 float Button::getPosition_x()
 {

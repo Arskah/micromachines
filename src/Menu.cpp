@@ -607,7 +607,7 @@ void Menu::draw(sf::RenderWindow& window)
 	text.setColor(sf::Color::Blue);
 	text.setCharacterSize(40);
 	text.setStyle(sf::Text::Regular);
-	text.setPosition(width / 2 - 250, height / 13 * 1);
+	text.setPosition((float)width / 2 - 250, (float) height / 13 * 1);
 	window.draw(text);
 
 	spri_num1.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 2));

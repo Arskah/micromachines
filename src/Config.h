@@ -48,7 +48,9 @@ namespace Config
 		start,
 		exit,
 		map,
-		music
+		music,
+		conti,
+		exit_pause
 	};
 	extern const std::map<std::string, Config::BlockType> StringToBlockTypeMap;
 	extern const std::map<BlockType, float> BlockToFrictionMap;

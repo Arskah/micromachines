@@ -41,7 +41,9 @@ public:
 	//Return texture
 	sf::Texture getTexture();
 	//returns sprite to draw
-	sf::Sprite& getSprite();
+	sf::Sprite getSprite();
+	//get drawable sprite
+	sf::Sprite * Button::getDrawable();
 	//get button x position
 	float getPosition_x();
 	//get button y position

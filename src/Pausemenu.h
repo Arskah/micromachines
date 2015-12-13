@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "Config.h"
-#include "Button.h"
+//#include "Button.h"
+#include "Menu.h"
 #include "Config.h"
 #include <stdlib.h>
 #include <vector>
@@ -29,12 +30,25 @@ private:
 	sf::Image backgroundImage;
 	sf::Font font;
 
-	Button continue_game;
-	Button exit_game;
-	Button music;
+	button continue_game;
+	button exit_game;
+	button music;
 
-	std::vector<class Button> buttons;
+	std::vector<struct button> buttons;
 
 	sf::RenderWindow& window;
+
+	sf::Sprite spri_exit;
+	sf::Sprite spri_continue;
+	sf::Sprite spri_music;
+
+	//Load music texture
+	sf::Texture tex_music12;
+	sf::Texture tex_music22;
+	sf::Texture tex_music32;
+	sf::Texture tex_music42;
+	sf::Texture tex_music52;
+	sf::Texture tex_music62;
+	sf::Sprite spri_music2;
 };
 	
