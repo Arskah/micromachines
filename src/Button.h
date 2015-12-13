@@ -43,7 +43,7 @@ public:
 	//returns sprite to draw
 	sf::Sprite getSprite();
 	//get drawable sprite
-	sf::Sprite * Button::getDrawable();
+	sf::Sprite * getDrawable();
 	//get button x position
 	float getPosition_x();
 	//get button y position
