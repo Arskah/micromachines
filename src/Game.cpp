@@ -1,5 +1,6 @@
 #include "Game.h"
-
+#include "Pausemenu.h"
+#include <SFML/Graphics.hpp>
 
 Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
@@ -114,8 +115,13 @@ void Game::initMap(std::string mapdata)
 /*
 THE GAME RUNS HERE
 */
-void Game::run(bool &loading)
+void Game::run(sf::Music &music)
 {
+	//create pausemenu
+	PauseMenu pausemenu(window);
+	//integer for in menu 
+	bool in_pause_menu = true;
+
 	sf::Clock clock;
 	sf::Clock gametimer;
 	float tickrate = 1.f / 60;
@@ -343,11 +349,27 @@ void Game::run(bool &loading)
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);
 			gametime.setString(time.substr(0, time.size()-4));
 
-			//Exit the loading creen
-			loading = false;
-			// The engine draws the game state here
-			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
-			userinput.clear();
+
+			//go to pause menu if Esc is pressed
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			{
+				in_pause_menu = pausemenu.runMenu(window, music);
+				if (in_pause_menu == false)
+					return;
+				else
+				{
+					// The engine draws the game state here
+					Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
+					userinput.clear();
+				}
+			}
+			else
+			{
+				// The engine draws the game state here
+				Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
+				userinput.clear();
+			}
+			
 		}
 	}
 }

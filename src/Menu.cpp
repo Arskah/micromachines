@@ -593,15 +593,24 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<con
 }
 void Menu::draw(sf::RenderWindow& window)
 {
+	//clear window
 	window.clear(sf::Color::Black);
+	//define all needed integers
 	sf::Text text;
 	sf::Texture texture;
-	texture.loadFromImage(this->backgroundImage);
 	sf::Sprite sprite;
+	//draw background image
+	texture.loadFromImage(this->backgroundImage);
 	sprite.setTexture(texture, true);
 	window.draw(sprite);
-
-	int y_place = 1;
+	//Print micromachines 2 logo
+	text.setString("Welcome to Micromachines 2!");
+	text.setFont(font);
+	text.setColor(sf::Color::Blue);
+	text.setCharacterSize(40);
+	text.setStyle(sf::Text::Regular);
+	text.setPosition(width / 2 - 250, height / 13 * 1);
+	window.draw(text);
 
 	spri_num1.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 2));
 	spri_num2.setPosition((float) (width / 2 - 200), (float) (height / heightDivider * 3));
@@ -629,11 +638,6 @@ void Menu::draw(sf::RenderWindow& window)
 			window.draw(text);
 		}
 	}
-
-	//window.draw(start.spri);
-	//window.draw(exit.spri);
-
+	//display everything
 	window.display();
-
-
 }

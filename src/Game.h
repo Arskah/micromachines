@@ -33,7 +33,7 @@ public:
 	/* run()
 	The game loop. Runs the event loop, gathers user input and passes it to the Engine.
 	*/
-	void run(bool &loading);
+	void run(sf::Music &music);
 
 
 private:
