@@ -34,7 +34,7 @@ private:
 
 	sf::RenderWindow& window;
 
-
+	//lol
 
 };
 	

@@ -13,7 +13,7 @@ PauseMenu::PauseMenu(sf::RenderWindow& window) : window(window)
 }
 void PauseMenu::loadContent()
 {
-
+	//lol 
 }
 void PauseMenu::createButtons()
 {
