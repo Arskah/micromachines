@@ -90,12 +90,12 @@ void ResourceManager::loadSoundBuffers()
 	}
 }
 
-std::map<Config::ObjectType, sf::Texture> * ResourceManager::getObjectTextures()
+std::map<Config::ObjectType, sf::Texture> * ResourceManager::getObjectTextures() const
 {
 	return &objecttextures;
 }
 
-std::map<Config::BlockType, sf::Image> * ResourceManager::getBlockTextures()
+std::map<Config::BlockType, sf::Image> * ResourceManager::getBlockTextures() const
 {
 	return &blocktextures;
 }
