@@ -121,7 +121,7 @@ void Game::run(bool &loading)
 	float time = 0.f;
 
 	sf::Font font;
-	font.loadFromFile("Arial.ttf");
+	font.loadFromFile("src/resources/arial.ttf");
 	sf::Text gametime;
 	gametime.setFont(font);
 	gametime.setStyle(sf::Text::Bold);

@@ -184,7 +184,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 						resourcemanager->playSound("mine");
 
 						// Creating the explosion object to be displayed briefly.
-						Projectile explosion(&(resourcemanager->getObjectTextures()->find(Config::ObjectType::Explosion)->second), projectile->getPosition(), 0.f, Config::ObjectType::Explosion, 0.f);
+						Projectile explosion(&(resourcemanager->getObjectTextures()->find(Config::ObjectType::Explosion)->second), 0.f, Config::ObjectType::Explosion, 0.f);
 						explosion.setPosition(projectile->getPosition());
 						explosion.setRotation(vehicle->getRotation());
 						explosion.setScale(2.0, 2.0);

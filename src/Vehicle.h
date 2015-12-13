@@ -33,7 +33,7 @@ public:
 	void setWeapontimer(float dt);
 	
 	//Returns true/false depending on if the vehicle has driven into an oilspill.
-	//This will prevent turning, accelerating and braking for 1 second.
+	//This will prevent steering for one second.
 	bool getPenalty();
 	//Change the state of the penalty.
 	void setPenalty(bool penalty);
