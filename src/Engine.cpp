@@ -166,10 +166,20 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					{
 						// The mine will launch the vehicle backwards with a slight random variation in the angle.
 						srand(time(NULL));
-						vehicle->rotate(rand() % 40 - 20);
+						vehicle->rotate(rand() % 60 - 30);
 						vehicle->accelerate(-(vehicle->getSpeed() / abs(vehicle->getSpeed()))*5.f);
 						resourcemanager->playSound("mine");
+
+						// Creating the explosion object to be displayed briefly.
+						Projectile explosion(&(resourcemanager->getObjectTextures()->find(Config::ObjectType::Explosion)->second), projectile->getPosition(), 0.f, Config::ObjectType::Explosion, 0.f);
+						explosion.setPosition(projectile->getPosition());
+						explosion.setRotation(vehicle->getRotation());
+						explosion.setScale(2.0, 2.0);
+
+						// Removing the mine from projectiles vector and adding the explosion.
+						// The explosion is removed after it has been drawn.
 						projectile = projectiles->erase(projectile);
+						projectiles->push_back(explosion);
 						break;
 					}
 					if (projectile->getType() == Config::ObjectType::Oilspill)
@@ -259,9 +269,15 @@ void Engine::draw_vehicles(sf::RenderWindow& window, std::vector<Vehicle> * vehi
 
 void Engine::draw_projectiles(sf::RenderWindow& window, std::vector<Projectile> * projectiles)
 {
-	for (auto it = projectiles->begin(); it != projectiles->end(); it++)
+	for (auto it = projectiles->begin(); it != projectiles->end();)
 	{
 		window.draw(*it);
+
+		// Removing the explosion object
+		if (it->getType() == Config::ObjectType::Explosion)
+			it = projectiles->erase(it);
+		else
+			it++;
 	}
 }
 

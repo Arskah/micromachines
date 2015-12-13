@@ -17,7 +17,8 @@ namespace Config
 		Car4,
 		Boat,
 		Oilspill,
-		Mine
+		Mine,
+		Explosion
 	};
 
 	enum class BlockType
@@ -43,6 +44,7 @@ namespace Config
 
 	extern const std::map<std::string, Config::BlockType> StringToBlockTypeMap;
 	extern const std::map<BlockType, float> BlockToFrictionMap;
+	extern const std::map<BlockType, sf::Color> BlockToColorMap;
 	extern const std::map<ObjectType, ObjectType> VehicleToProjectileMap;
 
 	extern const float FrameCap;
