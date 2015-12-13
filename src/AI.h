@@ -9,8 +9,10 @@
 
 namespace AI
 {
-	Config::InputType calculateAIinput(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
-	bool doShoot(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
-	Config::InputType isCrashing(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map);
-	//bool 
+	std::pair<Config::InputType, Config::InputType> calculateAIinput(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
+	std::pair<Config::InputType, Config::InputType> AIBeam(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
+	//Config::InputType doAccelerate(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
+	//Config::InputType doTurn(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
+	Config::InputType doShoot(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile> * projectiles, Map& map);
+	//Config::InputType isCrashing(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map);
 };

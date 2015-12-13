@@ -85,7 +85,7 @@ int main()
 	sf::Sprite sprite;
 	sf::Texture tex_1;
 	tex_1.loadFromFile("src/resources/menu/loading3.png");
-	sprite.setPosition((window.getSize().x / 2 - 50), window.getSize().y / 2);
+	sprite.setPosition(((float) window.getSize().x / 2 - 50), (float) window.getSize().y / 2);
 	//draw loading screen
 	sprite.setTexture(tex_1, true);
 	window.draw(sprite);

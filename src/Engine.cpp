@@ -11,7 +11,12 @@ void Engine::update(sf::RenderWindow& window, ResourceManager * resourcemanager,
 		/* Call AI calculations. */
 		
 		if (!(player->getHuman()))
-			it.second = AI::calculateAIinput(player, vehicles, projectiles, map);
+		{
+			std::pair<Config::InputType, Config::InputType> AI_input_pair;
+			AI_input_pair = AI::calculateAIinput(player, vehicles, projectiles, map);
+			Engine::handleInput(player, AI_input_pair.first, dt, projectiles, resourcemanager);
+			it.second = AI_input_pair.second;
+		}
 		
 		/* AI and player movement handling */
 		Engine::handleInput(player, it.second, dt, projectiles, resourcemanager);
@@ -63,6 +68,8 @@ void Engine::handleInput(Player* player, Config::InputType input, float dt, std:
 			projectiles->emplace_back(player->getVehicle()->shoot());
 			resourcemanager->playSound("shoot");
 		}
+		break;
+	case Config::InputType::None:
 		break;
 	default:
 		break;

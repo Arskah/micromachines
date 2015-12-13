@@ -1,8 +1,17 @@
 #include "AI.h"
 
-Config::InputType AI::calculateAIinput(Player * player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map)
+std::pair<Config::InputType, Config::InputType> AI::calculateAIinput(Player * player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map)
 {
-	Config::InputType input;
+	std::pair<Config::InputType, Config::InputType> input_pair;			// First for Accelerate/Brake, Second for turn or shoot
+
+	//input_pair.first = AI::doAccelerate(player, vehicles, projectiles, map);
+	//input_pair.second = AI::doTurn(player, vehicles, projectiles, map);
+
+	input_pair = AI::AIBeam(player, vehicles, projectiles, map);
+
+	if (input_pair.second == Config::InputType::None)
+		input_pair.second = AI::doShoot(player, vehicles, projectiles, map);
+	/*
 	if (player->getVehicle()->getSpeed() != 0)
 	{
 		if ((input = AI::isCrashing(player, vehicles, projectiles, map)) == Config::InputType::None)	//Turning and avoiding collisions is #1 priority
@@ -13,10 +22,86 @@ Config::InputType AI::calculateAIinput(Player * player, std::vector<Vehicle>* ve
 	}
 	else
 		input = Config::InputType::Accelerate;
-	return input;
+	*/
+	return input_pair;
+}
+std::pair<Config::InputType, Config::InputType> AI::AIBeam(Player * player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map)
+{
+	std::pair<Config::InputType, Config::InputType> input_pair(Config::InputType::None, Config::InputType::None);
+	Vehicle* aiVehicle = player->getVehicle();
+
+	std::vector<std::pair<float, int>> beams;
+	int maxdistance = 1000;								// Max distance AI "sees" the turn and starts to do playing moves
+	int maxOffsetDeg = 5;									// AI starts to correct heading if more than 5 degree offset
+	float minFov = aiVehicle->getRotation() - 30;			// 60 deg field of view
+	float maxFov = aiVehicle->getRotation() + 30;
+	float aiPosX = aiVehicle->getPosition().x;
+	float aiPosY = aiVehicle->getPosition().y;
+
+	for (float angle = minFov; angle <= maxFov; angle++)
+	{
+		for (int distance = 0; distance <= maxdistance; distance = distance + 1)
+		{
+			Config::BlockType debug = map.getTrackMaterial();
+			double x = std::round(aiPosX + distance * sin(angle * 3.14159265 / 180));		// Deg to rad
+			double y = std::round(aiPosY + distance * cos(angle * 3.14159265 / 180));
+			int x_int = (int)x;
+			int y_int = (int)y;
+			Block block = map.getBlock(x_int, y_int);
+			Config::BlockType trackMaterial = map.getTrackMaterial();
+			if (((block.getType() != trackMaterial) && (block.getType() != Config::BlockType::Checkerboard || (distance == maxdistance && block.getType() == trackMaterial))))
+			{
+				std::pair<float, int> pair;
+				pair.first = angle;
+				pair.second = distance;
+				beams.push_back(pair);
+				break;
+			}
+		}
+	}
+	if (!beams.empty())
+	{
+		// Find maximum distance and corresponding angle
+		std::pair<float, int> maxpair;
+		maxpair.first = 0;
+		maxpair.second = -1;
+		for (auto it = beams.begin(); it != beams.end(); it++)
+		{
+			if (it->second > maxpair.second)
+			{
+				maxpair.first = it->first;
+				maxpair.second = it->second;
+			}
+		}
+		// Check accelerate/brake
+		if (maxpair.second > 100)
+			input_pair.first = Config::InputType::Accelerate;
+		else
+			input_pair.first = Config::InputType::Brake;
+
+		// Check if need to turn
+		if (maxpair.first - maxOffsetDeg > aiVehicle->getRotation())
+			input_pair.second = Config::InputType::TurnRight;
+		else if (maxpair.first + maxOffsetDeg < aiVehicle->getRotation())
+			input_pair.second = Config::InputType::TurnLeft;
+		else
+			input_pair.second = Config::InputType::None;
+	}
+
+	return input_pair;
+}
+/*
+Config::InputType AI::doAccelerate(Player * player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map)
+{
+	return Config::InputType();
 }
 
-bool AI::doShoot(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map &map)
+Config::InputType AI::doTurn(Player * player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map & map)
+{
+	return Config::InputType();
+}
+*/
+Config::InputType AI::doShoot(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map &map)
 {
 	/*
 	Vehicle* aiVehicle = player->getVehicle();
@@ -31,11 +116,11 @@ bool AI::doShoot(Player* player, std::vector<Vehicle>* vehicles, std::vector<Pro
 				{
 				case Config::ObjectType::Mine:
 					if ()						// Condition to shoot
-						return true;			// Shoot
+						return Config::InputType::Shoot;			// Shoot
 					break;
 				case Config::ObjectType::Oilspill:
 					if ()
-						return true;
+						return Config::InputType::Shoot;
 					break;
 				default:
 					break;
@@ -44,9 +129,9 @@ bool AI::doShoot(Player* player, std::vector<Vehicle>* vehicles, std::vector<Pro
 		}
 	}
 	*/
-	return false;
+	return Config::InputType::None;
 }
-
+/*
 Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles, std::vector<Projectile>* projectiles, Map &map)
 {
 	// Create dummy object that is invisible and can be used for Hitbox::checkCollision
@@ -67,7 +152,7 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 
 	//unsigned int recursionLevel = 0;
 
-	///* Check if other car is in front of AI, then compare speeds. Should try to overtake? */
+	// Check if other car is in front of AI, then compare speeds. Should try to overtake? 
 	//for (int dist = 0; dist < 100; dist++)		// Move hitTester 100 pixels in front
 	//{
 	//	hitTester.move(movementVec);
@@ -80,7 +165,7 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	//		}
 	//	}
 
-	//	/* Check for objects on road */
+	//	 Check for objects on road 
 	//	for (auto it : *projectiles)
 	//	{
 	//		if (Hitbox::checkCollision(&(hitTester), &(it)))
@@ -90,7 +175,7 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 	//	}
 	//}
 
-	/* Check if circuit is turning */
+	 Check if circuit is turning 
 
 	// Go through the beams
 	std::vector<std::pair<float, int>> beams;
@@ -110,7 +195,7 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 			int x_int = (int) x;
 			int y_int = (int) y;
 			Block block = map.getBlock(x_int, y_int);
-			if (((block.getType() != map.getTrackMaterial()) && (block.getType() != Config::BlockType::Checkerboard)) || (distance == maxdistance && block.getType() == map.getTrackMaterial()))
+			if (((block.getType() != map.getTrackMaterial()) && (block.getType() != Config::BlockType::Checkerboard)))		// || (distance == maxdistance && block.getType() == map.getTrackMaterial())
 			{
 				std::pair<float, int> pair;
 				pair.first = angle;
@@ -142,3 +227,4 @@ Config::InputType AI::isCrashing(Player* player, std::vector<Vehicle>* vehicles,
 
 	return Config::InputType::None;
 }
+*/

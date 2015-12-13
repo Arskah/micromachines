@@ -35,27 +35,6 @@ void Game::initVehicle(Config::ObjectType type)
 			}
 		}
 	}
-
-	int i = 0;
-	std::pair<std::size_t, std::size_t> finishLineL(map.getFinishline().first.first);
-	std::pair<std::size_t, std::size_t> finishLineR(map.getFinishline().first.second);
-	int diff;
-	if (map.getFinishline().second)
-		diff = (finishLineR.first - finishLineL.first) / vehicles.size();
-	else
-		diff = (finishLineR.second - finishLineL.second) / vehicles.size();
-
-	for (auto it = vehicles.begin(); it != vehicles.end(); it++)
-	{
-		if (map.getFinishline().second)
-			it->setPosition(finishLineL.first + (i * diff), finishLineL.second);
-		else
-		{
-			it->setPosition(finishLineL.first, finishLineL.second + (i * diff));
-			it->setRotation(90);
-		}
-		i++;
-	}
 }
 
 Projectile Game::createProjectile(Config::ObjectType type)
@@ -79,7 +58,7 @@ Projectile Game::createProjectile(Config::ObjectType type)
 					{
 						parameters.push_back(std::stof(token));
 					}
-					return Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), sf::Vector2f(0.f, 0.f), parameters[1], weapontype, parameters[2]);
+					return Projectile(&(resourcemanager->getObjectTextures()->find(weapontype)->second), parameters[1], weapontype, parameters[2]);
 				}
 			}
 		}
