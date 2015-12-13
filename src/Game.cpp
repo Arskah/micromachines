@@ -326,14 +326,14 @@ void Game::run(sf::Music &music)
 					std::string name = it.getName() + " won!";
 					winner.setFont(font);
 					winner.setString(name);
-					winner.setScale(3, 3);
+					winner.setCharacterSize(50);
 					winner.setStyle(sf::Text::Bold);
 					winner.setPosition(window.getSize().x/2 - winner.getGlobalBounds().width/2, window.getSize().y/4);
 
 					sf::Text exit;
 					exit.setFont(font);
 					exit.setString("Press escape to return to menu.\n        Thank you for playing!");
-					exit.setScale(2, 2);
+					exit.setCharacterSize(40);
 					exit.setPosition(window.getSize().x / 2 - exit.getGlobalBounds().width / 2, window.getSize().y / 2);
 
 					resourcemanager->playSound("win");
