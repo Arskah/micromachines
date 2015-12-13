@@ -1,5 +1,6 @@
 #include "Game.h"
-
+#include "Pausemenu.h"
+#include <SFML/Graphics.hpp>
 
 Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata, std::string mapdata) : 
 	window(window), resourcemanager(resourcemanager)
@@ -7,7 +8,7 @@ Game::Game(sf::RenderWindow& window, ResourceManager * resourcemanager, std::vec
 	initMap(mapdata);
 	initPlayers(playerdata);
 	initProjectiles();
-	this->MaxLaps = 5;
+	this->MaxLaps = 1;
 }
 
 void Game::initVehicle(Config::ObjectType type)
@@ -114,8 +115,13 @@ void Game::initMap(std::string mapdata)
 /*
 THE GAME RUNS HERE
 */
-void Game::run(bool &loading)
+void Game::run(sf::Music &music)
 {
+	//create pausemenu
+	PauseMenu pausemenu(window);
+	//integer for in menu 
+	bool in_pause_menu = true;
+
 	sf::Clock clock;
 	sf::Clock gametimer;
 	float tickrate = 1.f / 60;
@@ -308,22 +314,62 @@ void Game::run(bool &loading)
 
 			// Draw lap count
 			int lapCount = 0;
-			for (auto it : vehicles)
+			for (auto it : players)
 			{
-				if (lapCount < it.getLaps())
-					lapCount = it.getLaps();
+
+				if (lapCount < it.getVehicle()->getLaps())
+					lapCount = it.getVehicle()->getLaps();
+				if (lapCount == MaxLaps)
+				{
+					window.setView(window.getDefaultView());
+					sf::Text winner;
+					std::string name = it.getName() + " won!";
+					winner.setFont(font);
+					winner.setString(name);
+					winner.setScale(3, 3);
+					winner.setStyle(sf::Text::Bold);
+					winner.setPosition(window.getSize().x/2 - winner.getGlobalBounds().width/2, window.getSize().y/4);
+					resourcemanager->playSound("win");
+					while (window.isOpen())
+					{
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+						{
+							window.close();
+						}
+						window.clear();
+						window.draw(winner);
+						window.display();
+					}
+				}
 			}
+
 			std::string lap = "LAPS:" + std::to_string(lapCount) + "/" + std::to_string(MaxLaps);
 			lapText.setString(lap);
 
 			std::string time = std::to_string(round(gametimer.getElapsedTime().asSeconds() * 100) / 100);
 			gametime.setString(time.substr(0, time.size()-4));
 
-			//Exit the loading creen
-			loading = false;
-			// The engine draws the game state here
-			Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
-			userinput.clear();
+
+			//go to pause menu if Esc is pressed
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			{
+				in_pause_menu = pausemenu.runMenu(window, music);
+				if (in_pause_menu == false)
+					return;
+				else
+				{
+					// The engine draws the game state here
+					Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
+					userinput.clear();
+				}
+			}
+			else
+			{
+				// The engine draws the game state here
+				Engine::update(window, resourcemanager, &vehicles, &projectiles, map, userinput, dt, gametime, lapText, &humanPlayers);
+				userinput.clear();
+			}
+			
 		}
 	}
 }

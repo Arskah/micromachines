@@ -17,6 +17,7 @@ void Button::addState(sf::Texture texture1, sf::Texture texture2, sf::Texture te
 	textures_temp.push_back(texture2);
 	textures_temp.push_back(texture3);
 	textures.push_back(textures_temp);
+	sprite.setTexture(texture1);
 	textures_temp.pop_back();
 	textures_temp.pop_back();
 	textures_temp.pop_back();
@@ -28,13 +29,13 @@ void Button::raiseState()
 	{
 		state++;
 		textures_temp = textures.at(state);
-		sprite.setTexture(textures_temp.at(0));
+		sprite.setTexture(textures_temp.at(0), true);
 	}
 	else
 	{
 		state = 0;
 		textures_temp = textures.at(state);
-		sprite.setTexture(textures_temp.at(0));
+		sprite.setTexture(textures_temp.at(0), true);
 	}
 }
 void Button::lowerState()
@@ -43,13 +44,13 @@ void Button::lowerState()
 	{
 		state--;
 		textures_temp = textures.at(state);
-		sprite.setTexture(textures_temp.at(0));
+		sprite.setTexture(textures_temp.at(0), true);
 	}
 	else
 	{
 		state = max_states - 1;
 		textures_temp = textures.at(state);
-		sprite.setTexture(textures_temp.at(0));
+		sprite.setTexture(textures_temp.at(0), true);
 	}
 }
 void Button::movePosition(int loc_x, int loc_y)
@@ -59,12 +60,12 @@ void Button::movePosition(int loc_x, int loc_y)
 void Button::mouseOver()
 {
 	textures_temp = textures.at(state);
-	sprite.setTexture(textures_temp.at(1));
+	sprite.setTexture(textures_temp.at(1), true);
 }
 void Button::mouseOut()
 {
 	textures_temp = textures.at(state);
-	sprite.setTexture(textures_temp.at(0));
+	sprite.setTexture(textures_temp.at(0), true);
 }
 int Button::getState()
 {

@@ -16,7 +16,7 @@ public:
 
 	void createButtons();
 
-	bool runMenu(sf::RenderWindow& window, bool &pausemenu);
+	bool runMenu(sf::RenderWindow& window, sf::Music &music);
 	void draw(sf::RenderWindow& window);
 
 	int width;
