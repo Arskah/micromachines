@@ -39,7 +39,7 @@ private:
 	void createImageFromBlockImage(const std::map<Config::BlockType, sf::Image>& blocktextures);
 
 	//Saves map to a image file
-	bool saveToImage(const std::string &filename);
+	bool saveToImage(const std::string & filename, const std::map<Config::BlockType, sf::Image>& blocktextures);
 
 	//Splits map image to smaller pieces 256 x 256px (same as textures).
 	void splitImages(const std::map<Config::BlockType, sf::Image>& blocktextures);
@@ -49,6 +49,9 @@ private:
 
 	//Base block
 	Config::BlockType base_block;
+
+	//Map size
+	sf::Vector2u size;
 
 	//Block image, build blocks after editing from this
 	sf::Image block_image;
