@@ -42,6 +42,14 @@ namespace Config
 		Shoot
 	};
 
+	enum class buttonType {
+		pao,
+		car,
+		start,
+		exit,
+		map,
+		music
+	};
 	extern const std::map<std::string, Config::BlockType> StringToBlockTypeMap;
 	extern const std::map<BlockType, float> BlockToFrictionMap;
 	extern const std::map<BlockType, sf::Color> BlockToColorMap;

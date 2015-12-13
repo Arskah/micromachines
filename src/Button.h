@@ -3,16 +3,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <list>
+#include "Config.h"
 
-
-enum class buttonType {
-	pao,
-	car,
-	start,
-	exit,
-	map,
-	music
-};
 
 class Button
 {
@@ -23,11 +15,11 @@ public:
 	~Button() {};
 
 	//create button
-	void createButton(std::string name, int state, float loc_X, float loc_y);
+	void createButton(std::string name, int player, int state, float loc_X, float loc_y);
 	
 	//Modify button
 	//Add one state to button
-	void addState(sf::Texture texture1, sf::Texture texture2, sf::Texture texture3);
+	void addState(sf::Texture &texture1, sf::Texture &texture2, sf::Texture &texture3);
 	//Raise buttons state
 	void raiseState();
 	//Lower buttons state
@@ -38,18 +30,22 @@ public:
 	void mouseOver();
 	//on mouse out state
 	void mouseOut();
+	//set texture
+	void setSpriteTexture();
+	//set own sprite texrure
+	void setOwnSpriteTexture(sf::Texture tex);
 
 	//read button
 	//Returns buttons state
 	int getState();
 	//Return texture
-	sf::Texture getTexture(int mousestate);
+	sf::Texture getTexture();
 	//returns sprite to draw
-	sf::Sprite getSprite();
+	sf::Sprite& getSprite();
 	//get button x position
-	int getPosition_x();
+	float getPosition_x();
 	//get button y position
-	int getPosition_y();
+	float getPosition_y();
 	//get buttoin name
 	std::string getName();
 
@@ -61,9 +57,9 @@ private:
 	float loc_y = 0;
 	float loc_x = 0;
 	int pressed = 0;
-	buttonType type;
+	int mouse_state = 0;
+
 	sf::Sprite sprite;
-	std::vector<sf::Texture> textures_temp;
 	std::vector<std::vector<sf::Texture>> textures;
 	std::string name;
 };

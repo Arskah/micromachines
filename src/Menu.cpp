@@ -1,7 +1,5 @@
-#include <SFML/Graphics/Rect.hpp>
-
 #include "Menu.h"
-#include <stdlib.h>
+
 
 
 /* BASE CLASS MAIN MENU*/

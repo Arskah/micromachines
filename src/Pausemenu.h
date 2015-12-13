@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Config.h"
 #include "Button.h"
+#include "Config.h"
 #include <stdlib.h>
 #include <vector>
 #include <list>

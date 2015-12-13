@@ -13,6 +13,7 @@
 #include "Config.h"
 #include "Engine.h"
 #include "ResourceManager.h"
+#include "Pausemenu.h"
 
 /*
 This class keeps track of the map, players and objects, runs the event loop

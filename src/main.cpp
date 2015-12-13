@@ -15,14 +15,10 @@ int main()
 	bool start_game = false;
 	bool start_editor = false;
 	bool game_running = true;
-	//std::string name = "Playah";
-	//std::string name2 = "Kalle";
-	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
-	//std::pair<const std::string, Config::ObjectType> pair2(name2, Config::ObjectType::Car2);
-	std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata;			// ((normal playerdata) isHumanPlayer?)
-	//playerdata.push_back(pair);
-	//playerdata.push_back(pair2);
-	std::string mapdata; // = "src/resources/mapsavetest.png";
+
+	//create integers for playerdata and mapdata
+	std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> playerdata;
+	std::string mapdata;
 
 	ResourceManager resourcemanager;
 
@@ -49,7 +45,7 @@ int main()
 	music.play();
 
 	//screenhandler loop
-	while (game_running = true) 
+	while (game_running == true) 
 	{
 		
 		Menu menu(window, &resourcemanager);
@@ -66,19 +62,27 @@ int main()
 		//start editor
 		if(start_editor == true)
 		{
+			//loading screen
 			window.draw(sprite);
 			window.display();
+			//start editor
 			Editor editor(window, *resourcemanager.getBlockTextures());
 			editor.runEditor();
 		}
 		//start game
 		if (start_game == true)
 		{
+			//loading screen
 			window.draw(sprite);
 			window.display();
-
+			//start game 
 			Game game(window, &resourcemanager, playerdata, mapdata);
 			game.run(music);
+			//loading screen
+			window.draw(sprite);
+			window.display();
+			playerdata.clear();
+			mapdata.clear();
 		}
 	}
 	return 0;
