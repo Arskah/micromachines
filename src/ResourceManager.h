@@ -17,8 +17,8 @@ public:
 	*/
 	ResourceManager();
 
-	std::map<Config::ObjectType, sf::Texture> * getObjectTextures() const;
-	std::map<Config::BlockType, sf::Image> * getBlockTextures() const;
+	std::map<Config::ObjectType, sf::Texture> * getObjectTextures();
+	std::map<Config::BlockType, sf::Image> * getBlockTextures();
 	void playSound(std::string name);
 
 private:

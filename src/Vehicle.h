@@ -26,7 +26,7 @@ public:
 	void slow(float friction, float dt);
 
 	//Returns the projectile of the vehicle.
-	Projectile * getWeapon() const;
+	const Projectile * getWeapon() const;
 	//Returns the time that has passed since the projectile was last launched.
 	float getWeapontimer() const;
 	//Increments the timer by adding dt to it.

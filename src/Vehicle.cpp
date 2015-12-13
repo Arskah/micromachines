@@ -133,14 +133,14 @@ Projectile Vehicle::shoot()
 	return this->weapon;
 }
 
-Projectile * Vehicle::getWeapon() const
+const Projectile * Vehicle::getWeapon() const
 {
 	return &this->weapon;
 }
 
 float Vehicle::getWeapontimer() const
 {
-	return this->weapontimer;
+	return weapontimer;
 }
 
 void Vehicle::setWeapontimer(float dt)
@@ -150,7 +150,7 @@ void Vehicle::setWeapontimer(float dt)
 
 bool Vehicle::getPenalty() const
 {
-	return this->penalty;
+	return penalty;
 }
 
 void Vehicle::setPenalty(bool penalty)
@@ -160,7 +160,7 @@ void Vehicle::setPenalty(bool penalty)
 
 float Vehicle::getPenaltytimer() const
 {
-	return this->penaltytimer;
+	return penaltytimer;
 }
 
 void Vehicle::setPenaltytimer(float dt)
