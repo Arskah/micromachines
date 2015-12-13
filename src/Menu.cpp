@@ -79,6 +79,12 @@ void Menu::loadContent() {
 	tex_music6.loadFromFile("src/resources/menu/P_muted.png");
 	spri_music.setTexture(tex_music1);
 
+	//load editor textures
+	tex_editor1.loadFromFile("src/resources/menu/N_editor.png");
+	tex_editor2.loadFromFile("src/resources/menu/O_editor.png");
+	tex_editor3.loadFromFile("src/resources/menu/P_editor.png");
+	spri_editor.setTexture(tex_editor1);
+
     //font 
     font.loadFromFile("src/resources/arial.ttf");
 }
@@ -205,6 +211,7 @@ void Menu::createButtons()
 	exit.player = 99;
 	buttons.push_back(exit);
 
+	//create music/muted button
 	music.state = 0;
 	music.max_states = 2;
 	music.loc_x = (float) (width / 2 - 50);
@@ -221,6 +228,22 @@ void Menu::createButtons()
 	music.player = 96;
 	buttons.push_back(music);  
 
+	//create editor button
+	editor.state = 0;
+	editor.max_states = 2;
+	editor.loc_x = (float)(width / 2 - 500);
+	editor.loc_y = (float)(height / heightDivider * 1);
+	editor.textures.push_back(tex_editor1);
+	editor.textures.push_back(tex_editor2);
+	editor.textures.push_back(tex_editor3);
+	editor.textures.push_back(tex_editor1);
+	editor.textures.push_back(tex_editor2);
+	editor.textures.push_back(tex_editor3);
+	editor.spri = spri_editor;
+	editor.spri.setPosition(editor.loc_x, editor.loc_y);
+	editor.type = buttonType::editor;
+	editor.player = 95;
+	buttons.push_back(editor);
 }
 
 std::string Menu::checkName(button &it_button)
@@ -276,7 +299,7 @@ std::string Menu::checkMap(button it_button) {
 }
 
 
-bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> &playerdata, std::string &mapdata, sf::Music &music)
+bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<const std::string, Config::ObjectType>, bool>> &playerdata, std::string &mapdata, sf::Music &music, bool& start_editor)
 {   
     Menu::loadContent();
     Menu::createButtons();
@@ -348,6 +371,11 @@ bool Menu::runMenu(sf::RenderWindow& window, std::vector<std::pair<std::pair<con
 					{
 						//end game
 						return false;
+					}
+					if (it_button2->type == buttonType::editor && it_button2->state == 1)
+					{
+						start_editor = true;
+						return true;
 					}
 					if(it_button2->type == buttonType::start && it_button2->state == 1)
 					{

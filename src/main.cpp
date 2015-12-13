@@ -13,6 +13,7 @@ int main()
 
 	bool menudata;
 	bool loading;
+	bool start_editor;
 	//std::string name = "Playah";
 	//std::string name2 = "Kalle";
 	//std::pair<const std::string, Config::ObjectType> pair(name, Config::ObjectType::Car1);
@@ -39,10 +40,15 @@ int main()
 		music.play();
 
 	Menu menu(window, &resourcemanager);
-	menudata = menu.runMenu(window, playerdata, mapdata, music);
+	menudata = menu.runMenu(window, playerdata, mapdata, music, start_editor);
 	if (menudata == false)
 	{
 		exit(0);
+	}
+	else if (start_editor == true)
+	{
+		Editor editor(window, *resourcemanager.getBlockTextures());
+		editor.runEditor();
 	}
 	else
 		loading = true;
