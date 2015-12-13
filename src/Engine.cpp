@@ -188,6 +188,7 @@ void Engine::checkCollisions(std::vector<Vehicle> * vehicles, std::vector<Projec
 					// In case of a Mine, the mine needs to be deleted.
 					if (projectile->getType() == Config::ObjectType::Mine)
 					{
+						// This prevents division by zero error if a mine is spawned on top of a standing vehicle.
 						if (vehicle->getSpeed() == 0.f)
 							break;
 
